@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
 
-    private const val BASE_URL = "http://10.0.2.2:8080/GanApp/" // Reemplaza esto con tu URL base
+    private const val BASE_URL = "http://localhost:8080/GanApp/" // Reemplaza esto con tu URL base
 
     // Lazy initialization del Retrofit instance
     val retrofit: Retrofit by lazy {
