@@ -12,20 +12,20 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun UserInputForm(onSubmit: (UserData) -> Unit) {
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
+    var nombreCompleto by remember { mutableStateOf("") }
+    var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var phoneNumber by remember { mutableStateOf("") }
+    var numeroTelefono by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.padding(16.dp)) {
         OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
+            value = nombreCompleto,
+            onValueChange = { nombreCompleto = it },
             label = { Text("Nombre") }
         )
         OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
+            value = correo,
+            onValueChange = { correo = it },
             label = { Text("Correo Electrónico") }
         )
         OutlinedTextField(
@@ -35,14 +35,14 @@ fun UserInputForm(onSubmit: (UserData) -> Unit) {
             visualTransformation = PasswordVisualTransformation()
         )
         OutlinedTextField(
-            value = phoneNumber,
-            onValueChange = { phoneNumber = it },
+            value = numeroTelefono,
+            onValueChange = { numeroTelefono = it },
             label = { Text("Número de Teléfono") }
         )
-        Button(onClick = { onSubmit(UserData(name, email, password, phoneNumber)) }) {
+        Button(onClick = { onSubmit(UserData(nombreCompleto, correo, password, numeroTelefono)) }) {
             Text("Enviar")
         }
     }
 }
 
-data class UserData(val name: String, val email: String, val password: String, val phoneNumber: String)
+data class UserData(val nombreCompleto: String, val correo: String, val password: String, val numeroTelefono: String)
