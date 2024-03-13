@@ -6,6 +6,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface UserRegisterApiService {
-    @POST("users")
+    @POST("registro")
     fun createUser(@Body userData: UserData): Call<Void>
 }
