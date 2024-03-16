@@ -16,6 +16,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ViewsGanAppTheme { // Asume que este es tu tema de Compose
+
                 UserInputForm { userData ->
                     val call = RetrofitInstance.apiService.createUser(userData)
                     call.enqueue(object : Callback<Void> {
