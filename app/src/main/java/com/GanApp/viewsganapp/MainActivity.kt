@@ -37,3 +37,5 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// lateinit var: correo: EditText
+
