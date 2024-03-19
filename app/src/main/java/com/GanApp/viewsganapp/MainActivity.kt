@@ -16,7 +16,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ViewsGanAppTheme { // Asume que este es tu tema de Compose
-
                 UserInputForm { userData ->
                     val call = RetrofitInstance.apiService.createUser(userData)
                     call.enqueue(object : Callback<Void> {
@@ -27,7 +26,6 @@ class MainActivity : ComponentActivity() {
                                 Log.d("API Call", "Response not successful: ${response.errorBody()?.string()}")
                             }
                         }
-
                         override fun onFailure(call: Call<Void>, t: Throwable) {
                             Log.d("API Call", "Failure: ${t.message}")
                         }
@@ -36,5 +34,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 }
 
