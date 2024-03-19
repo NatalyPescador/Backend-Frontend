@@ -40,7 +40,7 @@ import androidx.compose.foundation.layout.Column as Column
 
 
 @Composable
-fun UserInputForm(onSubmit: (UserData) -> Unit) {
+fun Register(onSubmit: (UserData) -> Unit) {
     var nombreCompleto by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -68,7 +68,7 @@ fun UserInputForm(onSubmit: (UserData) -> Unit) {
            }
 
         Text(
-            text = "Registrate",
+            text = "Registrarse",
             fontSize = 40.sp,
             modifier = Modifier
                 .padding(bottom = 16.dp)
@@ -78,7 +78,7 @@ fun UserInputForm(onSubmit: (UserData) -> Unit) {
 
         OutlinedTextField(
             value = nombreCompleto,
-            { //Elimina las lineas no deseadas
+            onValueChange = { //Elimina las lineas no deseadas
                 val filteredText = it.replace("\n", "")
                 nombreCompleto = filteredText
             },
@@ -127,7 +127,8 @@ fun UserInputForm(onSubmit: (UserData) -> Unit) {
             )
 
         OutlinedTextField(
-            password, {
+            value = password,
+            onValueChange = {
                 val filteredText = it.replace("\n", "")
                 password = filteredText
             },
@@ -144,7 +145,6 @@ fun UserInputForm(onSubmit: (UserData) -> Unit) {
 
         Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
 
-        val buttonColors = remember { mutableStateOf(Color(10, 191, 4)) }
         Box(
             modifier = Modifier.offset(y = 20.dp)
 
@@ -155,7 +155,7 @@ fun UserInputForm(onSubmit: (UserData) -> Unit) {
                     contentColor = Color.Black)
             )
             {
-                Text("Registrate", color = Color.Black)
+                Text("Registrarse", color = Color.Black)
             }
         }
 
