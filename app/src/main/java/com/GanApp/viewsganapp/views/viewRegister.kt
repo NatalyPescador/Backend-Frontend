@@ -61,6 +61,7 @@ fun Register(onSubmit: (UserData) -> Unit) {
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()
+                .offset(y = 20.dp),
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
