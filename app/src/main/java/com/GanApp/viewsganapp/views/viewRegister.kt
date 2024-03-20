@@ -2,19 +2,31 @@ package com.GanApp.viewsganapp.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.*
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -25,15 +37,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.GanApp.viewsganapp.R
 import androidx.compose.foundation.layout.Column as Column
-import androidx.compose.runtime.Composable
 
 
 @Composable
-fun UserInputForm(onSubmit: (UserData)-> Unit) {
+fun Register(onSubmit: (UserData) -> Unit) {
     var nombreCompleto by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var numeroTelefono by remember { mutableStateOf("") }
+
 
     Column(
         modifier = Modifier
@@ -56,7 +68,7 @@ fun UserInputForm(onSubmit: (UserData)-> Unit) {
            }
 
         Text(
-            text = "Registrate",
+            text = "Registrarse",
             fontSize = 40.sp,
             modifier = Modifier
                 .padding(bottom = 16.dp)
@@ -66,7 +78,7 @@ fun UserInputForm(onSubmit: (UserData)-> Unit) {
 
         OutlinedTextField(
             value = nombreCompleto,
-            { //Elimina las lineas no deseadas
+            onValueChange = { //Elimina las lineas no deseadas
                 val filteredText = it.replace("\n", "")
                 nombreCompleto = filteredText
             },
@@ -115,7 +127,8 @@ fun UserInputForm(onSubmit: (UserData)-> Unit) {
             )
 
         OutlinedTextField(
-            password, {
+            value = password,
+            onValueChange = {
                 val filteredText = it.replace("\n", "")
                 password = filteredText
             },
@@ -132,7 +145,6 @@ fun UserInputForm(onSubmit: (UserData)-> Unit) {
 
         Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
 
-        val buttonColors = remember { mutableStateOf(Color(10, 191, 4)) }
         Box(
             modifier = Modifier.offset(y = 20.dp)
 
@@ -143,7 +155,7 @@ fun UserInputForm(onSubmit: (UserData)-> Unit) {
                     contentColor = Color.Black)
             )
             {
-                Text("Registrate", color = Color.Black)
+                Text("Registrarse", color = Color.Black)
             }
         }
 
