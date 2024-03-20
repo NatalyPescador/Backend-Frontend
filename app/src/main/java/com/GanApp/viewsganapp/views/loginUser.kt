@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,10 +19,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults.buttonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -36,15 +35,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.GanApp.viewsganapp.R
-import androidx.compose.foundation.layout.Column as Column
-
 
 @Composable
-fun Register(onSubmit: (UserData) -> Unit) {
-    var nombreCompleto by remember { mutableStateOf("") }
+fun LogIn(onSubmit: (LogInData) -> Unit) {
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var numeroTelefono by remember { mutableStateOf("") }
 
 
     Column(
@@ -65,33 +60,16 @@ fun Register(onSubmit: (UserData) -> Unit) {
             Image(
                 painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
                 modifier = Modifier.offset(y = 35.dp))
-           }
+        }
 
         Text(
-            text = "Registrarse",
+            text = "Iniciar Sesión",
             fontSize = 40.sp,
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .offset(y = 20.dp)
 
         )
-
-        OutlinedTextField(
-            value = nombreCompleto,
-            onValueChange = { //Elimina las lineas no deseadas
-                val filteredText = it.replace("\n", "")
-                nombreCompleto = filteredText
-            },
-            label = { Text("Nombre") },
-            textStyle = TextStyle(color = Color.Black),
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Person, contentDescription = "telefono")
-            },
-            shape = RoundedCornerShape(20.dp), // Ajusta el radio del borde según tus preferencias
-            modifier = Modifier.offset(y = 20.dp)
-
-        )
-
 
         OutlinedTextField(
             value = correo,
@@ -107,24 +85,7 @@ fun Register(onSubmit: (UserData) -> Unit) {
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier.offset(y = 20.dp)
 
-            )
-
-        OutlinedTextField(
-            value = numeroTelefono,
-            onValueChange = {
-                val filteredText = it.replace("\n", "")
-                numeroTelefono = filteredText
-            },
-            label = { Text("Número de Teléfono") },
-            textStyle = TextStyle(color = Color.Black),
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Phone, contentDescription = "telefono")
-            },
-            shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 20.dp)
-
-
-            )
+        )
 
         OutlinedTextField(
             value = password,
@@ -141,7 +102,7 @@ fun Register(onSubmit: (UserData) -> Unit) {
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier.offset(y = 20.dp)
 
-            )
+        )
 
         Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
 
@@ -150,12 +111,12 @@ fun Register(onSubmit: (UserData) -> Unit) {
 
         ) {
             Button(
-                { onSubmit(UserData(nombreCompleto, correo, password, numeroTelefono)) },
-                colors = buttonColors(Color(10, 191, 4),
+                { onSubmit(LogInData(correo, password)) },
+                colors = ButtonDefaults.buttonColors(Color(10, 191, 4),
                     contentColor = Color.Black)
             )
             {
-                Text("Registrarse", color = Color.Black)
+                Text("Iniciar Sesión", color = Color.Black)
             }
         }
 
@@ -166,9 +127,9 @@ fun Register(onSubmit: (UserData) -> Unit) {
             modifier = Modifier.offset(y = 20.dp)
         ) {
             Row {
-                Text(text = "¿Ya tienes una cuenta?")
+                Text(text = "¿Aun no tienes cuenta?")
                 Spacer(modifier = Modifier.width(15.dp))
-                Text(text = "Inicia Sesión", fontWeight = FontWeight.Bold)
+                Text(text = "Registrate", fontWeight = FontWeight.Bold)
             }
         }
 
@@ -205,12 +166,12 @@ fun Register(onSubmit: (UserData) -> Unit) {
             }
         }
 
-            Box(modifier = Modifier.offset(y = (-15).dp)){
-                Row {
-                    Text(text = "Facebook", modifier = Modifier.offset(x = (-70).dp))
-                    Text(text = "Gmail", modifier = Modifier.offset(x = (45).dp))
-                }
+        Box(modifier = Modifier.offset(y = (-15).dp)){
+            Row {
+                Text(text = "Facebook", modifier = Modifier.offset(x = (-70).dp))
+                Text(text = "Gmail", modifier = Modifier.offset(x = (45).dp))
             }
+        }
 
         Text(
             text = "Registrate", color = Color.White,
@@ -232,9 +193,7 @@ fun Register(onSubmit: (UserData) -> Unit) {
 
 
 
-data class UserData(
-    val nombreCompleto: String,
+data class LogInData(
     val correo: String,
     val password: String,
-    val numeroTelefono:String
 )
