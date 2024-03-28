@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -13,14 +12,15 @@ import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Gmail
+import com.GanApp.viewsganapp.views.ForgotPassword
 import com.GanApp.viewsganapp.views.LogIn
 import com.GanApp.viewsganapp.views.Register
+import com.GanApp.viewsganapp.views.ResetPassword
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -56,7 +56,6 @@ class MainActivity : ComponentActivity() {
                             })
                         }
                     }
-
 
                     composable(AppScreens.loginUser.route) {
                         LogIn(navController = navController) { logInData ->
@@ -95,10 +94,46 @@ class MainActivity : ComponentActivity() {
 
 
                 }
+
+
+                ForgotPassword { forgotPasswordData ->
+                    val call = RetrofitInstance.apiService.forgotPassword(forgotPasswordData)
+                    call.enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.isSuccessful) {
+                                Log.d("API Call", "Success")
+                            } else {
+                                Log.d("API Call", "Response not successful: ${response.errorBody()?.string()}")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            Log.d("API Call", "Failure: ${t.message}")
+                        }
+                    })
+                }
+
+
+                ResetPassword { resetPasswordData ->
+                    val call = RetrofitInstance.apiService.resetPassword(resetPasswordData)
+                    call.enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.isSuccessful) {
+                                Log.d("API Call", "Success")
+                            } else {
+                                Log.d(
+                                    "API Call",
+                                    "Response not successful: ${response.errorBody()?.string()}"
+                                )
+                            }
+                        }
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            Log.d("API Call", "Failure: ${t.message}")
+                        }
+                    })
+                }
             }
         }
     }
 }
-
-
 
