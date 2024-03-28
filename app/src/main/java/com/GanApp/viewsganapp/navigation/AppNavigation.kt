@@ -1,5 +1,6 @@
 package com.GanApp.viewsganapp.navigation
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +20,7 @@ sealed class AppScreens(val route: String) {
     object conecctionGmail : AppScreens("gmail")
 }
 
+@SuppressLint("ComposableDestinationInComposeScope")
 @Composable
 fun AppScreens(navController: NavController) {
     NavHost(
