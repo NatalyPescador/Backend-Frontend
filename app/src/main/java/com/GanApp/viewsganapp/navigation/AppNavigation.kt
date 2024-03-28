@@ -72,7 +72,6 @@ fun AppScreens(navController: NavController) {
                     var confirmedPassword by remember { mutableStateOf("") }
                 }
             }
-
         }
     }
 }
