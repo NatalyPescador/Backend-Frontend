@@ -30,10 +30,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
 
 @Composable
-fun ForgotPassword(onSubmit: (ForgotPasswordData) -> Unit) {
+fun ForgotPassword(navController: NavController, onSubmit: (ForgotPasswordData) -> Unit) {
     var correo by remember { mutableStateOf("") }
 
     Column(
@@ -96,8 +97,8 @@ fun ForgotPassword(onSubmit: (ForgotPasswordData) -> Unit) {
             modifier = Modifier.offset(y = 20.dp)
 
         ) {
-            Button(
-                { onSubmit(ForgotPasswordData(correo)) },
+            Button(  onClick = { navController.navigate("resetPassword")
+                onSubmit(ForgotPasswordData(correo)) },
                 colors = ButtonDefaults.buttonColors(Color(10, 191, 4),
                     contentColor = Color.Black)
             )
