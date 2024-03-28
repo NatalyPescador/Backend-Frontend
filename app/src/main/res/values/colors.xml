@@ -11,6 +11,6 @@
     <color name="verde_oscuro">#02730a</color>
     <color name="verde_claro">#0abf04</color>
     <color name="cafe">#8C1A0F</color>
-    <color name="verde_mas_oscuro">#055902</color>
-
-</resources>
+    <color name="verde_border">#055902</color>
+    <color name="color_barra">#98ff96</color><![CDATA[
+]]></resources>

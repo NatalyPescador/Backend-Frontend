@@ -2,7 +2,7 @@ package com.GanApp.viewsganapp.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -22,9 +24,12 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,16 +40,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.input.ImeAction
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.Column as Column
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Register(onSubmit: (UserData) -> Unit) {
+fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
     var nombreCompleto by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var numeroTelefono by remember { mutableStateOf("") }
+
+
 
 
     Column(
@@ -53,8 +67,7 @@ fun Register(onSubmit: (UserData) -> Unit) {
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
             .fillMaxSize(), // Esto hará que la Column ocupe todo el tamaño disponible
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Row(
@@ -64,8 +77,9 @@ fun Register(onSubmit: (UserData) -> Unit) {
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
-                modifier = Modifier.offset(y = 35.dp))
-           }
+                modifier = Modifier.offset(y = 35.dp)
+            )
+        }
 
         Text(
             text = "Registrarse",
@@ -79,7 +93,8 @@ fun Register(onSubmit: (UserData) -> Unit) {
         OutlinedTextField(
             value = nombreCompleto,
             onValueChange = { //Elimina las lineas no deseadas
-                val filteredText = it.replace("\n", "")
+                // Filtrar el texto para permitir solo letras
+                val filteredText = it.filter { char -> char.isLetter() }
                 nombreCompleto = filteredText
             },
             label = { Text("Nombre") },
@@ -88,9 +103,11 @@ fun Register(onSubmit: (UserData) -> Unit) {
                 Icon(imageVector = Icons.Default.Person, contentDescription = "telefono")
             },
             shape = RoundedCornerShape(20.dp), // Ajusta el radio del borde según tus preferencias
-            modifier = Modifier.offset(y = 20.dp)
+            modifier = Modifier.offset(y = 20.dp),
 
         )
+
+
 
 
         OutlinedTextField(
@@ -107,12 +124,12 @@ fun Register(onSubmit: (UserData) -> Unit) {
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier.offset(y = 20.dp)
 
-            )
+        )
 
         OutlinedTextField(
             value = numeroTelefono,
             onValueChange = {
-                val filteredText = it.replace("\n", "")
+                val filteredText = it.filter { char -> char.isDigit() }
                 numeroTelefono = filteredText
             },
             label = { Text("Número de Teléfono") },
@@ -124,7 +141,7 @@ fun Register(onSubmit: (UserData) -> Unit) {
             modifier = Modifier.offset(y = 20.dp)
 
 
-            )
+        )
 
         OutlinedTextField(
             value = password,
@@ -141,18 +158,18 @@ fun Register(onSubmit: (UserData) -> Unit) {
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier.offset(y = 20.dp)
 
-            )
+        )
 
         Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
 
         Box(
             modifier = Modifier.offset(y = 20.dp)
-
         ) {
-            Button(
-                { onSubmit(UserData(nombreCompleto, correo, password, numeroTelefono)) },
-                colors = buttonColors(Color(10, 191, 4),
-                    contentColor = Color.Black)
+            Button( onClick = {
+                onSubmit(UserData(nombreCompleto, correo, password, numeroTelefono)) },
+                colors = buttonColors(
+                    Color(10, 191, 4)
+                )
             )
             {
                 Text("Registrarse", color = Color.Black)
@@ -160,16 +177,15 @@ fun Register(onSubmit: (UserData) -> Unit) {
         }
 
 
-        Spacer(modifier = Modifier.height(5.dp))
+        Spacer(modifier = Modifier.height(25.dp))
 
-        Box(
-            modifier = Modifier.offset(y = 20.dp)
-        ) {
-            Row {
-                Text(text = "¿Ya tienes una cuenta?")
-                Spacer(modifier = Modifier.width(15.dp))
-                Text(text = "Inicia Sesión", fontWeight = FontWeight.Bold)
-            }
+        Row {
+            Text(text = "¿Ya tienes una cuenta?")
+            Spacer(modifier = Modifier.width(15.dp))
+            Text(text = "Inicia Sesión", fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable {
+                        navController.navigate("loginUser_screens")
+                })
         }
 
         Row(
@@ -184,6 +200,9 @@ fun Register(onSubmit: (UserData) -> Unit) {
                 painter = painterResource(id = R.drawable.fc_logo),
                 contentDescription = "Logo de Facebook",
                 modifier = Modifier
+                    .clickable {
+                        navController.navigate("facebook")
+                    }
                     .height(70.dp)
                     .width(70.dp)
                     .offset(x = 22.dp)
@@ -192,6 +211,9 @@ fun Register(onSubmit: (UserData) -> Unit) {
                 painter = painterResource(id = R.drawable.gmail_logo),
                 contentDescription = "Logo Gmail",
                 modifier = Modifier
+                    .clickable {
+                        navController.navigate("gmail")
+                    }
                     .height(55.dp)
                     .offset(x = 135.dp)
                     .width(55.dp)
@@ -200,17 +222,31 @@ fun Register(onSubmit: (UserData) -> Unit) {
         Box(modifier = Modifier.offset(y = (-10).dp)
         ) {
             Row {
-                Text(text = "Continuar con", modifier = Modifier.offset(x = (-38).dp))//Facebook
-                Text(text = "Continuar con", modifier = Modifier.offset(x = 30.dp))//Gmail
+                Text(text = "Continuar con", modifier = Modifier
+                    .clickable {
+                        navController.navigate("facebook")
+                    }
+                    .offset(x = (-38).dp))//Facebook
+                Text(text = "Continuar con",modifier = Modifier
+                    .clickable {
+                        navController.navigate("gmail")
+                    }.offset(x = 30.dp))//Gmail
             }
         }
 
-            Box(modifier = Modifier.offset(y = (-15).dp)){
-                Row {
-                    Text(text = "Facebook", modifier = Modifier.offset(x = (-70).dp))
-                    Text(text = "Gmail", modifier = Modifier.offset(x = (45).dp))
-                }
+        Box(modifier = Modifier.offset(y = (-15).dp)){
+            Row {
+                Text(text = "Facebook", modifier = Modifier
+                    .clickable {
+                        navController.navigate("facebook")
+                    }
+                    .offset(x = (-70).dp))
+                Text(text = "Gmail", modifier = Modifier
+                    .clickable {
+                        navController.navigate("gmail")
+                    }.offset(x = (45).dp))
             }
+        }
 
         Text(
             text = "Registrate", color = Color.White,
@@ -229,6 +265,7 @@ fun Register(onSubmit: (UserData) -> Unit) {
 
     }
 }
+
 
 
 
