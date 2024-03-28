@@ -92,45 +92,45 @@ class MainActivity : ComponentActivity() {
                         Gmail(navController = navController)
                     }
 
+                    composable(AppScreens.forgotPassword.route){
+                        ForgotPassword(navController = navController) { forgotPasswordData ->
+                            val call = RetrofitInstance.apiService.forgotPassword(forgotPasswordData)
+                            call.enqueue(object : Callback<Void> {
+                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                    if (response.isSuccessful) {
+                                        Log.d("API Call", "Success")
+                                    } else {
+                                        Log.d("API Call", "Response not successful: ${response.errorBody()?.string()}")
+                                    }
+                                }
 
-                }
-
-
-                ForgotPassword { forgotPasswordData ->
-                    val call = RetrofitInstance.apiService.forgotPassword(forgotPasswordData)
-                    call.enqueue(object : Callback<Void> {
-                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                            if (response.isSuccessful) {
-                                Log.d("API Call", "Success")
-                            } else {
-                                Log.d("API Call", "Response not successful: ${response.errorBody()?.string()}")
-                            }
+                                override fun onFailure(call: Call<Void>, t: Throwable) {
+                                    Log.d("API Call", "Failure: ${t.message}")
+                                }
+                            })
                         }
+                    }
 
-                        override fun onFailure(call: Call<Void>, t: Throwable) {
-                            Log.d("API Call", "Failure: ${t.message}")
+                    composable(AppScreens.resetPassword.route){
+                        ResetPassword (navController = navController){ resetPasswordData ->
+                            val call = RetrofitInstance.apiService.resetPassword(resetPasswordData)
+                            call.enqueue(object : Callback<Void> {
+                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                    if (response.isSuccessful) {
+                                        Log.d("API Call", "Success")
+                                    } else {
+                                        Log.d(
+                                            "API Call",
+                                            "Response not successful: ${response.errorBody()?.string()}"
+                                        )
+                                    }
+                                }
+                                override fun onFailure(call: Call<Void>, t: Throwable) {
+                                    Log.d("API Call", "Failure: ${t.message}")
+                                }
+                            })
                         }
-                    })
-                }
-
-
-                ResetPassword { resetPasswordData ->
-                    val call = RetrofitInstance.apiService.resetPassword(resetPasswordData)
-                    call.enqueue(object : Callback<Void> {
-                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                            if (response.isSuccessful) {
-                                Log.d("API Call", "Success")
-                            } else {
-                                Log.d(
-                                    "API Call",
-                                    "Response not successful: ${response.errorBody()?.string()}"
-                                )
-                            }
-                        }
-                        override fun onFailure(call: Call<Void>, t: Throwable) {
-                            Log.d("API Call", "Failure: ${t.message}")
-                        }
-                    })
+                    }
                 }
             }
         }

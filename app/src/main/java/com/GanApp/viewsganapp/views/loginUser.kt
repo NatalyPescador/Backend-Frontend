@@ -140,7 +140,12 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
                 })
         }
         Spacer(modifier = Modifier.height(15.dp))
-        Text(text = "¿Olvidaste tú contraseña?", modifier = Modifier.offset(x = 50.dp))
+        Text(text = "¿Olvidaste tú contraseña?",
+            modifier = Modifier
+            .clickable {
+                navController.navigate("forgotPassword")
+            }
+            .offset(x = 50.dp))
 
         Row(
             modifier = Modifier

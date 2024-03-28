@@ -1,5 +1,6 @@
 package com.GanApp.viewsganapp.navigation
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,7 +10,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.GanApp.viewsganapp.views.ForgotPasswordData
 import com.GanApp.viewsganapp.views.LogInData
+import com.GanApp.viewsganapp.views.ResetPasswordData
 import com.GanApp.viewsganapp.views.UserData
 
 sealed class AppScreens(val route: String) {
@@ -17,8 +20,11 @@ sealed class AppScreens(val route: String) {
     object viewReister : AppScreens("viewRegister")
     object conecctionFacebook : AppScreens ("facebook")
     object conecctionGmail : AppScreens("gmail")
+    object forgotPassword : AppScreens ("forgotPassword")
+    object resetPassword : AppScreens("resetPassword")
 }
 
+@SuppressLint("ComposableDestinationInComposeScope")
 @Composable
 fun AppScreens(navController: NavController) {
     NavHost(
@@ -52,9 +58,23 @@ fun AppScreens(navController: NavController) {
                 @Composable
                 fun Gmail(){}
             }
+            composable(AppScreens.forgotPassword.route){
+                @Composable
+                fun ForgotPassword(onSubmit: (ForgotPasswordData) -> Unit) {
+                    var correo by remember { mutableStateOf("") }
+            }
+        }
+            composable(AppScreens.resetPassword.route){
+                @Composable
+                fun ResetPassword(onSubmit: (ResetPasswordData) -> Unit) {
+                    var token by remember { mutableStateOf("") }
+                    var newPassword by remember { mutableStateOf("") }
+                    var confirmedPassword by remember { mutableStateOf("") }
+                }
+            }
+
         }
     }
-
 }
 
 
