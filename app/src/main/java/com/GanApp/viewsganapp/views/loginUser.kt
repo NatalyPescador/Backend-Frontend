@@ -45,6 +45,7 @@ import com.GanApp.viewsganapp.views.LogInData
 fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var isPasswordIncorrect by remember { mutableStateOf(false) }
 
 
     Column(

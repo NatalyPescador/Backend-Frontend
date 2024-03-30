@@ -135,7 +135,7 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
             label = { Text("Número de Teléfono") },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Phone, contentDescription = "telefono")
+                Icon(imageVector = Icons.Default.Phone, contentDescription = "nombre")
             },
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier.offset(y = 20.dp)
@@ -153,7 +153,7 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
             visualTransformation = PasswordVisualTransformation(),
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
+                Icon(imageVector = Icons.Default.Lock, contentDescription = "candado")
             },
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier.offset(y = 20.dp)
