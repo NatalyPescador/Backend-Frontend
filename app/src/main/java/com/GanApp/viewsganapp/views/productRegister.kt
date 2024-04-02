@@ -37,14 +37,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
-import com.GanApp.viewsganapp.views.LogInData
+import com.GanApp.viewsganapp.views.ProductData
 
 
 
 @Composable
-fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
-    var correo by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Unit) {
+    var nombre by remember { mutableStateOf("") }
+    var precio by remember { mutableStateOf("") }
+    var descripcion by remember { mutableStateOf("") }
+    var imagenes by remember { mutableStateOf("") }
 
 
     Column(
@@ -70,7 +72,7 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
         }
 
         Text(
-            text = "Iniciar Sesión",
+            text = "Registrar Producto",
             fontSize = 40.sp,
             modifier = Modifier
                 .padding(bottom = 16.dp)
@@ -79,12 +81,12 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
         )
 
         OutlinedTextField(
-            value = correo,
+            value = nombre,
             onValueChange = {
                 val filteredText = it.replace("\n", "")
-                correo = filteredText
+                nombre = filteredText
             },
-            label = { Text("Correo Electrónico") },
+            label = { Text("Nombre producto") },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Email, contentDescription = "gmail")
@@ -95,12 +97,46 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
         )
 
         OutlinedTextField(
-            value = password,
+            value = precio,
             onValueChange = {
                 val filteredText = it.replace("\n", "")
-                password = filteredText
+                precio = filteredText
             },
-            label = { Text("Contraseña") },
+            label = { Text("Precio") },
+            visualTransformation = PasswordVisualTransformation(),
+            textStyle = TextStyle(color = Color.Black),
+            leadingIcon = {
+                Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
+            },
+            shape = RoundedCornerShape(20.dp),
+            modifier = Modifier.offset(y = 20.dp)
+
+        )
+
+        OutlinedTextField(
+            value = descripcion,
+            onValueChange = {
+                val filteredText = it.replace("\n", "")
+                descripcion = filteredText
+            },
+            label = { Text("Descripcion") },
+            visualTransformation = PasswordVisualTransformation(),
+            textStyle = TextStyle(color = Color.Black),
+            leadingIcon = {
+                Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
+            },
+            shape = RoundedCornerShape(20.dp),
+            modifier = Modifier.offset(y = 20.dp)
+
+        )
+
+        OutlinedTextField(
+            value = imagenes,
+            onValueChange = {
+                val filteredText = it.replace("\n", "")
+                imagenes = filteredText
+            },
+            label = { Text("Imagenes") },
             visualTransformation = PasswordVisualTransformation(),
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
@@ -118,14 +154,14 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
 
         ) {
             Button(
-                onClick = { onSubmit(LogInData(correo, password)) },
+                onClick = { onSubmit(ProductData(nombre, precio, descripcion, imagenes)) },
                 colors = ButtonDefaults.buttonColors(
                     Color(10, 191, 4),
                     contentColor = Color.Black
                 )
             )
             {
-                Text("Iniciar Sesión", color = Color.Black)
+                Text("Publicar", color = Color.Black)
             }
         }
 
@@ -142,98 +178,16 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
         Spacer(modifier = Modifier.height(15.dp))
         Text(text = "¿Olvidaste tú contraseña?",
             modifier = Modifier
-            .clickable {
-                navController.navigate("forgotPassword")
-            }
-            .offset(x = 50.dp))
-
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .offset(y = 20.dp),
-
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.fc_logo),
-                contentDescription = "Logo de Facebook",
-                modifier = Modifier
-                    .clickable {
-                        navController.navigate("productRegister")
-                    }
-                    .height(70.dp)
-                    .width(70.dp)
-                    .offset(x = 22.dp)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.gmail_logo),
-                contentDescription = "Logo Gmail",
-                modifier = Modifier
-                    .clickable {
-                        navController.navigate("gmail")
-                    }
-                    .height(55.dp)
-                    .offset(x = 135.dp)
-                    .width(55.dp)
-            )
-        }
-        Box(modifier = Modifier.offset(y = (-10).dp)
-        ) {
-            Row {
-                Text(text = "Continuar con", modifier = Modifier
-                    .clickable {
-                        navController.navigate("productRegister")
-                    }
-                    .offset(x = (-38).dp))//Facebook
-                Text(text = "Continuar con",modifier = Modifier
-                    .clickable {
-                        navController.navigate("gmail")
-                    }.offset(x = 30.dp))//Gmail
-            }
-        }
-
-        Box(modifier = Modifier.offset(y = (-15).dp)){
-            Row {
-                Text(text = "Facebook", modifier = Modifier
-                    .clickable {
-                        navController.navigate("productRegister")
-                    }
-                    .offset(x = (-70).dp))
-                Text(text = "Gmail", modifier = Modifier
-                    .clickable {
-                        navController.navigate("gmail")
-                    }.offset(x = (45).dp))
-            }
-        }
-
-        Text(
-            text = "Registrate", color = Color.White,
-            fontSize = 40.sp,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-
-        )
-
-        Text(
-            text = "Registrate", color = Color.White,
-            fontSize = 40.sp,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-        )
-
-        Text(
-            text = "Registrate", color = Color.White,
-            fontSize = 40.sp,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-        )
-
-
+                .clickable {
+                    navController.navigate("forgotPassword")
+                }
+                .offset(x = 50.dp))
     }
 }
 
-data class LogInData(
-    val correo: String,
-    val password: String
+data class ProductData(
+    val nombre: String,
+    val precio: String,
+    val descripcion: String,
+    val imagenes: String
 )
