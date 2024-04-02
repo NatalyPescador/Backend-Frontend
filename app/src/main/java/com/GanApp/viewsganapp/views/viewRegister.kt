@@ -2,6 +2,7 @@ package com.GanApp.viewsganapp.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -40,7 +41,7 @@ import androidx.compose.foundation.layout.Column as Column
 
 
 @Composable
-fun Register(onSubmit: (UserData) -> Unit) {
+fun Register(onSubmit: (UserData) -> Unit, onSwitchToLogin: () -> Unit) {
     var nombreCompleto by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -168,7 +169,7 @@ fun Register(onSubmit: (UserData) -> Unit) {
             Row {
                 Text(text = "¿Ya tienes una cuenta?")
                 Spacer(modifier = Modifier.width(15.dp))
-                Text(text = "Inicia Sesión", fontWeight = FontWeight.Bold)
+                Text(text = "Inicia Sesión", fontWeight = FontWeight.Bold, modifier = Modifier.clickable { onSwitchToLogin()})
             }
         }
 
