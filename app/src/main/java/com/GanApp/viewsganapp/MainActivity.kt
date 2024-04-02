@@ -14,6 +14,7 @@ import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Gmail
 import com.GanApp.viewsganapp.views.ForgotPassword
 import com.GanApp.viewsganapp.views.LogIn
+import com.GanApp.viewsganapp.views.ProductRegister
 import com.GanApp.viewsganapp.views.Register
 import com.GanApp.viewsganapp.views.ResetPassword
 import retrofit2.Call
@@ -114,6 +115,27 @@ class MainActivity : ComponentActivity() {
                     composable(AppScreens.resetPassword.route){
                         ResetPassword (navController = navController){ resetPasswordData ->
                             val call = RetrofitInstance.apiService.resetPassword(resetPasswordData)
+                            call.enqueue(object : Callback<Void> {
+                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                    if (response.isSuccessful) {
+                                        Log.d("API Call", "Success")
+                                    } else {
+                                        Log.d(
+                                            "API Call",
+                                            "Response not successful: ${response.errorBody()?.string()}"
+                                        )
+                                    }
+                                }
+                                override fun onFailure(call: Call<Void>, t: Throwable) {
+                                    Log.d("API Call", "Failure: ${t.message}")
+                                }
+                            })
+                        }
+                    }
+
+                    composable(AppScreens.productRegister.route){
+                        ProductRegister(navController = navController) { productRegister ->
+                            val call = RetrofitInstance.apiService.createProduct(productRegister)
                             call.enqueue(object : Callback<Void> {
                                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                     if (response.isSuccessful) {
