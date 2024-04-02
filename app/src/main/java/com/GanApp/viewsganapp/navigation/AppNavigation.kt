@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.GanApp.viewsganapp.views.ForgotPasswordData
 import com.GanApp.viewsganapp.views.LogInData
+import com.GanApp.viewsganapp.views.ProductData
 import com.GanApp.viewsganapp.views.ResetPasswordData
 import com.GanApp.viewsganapp.views.UserData
 
@@ -22,6 +23,7 @@ sealed class AppScreens(val route: String) {
     object conecctionGmail : AppScreens("gmail")
     object forgotPassword : AppScreens ("forgotPassword")
     object resetPassword : AppScreens("resetPassword")
+    object productRegister : AppScreens("productRegister")
 }
 
 @SuppressLint("ComposableDestinationInComposeScope")
@@ -70,6 +72,15 @@ fun AppScreens(navController: NavController) {
                     var token by remember { mutableStateOf("") }
                     var newPassword by remember { mutableStateOf("") }
                     var confirmedPassword by remember { mutableStateOf("") }
+                }
+            }
+            composable(AppScreens.productRegister.route){
+                @Composable
+                fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Unit) {
+                    var nombre by remember { mutableStateOf("") }
+                    var precio by remember { mutableStateOf("") }
+                    var descripcion by remember { mutableStateOf("") }
+                    var imagenes by remember { mutableStateOf("") }
                 }
             }
         }

@@ -3,6 +3,7 @@ package com.GanApp.viewsganapp.apiService
 
 import com.GanApp.viewsganapp.views.ForgotPasswordData
 import com.GanApp.viewsganapp.views.LogInData
+import com.GanApp.viewsganapp.views.ProductData
 import com.GanApp.viewsganapp.views.ResetPasswordData
 import com.GanApp.viewsganapp.views.UserData
 import retrofit2.Call
@@ -21,4 +22,7 @@ interface UserRegisterApiService {
 
     @POST("restablecer-contraseña")
     fun resetPassword(@Body resetPasswordData: ResetPasswordData): Call<Void>
+
+    @POST("registrar-producto")
+    fun createProduct(@Body productData: ProductData): Call<Void>
 }
