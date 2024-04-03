@@ -37,8 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
-import com.GanApp.viewsganapp.views.ProductData
-
 
 
 @Composable
@@ -46,7 +44,11 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
     var nombre by remember { mutableStateOf("") }
     var precio by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
-    var imagenes by remember { mutableStateOf("") }
+    var imagen by remember { mutableStateOf("") }
+    var tipoServicioId by remember { mutableStateOf("") }
+    var categoriaId by remember { mutableStateOf("") }
+    var usuarioId by remember { mutableStateOf("") }
+
 
 
     Column(
@@ -103,7 +105,6 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 precio = filteredText
             },
             label = { Text("Precio") },
-            visualTransformation = PasswordVisualTransformation(),
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
@@ -120,7 +121,6 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 descripcion = filteredText
             },
             label = { Text("Descripcion") },
-            visualTransformation = PasswordVisualTransformation(),
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
@@ -131,13 +131,44 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
         )
 
         OutlinedTextField(
-            value = imagenes,
+            value = imagen,
             onValueChange = {
                 val filteredText = it.replace("\n", "")
-                imagenes = filteredText
+                imagen = filteredText
             },
             label = { Text("Imagenes") },
-            visualTransformation = PasswordVisualTransformation(),
+            textStyle = TextStyle(color = Color.Black),
+            leadingIcon = {
+                Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
+            },
+            shape = RoundedCornerShape(20.dp),
+            modifier = Modifier.offset(y = 20.dp)
+
+        )
+
+        OutlinedTextField(
+            value = tipoServicioId,
+            onValueChange = {
+                val filteredText = it.replace("\n", "")
+                tipoServicioId = filteredText
+            },
+            label = { Text("Tipo de Servicio") },
+            textStyle = TextStyle(color = Color.Black),
+            leadingIcon = {
+                Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
+            },
+            shape = RoundedCornerShape(20.dp),
+            modifier = Modifier.offset(y = 20.dp)
+
+        )
+
+        OutlinedTextField(
+            value = categoriaId,
+            onValueChange = {
+                val filteredText = it.replace("\n", "")
+                categoriaId = filteredText
+            },
+            label = { Text("Tipo de Categoria") },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
@@ -154,7 +185,12 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
 
         ) {
             Button(
-                onClick = { onSubmit(ProductData(nombre, precio, descripcion, imagenes)) },
+
+                onClick = {
+                    val tipoServicioLong = tipoServicioId.toLongOrNull() ?: 0L // Convierte a Long o usa 0L si falla
+                    val categoriaLong = categoriaId.toLongOrNull() ?: 0L // Convierte a Long o usa 0L si falla
+                    onSubmit(ProductData(nombre, precio, descripcion, imagen, tipoServicioLong, categoriaLong, 122))
+                },
                 colors = ButtonDefaults.buttonColors(
                     Color(10, 191, 4),
                     contentColor = Color.Black
@@ -185,9 +221,14 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
     }
 }
 
+
+
 data class ProductData(
     val nombre: String,
     val precio: String,
     val descripcion: String,
-    val imagenes: String
+    val imagen: String,
+    val tipoServicioId: Long,
+    val categoriaId: Long,
+    val usuarioId: Long
 )

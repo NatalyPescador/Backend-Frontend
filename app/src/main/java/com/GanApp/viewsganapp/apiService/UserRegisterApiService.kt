@@ -23,6 +23,5 @@ interface UserRegisterApiService {
     @POST("restablecer-contraseña")
     fun resetPassword(@Body resetPasswordData: ResetPasswordData): Call<Void>
 
-    @POST("registrar-producto")
-    fun createProduct(@Body productData: ProductData): Call<Void>
+
 }
