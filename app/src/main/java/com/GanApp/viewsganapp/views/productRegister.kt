@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -31,12 +33,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
+
 
 
 @Composable
@@ -48,6 +51,8 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
     var tipoServicioId by remember { mutableStateOf("") }
     var categoriaId by remember { mutableStateOf("") }
     var usuarioId by remember { mutableStateOf("") }
+
+    var imagenes by remember { mutableStateOf("") }
 
 
 
@@ -82,6 +87,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
 
         )
 
+
         OutlinedTextField(
             value = nombre,
             onValueChange = {
@@ -91,7 +97,13 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
             label = { Text("Nombre producto") },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Email, contentDescription = "gmail")
+                // Cargar el recurso de la imagen PNG como un pintor
+                val painter = painterResource(id = R.drawable.nombre_producto_icn)
+                // Utilizar el pintor en el Icon
+                Icon(
+                    painter = painter, contentDescription = "Nombre",
+                    modifier = Modifier.size(24.dp)
+                )
             },
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier.offset(y = 20.dp)
@@ -101,18 +113,31 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
         OutlinedTextField(
             value = precio,
             onValueChange = {
-                val filteredText = it.replace("\n", "")
+                // Filtrar el texto para permitir solo números y puntos decimales
+                val filteredText = it.filter { char ->
+                    char.isDigit() || char == '.'
+                }
                 precio = filteredText
             },
             label = { Text("Precio") },
+            visualTransformation = PasswordVisualTransformation(),
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
+                val painter = painterResource(id = R.drawable.dolar_icn)
+                Icon(
+                    painter = painter, contentDescription = "Precio",
+                    modifier = Modifier.size(24.dp)
+                )
             },
             shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 20.dp)
+            modifier = Modifier.offset(y = 20.dp),
+            // Configuración del teclado para permitir solo números y puntos decimales
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            // Filtrar la entrada para permitir solo números y puntos decimales
+            keyboardActions = KeyboardActions.Default,
+            singleLine = true,
 
-        )
+            )
 
         OutlinedTextField(
             value = descripcion,
@@ -121,9 +146,14 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 descripcion = filteredText
             },
             label = { Text("Descripcion") },
+            visualTransformation = PasswordVisualTransformation(),
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
+                val painter = painterResource(id = R.drawable.descripcion_icn)
+                Icon(
+                    painter = painter, contentDescription = "Descripción",
+                    modifier = Modifier.size(24.dp)
+                )
             },
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier.offset(y = 20.dp)
@@ -171,7 +201,11 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
             label = { Text("Tipo de Categoria") },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
+                val painter = painterResource(id = R.drawable.imagenes_icn)
+                Icon(
+                    painter = painter, contentDescription = "Icono de imagenes",
+                    modifier = Modifier.size(24.dp)
+                )
             },
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier.offset(y = 20.dp)
@@ -197,27 +231,46 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 )
             )
             {
-                Text("Publicar", color = Color.Black)
-            }
-        }
-
-        Spacer(modifier = Modifier.height(25.dp))
-
-        Row {
-            Text(text = "¿Aun no tienes cuenta?")
-            Spacer(modifier = Modifier.width(15.dp))
-            Text(text = "Registrate", fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable {
-                    navController.navigate("viewRegister")
-                })
-        }
-        Spacer(modifier = Modifier.height(15.dp))
-        Text(text = "¿Olvidaste tú contraseña?",
-            modifier = Modifier
-                .clickable {
-                    navController.navigate("forgotPassword")
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    // Utiliza el ícono PNG convertido en vector drawable
+                    Icon(
+                        painter = painterResource(id = R.drawable.promocion_icn),
+                        contentDescription = "Descripción del icono",
+                        modifier = Modifier.size(24.dp) // Tamaño del ícono
+                    )
+                    Text("Publicar", color = Color.Black, modifier = Modifier.padding(start = 8.dp))
                 }
-                .offset(x = 50.dp))
+            }
+
+        }
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Text(
+            text = "Registrate", color = Color.White,
+            fontSize = 40.sp,
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+        )
+        Text(
+            text = "Registrate", color = Color.White,
+            fontSize = 40.sp,
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+        )
+        Text(
+            text = "Registrate", color = Color.White,
+            fontSize = 40.sp,
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+        )
+        Text(
+            text = "Registrate", color = Color.White,
+            fontSize = 40.sp,
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+        )
+
     }
 }
 
