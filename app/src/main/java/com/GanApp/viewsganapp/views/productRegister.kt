@@ -19,6 +19,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -44,8 +47,13 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
     var nombre by remember { mutableStateOf("") }
     var precio by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
+    var imagen by remember { mutableStateOf("") }
+    var tipoServicioId by remember { mutableStateOf("") }
+    var categoriaId by remember { mutableStateOf("") }
+    var usuarioId by remember { mutableStateOf("") }
+
     var imagenes by remember { mutableStateOf("") }
-    
+
 
 
     Column(
@@ -112,6 +120,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 precio = filteredText
             },
             label = { Text("Precio") },
+            visualTransformation = PasswordVisualTransformation(),
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 val painter = painterResource(id = R.drawable.dolar_icn)
@@ -152,12 +161,44 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
         )
 
         OutlinedTextField(
-            value = imagenes,
+            value = imagen,
             onValueChange = {
                 val filteredText = it.replace("\n", "")
-                imagenes = filteredText
+                imagen = filteredText
             },
             label = { Text("Imagenes") },
+            textStyle = TextStyle(color = Color.Black),
+            leadingIcon = {
+                Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
+            },
+            shape = RoundedCornerShape(20.dp),
+            modifier = Modifier.offset(y = 20.dp)
+
+        )
+
+        OutlinedTextField(
+            value = tipoServicioId,
+            onValueChange = {
+                val filteredText = it.replace("\n", "")
+                tipoServicioId = filteredText
+            },
+            label = { Text("Tipo de Servicio") },
+            textStyle = TextStyle(color = Color.Black),
+            leadingIcon = {
+                Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
+            },
+            shape = RoundedCornerShape(20.dp),
+            modifier = Modifier.offset(y = 20.dp)
+
+        )
+
+        OutlinedTextField(
+            value = categoriaId,
+            onValueChange = {
+                val filteredText = it.replace("\n", "")
+                categoriaId = filteredText
+            },
+            label = { Text("Tipo de Categoria") },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 val painter = painterResource(id = R.drawable.imagenes_icn)
@@ -178,7 +219,12 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
 
         ) {
             Button(
-                onClick = { onSubmit(ProductData(nombre, precio, descripcion, imagenes)) },
+
+                onClick = {
+                    val tipoServicioLong = tipoServicioId.toLongOrNull() ?: 0L // Convierte a Long o usa 0L si falla
+                    val categoriaLong = categoriaId.toLongOrNull() ?: 0L // Convierte a Long o usa 0L si falla
+                    onSubmit(ProductData(nombre, precio, descripcion, imagen, tipoServicioLong, categoriaLong, 122))
+                },
                 colors = ButtonDefaults.buttonColors(
                     Color(10, 191, 4),
                     contentColor = Color.Black
@@ -228,9 +274,14 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
     }
 }
 
+
+
 data class ProductData(
     val nombre: String,
     val precio: String,
     val descripcion: String,
-    val imagenes: String
+    val imagen: String,
+    val tipoServicioId: Long,
+    val categoriaId: Long,
+    val usuarioId: Long
 )

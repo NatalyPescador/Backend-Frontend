@@ -135,7 +135,7 @@ class MainActivity : ComponentActivity() {
 
                     composable(AppScreens.productRegister.route){
                         ProductRegister(navController = navController) { productRegister ->
-                            val call = RetrofitInstance.apiService.createProduct(productRegister)
+                            val call = RetrofitInstance.apiServiceProduct.createProduct(productRegister)
                             call.enqueue(object : Callback<Void> {
                                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                     if (response.isSuccessful) {
