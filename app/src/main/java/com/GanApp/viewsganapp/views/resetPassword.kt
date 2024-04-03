@@ -15,7 +15,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
@@ -29,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -46,7 +51,7 @@ fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) ->
         modifier = Modifier
             .background(color = Color.White)
             .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+            //.verticalScroll(rememberScrollState())
             .fillMaxSize(), // Esto hará que la Column ocupe todo el tamaño disponible
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -59,15 +64,17 @@ fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) ->
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
-                modifier = Modifier.offset(y = 35.dp))
+                modifier = Modifier.offset(y = (-65).dp))
         }
 
         Text(
             text = "Restablecer Contraseña",
-            fontSize = 40.sp,
+            fontWeight = FontWeight.Bold,
+            fontSize = 30.sp,
+            textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(bottom = 16.dp)
-                .offset(y = 20.dp)
+                .offset(y = (-70).dp)
 
         )
 
@@ -80,10 +87,10 @@ fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) ->
             label = { Text("Ingrese el código recibido") },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Person, contentDescription = "telefono")
+                Icon(imageVector = Icons.Default.Lock, contentDescription = "candado")
             },
             shape = RoundedCornerShape(20.dp), // Ajusta el radio del borde según tus preferencias
-            modifier = Modifier.offset(y = 20.dp)
+            modifier = Modifier.offset(y = (-65).dp)
 
         )
 
@@ -97,10 +104,10 @@ fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) ->
             label = { Text("Nueva Contraseña") },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Email, contentDescription = "gmail")
+                Icon(imageVector = Icons.Default.Edit, contentDescription = "gmail")
             },
             shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 20.dp)
+            modifier = Modifier.offset(y = (-65).dp)
 
         )
 
@@ -113,10 +120,10 @@ fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) ->
             label = { Text("Confirmar Contraseña") },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Phone, contentDescription = "telefono")
+                Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "telefono")
             },
             shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 20.dp)
+            modifier = Modifier.offset(y = (-65).dp)
 
 
         )
@@ -124,18 +131,25 @@ fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) ->
         Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
 
         Box(
-            modifier = Modifier.offset(y = 20.dp)
+            modifier = Modifier.offset(y = (-65).dp)
 
         ) {
             Button(
                 { onSubmit(ResetPasswordData(token, newPassword, confirmedPassword)) },
-                colors = buttonColors(Color(10, 191, 4),
-                    contentColor = Color.Black)
+                colors = buttonColors(Color(10, 191, 4)
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 65.dp, vertical = 5.dp)
             )
             {
-                Text("Restablecer Contraseña", color = Color.Black)
+                Text("Guardar cambios",
+                    color = Color.Black,
+                    fontSize = 15.sp,
+                    textAlign = TextAlign.Center)
             }
         }
+
     }
 }
 
