@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
             ViewsGanAppTheme {  // Asume que este es tu tema de Compose
                 NavHost(
                     navController = navController,
-                    startDestination = AppScreens.loginUsergi.route
+                    startDestination = AppScreens.loginUser.route
                 ) {
                     composable(AppScreens.viewReister.route) {
                         Register(navController = navController) { userData ->
