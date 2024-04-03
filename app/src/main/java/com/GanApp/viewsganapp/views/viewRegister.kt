@@ -92,9 +92,8 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
 
         OutlinedTextField(
             value = nombreCompleto,
-            onValueChange = { //Elimina las lineas no deseadas
-                // Filtrar el texto para permitir solo letras
-                val filteredText = it.filter { char -> char.isLetter() }
+            onValueChange = {
+                val filteredText = it.replace("\n", "")
                 nombreCompleto = filteredText
             },
             label = { Text("Nombre") },
