@@ -56,9 +56,9 @@ android {
 
 dependencies {
     //Dependencias para selecconar imagenes de galeria
-    implementation ("androidx.camera:camera-camera2:1.1.0-alpha02")
-    implementation ("androidx.activity:activity:1.4.0")
-    implementation ("androidx.fragment:fragment:1.4.0")
+    implementation ("androidx.camera:camera-camera2:1.3.2")
+    implementation ("androidx.activity:activity-ktx:1.8.2")
+    implementation ("androidx.fragment:fragment-ktx:1.6.2")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation ("androidx.navigation:navigation-compose:2.7.7")
@@ -71,6 +71,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
