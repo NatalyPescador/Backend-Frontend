@@ -2,6 +2,7 @@ package com.GanApp.viewsganapp.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,18 +35,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
+import com.GanApp.viewsganapp.views.LogInData
+
+
 
 @Composable
-fun LogIn(onSubmit: (LogInData) -> Unit) {
+fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var isPasswordIncorrect by remember { mutableStateOf(false) }
+    var isEmailInvalid by remember { mutableStateOf(false) }
 
 
     Column(
         modifier = Modifier
             .background(color = Color.White)
             .padding(16.dp)
+            .offset(y = 50.dp)
             .verticalScroll(rememberScrollState())
             .fillMaxSize(), // Esto hará que la Column ocupe todo el tamaño disponible
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -59,7 +67,8 @@ fun LogIn(onSubmit: (LogInData) -> Unit) {
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
-                modifier = Modifier.offset(y = 35.dp))
+                modifier = Modifier.offset(y = 35.dp)
+            )
         }
 
         Text(
@@ -111,9 +120,11 @@ fun LogIn(onSubmit: (LogInData) -> Unit) {
 
         ) {
             Button(
-                { onSubmit(LogInData(correo, password)) },
-                colors = ButtonDefaults.buttonColors(Color(10, 191, 4),
-                    contentColor = Color.Black)
+                onClick = { onSubmit(LogInData(correo, password)) },
+                colors = ButtonDefaults.buttonColors(
+                    Color(10, 191, 4),
+                    contentColor = Color.Black
+                )
             )
             {
                 Text("Iniciar Sesión", color = Color.Black)
@@ -121,17 +132,23 @@ fun LogIn(onSubmit: (LogInData) -> Unit) {
         }
 
 
-        Spacer(modifier = Modifier.height(5.dp))
+        Spacer(modifier = Modifier.height(25.dp))
 
-        Box(
-            modifier = Modifier.offset(y = 20.dp)
-        ) {
-            Row {
-                Text(text = "¿Aun no tienes cuenta?")
-                Spacer(modifier = Modifier.width(15.dp))
-                Text(text = "Registrate", fontWeight = FontWeight.Bold)
-            }
+        Row {
+            Text(text = "¿Aun no tienes cuenta?")
+            Spacer(modifier = Modifier.width(15.dp))
+            Text(text = "Registrate", fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable {
+                    navController.navigate("viewRegister")
+                })
         }
+        Spacer(modifier = Modifier.height(15.dp))
+        Text(text = "¿Olvidaste tú contraseña?",
+            modifier = Modifier
+            .clickable {
+                navController.navigate("forgotPassword")
+            }
+            .offset(x = 50.dp))
 
         Row(
             modifier = Modifier
@@ -145,6 +162,9 @@ fun LogIn(onSubmit: (LogInData) -> Unit) {
                 painter = painterResource(id = R.drawable.fc_logo),
                 contentDescription = "Logo de Facebook",
                 modifier = Modifier
+                    .clickable {
+                        navController.navigate("productRegister")
+                    }
                     .height(70.dp)
                     .width(70.dp)
                     .offset(x = 22.dp)
@@ -153,6 +173,9 @@ fun LogIn(onSubmit: (LogInData) -> Unit) {
                 painter = painterResource(id = R.drawable.gmail_logo),
                 contentDescription = "Logo Gmail",
                 modifier = Modifier
+                    .clickable {
+                        navController.navigate("gmail")
+                    }
                     .height(55.dp)
                     .offset(x = 135.dp)
                     .width(55.dp)
@@ -161,15 +184,29 @@ fun LogIn(onSubmit: (LogInData) -> Unit) {
         Box(modifier = Modifier.offset(y = (-10).dp)
         ) {
             Row {
-                Text(text = "Continuar con", modifier = Modifier.offset(x = (-38).dp))//Facebook
-                Text(text = "Continuar con", modifier = Modifier.offset(x = 30.dp))//Gmail
+                Text(text = "Continuar con", modifier = Modifier
+                    .clickable {
+                        navController.navigate("productRegister")
+                    }
+                    .offset(x = (-38).dp))//Facebook
+                Text(text = "Continuar con",modifier = Modifier
+                    .clickable {
+                        navController.navigate("gmail")
+                    }.offset(x = 30.dp))//Gmail
             }
         }
 
         Box(modifier = Modifier.offset(y = (-15).dp)){
             Row {
-                Text(text = "Facebook", modifier = Modifier.offset(x = (-70).dp))
-                Text(text = "Gmail", modifier = Modifier.offset(x = (45).dp))
+                Text(text = "Facebook", modifier = Modifier
+                    .clickable {
+                        navController.navigate("productRegister")
+                    }
+                    .offset(x = (-70).dp))
+                Text(text = "Gmail", modifier = Modifier
+                    .clickable {
+                        navController.navigate("gmail")
+                    }.offset(x = (45).dp))
             }
         }
 
@@ -188,12 +225,18 @@ fun LogIn(onSubmit: (LogInData) -> Unit) {
                 .padding(bottom = 16.dp)
         )
 
+        Text(
+            text = "Registrate", color = Color.White,
+            fontSize = 40.sp,
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+        )
+
+
     }
 }
 
-
-
 data class LogInData(
     val correo: String,
-    val password: String,
+    val password: String
 )
