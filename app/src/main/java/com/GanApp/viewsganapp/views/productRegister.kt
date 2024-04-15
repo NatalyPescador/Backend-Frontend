@@ -37,23 +37,32 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
-
+import com.GanApp.viewsganapp.components.CategoriaDropdown
+import com.GanApp.viewsganapp.components.TipoServicioDropdown
+import com.GanApp.viewsganapp.models.CategoriaEntity
+import com.GanApp.viewsganapp.models.TipoServicioEntity
+import com.GanApp.viewsganapp.viewModels.ProductViewModel
 
 
 @Composable
 fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Unit) {
+    val viewModel: ProductViewModel = viewModel()
     var nombre by remember { mutableStateOf("") }
     var precio by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
     var imagen by remember { mutableStateOf("") }
-    var tipoServicioId by remember { mutableStateOf("") }
-    var categoriaId by remember { mutableStateOf("") }
-    var usuarioId by remember { mutableStateOf("") }
+    var selectedCategoria by remember { mutableStateOf<CategoriaEntity?>(null) }
+    var selectedTipoServicio by remember { mutableStateOf<TipoServicioEntity?>(null) }
 
-    var imagenes by remember { mutableStateOf("") }
-
+    // Observa cambios en selectedTipoServicio y carga las categorías relacionadas
+    LaunchedEffect(selectedTipoServicio) {
+        selectedTipoServicio?.tipoServicioId?.let {
+            viewModel.fetchCategoriasByTipoServicio(it)
+        }
+    }
 
 
     Column(
@@ -120,7 +129,6 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 precio = filteredText
             },
             label = { Text("Precio") },
-            visualTransformation = PasswordVisualTransformation(),
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 val painter = painterResource(id = R.drawable.dolar_icn)
@@ -146,7 +154,6 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 descripcion = filteredText
             },
             label = { Text("Descripcion") },
-            visualTransformation = PasswordVisualTransformation(),
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 val painter = painterResource(id = R.drawable.descripcion_icn)
@@ -176,41 +183,26 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
 
         )
 
-        OutlinedTextField(
-            value = tipoServicioId,
-            onValueChange = {
-                val filteredText = it.replace("\n", "")
-                tipoServicioId = filteredText
-            },
-            label = { Text("Tipo de Servicio") },
-            textStyle = TextStyle(color = Color.Black),
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
-            },
-            shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 20.dp)
-
+        TipoServicioDropdown(
+            tiposServicio = viewModel.tiposServicio.value,
+            selectedTipoServicio = selectedTipoServicio,
+            onTipoServicioSelected = { tipoServicio ->
+                selectedTipoServicio = tipoServicio
+               /* viewModel.selectedTipoServicioId.value = tipoServicio.tipoServicioId
+                viewModel.fetchCategoriasByTipoServicio(tipoServicio.tipoServicioId)*/
+            }
         )
 
-        OutlinedTextField(
-            value = categoriaId,
-            onValueChange = {
-                val filteredText = it.replace("\n", "")
-                categoriaId = filteredText
-            },
-            label = { Text("Tipo de Categoria") },
-            textStyle = TextStyle(color = Color.Black),
-            leadingIcon = {
-                val painter = painterResource(id = R.drawable.imagenes_icn)
-                Icon(
-                    painter = painter, contentDescription = "Icono de imagenes",
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 20.dp)
+        if (selectedTipoServicio != null) { // Mostrar solo si hay un tipo de servicio seleccionado
+            CategoriaDropdown(
+                categorias = viewModel.categorias.value,
+                selectedCategoria = selectedCategoria,
+                onCategoriaSelected = { categoria ->
+                    selectedCategoria = categoria
+                }
+            )
+        }
 
-        )
 
         Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
 
@@ -221,9 +213,22 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
             Button(
 
                 onClick = {
-                    val tipoServicioLong = tipoServicioId.toLongOrNull() ?: 0L // Convierte a Long o usa 0L si falla
-                    val categoriaLong = categoriaId.toLongOrNull() ?: 0L // Convierte a Long o usa 0L si falla
-                    onSubmit(ProductData(nombre, precio, descripcion, imagen, tipoServicioLong, categoriaLong, 122))
+                    // Usando let para asegurarnos de que ambos, selectedCategoria y selectedTipoServicio, no son nulos.
+                    selectedCategoria?.let { categoria ->
+                        selectedTipoServicio?.let { servicio ->
+                            onSubmit(
+                                ProductData(
+                                    nombre = nombre,
+                                    precio = precio,
+                                    descripcion = descripcion,
+                                    imagen = imagen,
+                                    tipoServicioId = servicio.tipoServicioId,
+                                    categoriaId = categoria.categoriaId,
+                                    usuarioId = 122  // Considera manejar este valor de manera dinámica si es necesario.
+                                )
+                            )
+                        }
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(
                     Color(10, 191, 4),
