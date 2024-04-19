@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
-import com.GanApp.viewsganapp.views.LogInData
 
 
 

@@ -2,6 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="DuplicateDefinition">
 
     <style name="Theme.ViewsGanApp" parent="android:Theme.Material.Light.NoActionBar"/>
+    <item name="colorPrimarary" type="color">@color/verde_claro</item>
+    <item name="colorPrimaryVariant" type="color">@color/verde_claro</item>
+
+
    
 
 
