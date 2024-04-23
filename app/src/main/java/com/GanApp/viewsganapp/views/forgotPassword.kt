@@ -37,6 +37,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
+import kotlinx.coroutines.delay
+
+var showErrorForgotPassword by mutableStateOf(false)
+var errorMessageForgotPassword by mutableStateOf("")
 
 @Composable
 fun ForgotPassword(navController: NavController, onSubmit: (ForgotPasswordData) -> Unit) {
@@ -120,7 +124,31 @@ fun ForgotPassword(navController: NavController, onSubmit: (ForgotPasswordData) 
 
         )
 
-        Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LaunchedEffect(showErrorForgotPassword) {
+            if (showErrorForgotPassword) {
+                delay(5000)
+                showErrorForgotPassword = false
+            }
+        }
+
+        if (showErrorForgotPassword) {
+            Box(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    errorMessageForgotPassword,
+                    color = Color.Red,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Box(
             modifier = Modifier.offset(y = (-220).dp)
@@ -128,7 +156,6 @@ fun ForgotPassword(navController: NavController, onSubmit: (ForgotPasswordData) 
         ) {
             Button(
                 onClick = {
-                    navController.navigate("resetPassword")
                     onSubmit(ForgotPasswordData(correo))
                 },
                 colors = ButtonDefaults.buttonColors(

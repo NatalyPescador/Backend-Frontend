@@ -17,6 +17,16 @@ import com.GanApp.viewsganapp.views.LogIn
 import com.GanApp.viewsganapp.views.ProductRegister
 import com.GanApp.viewsganapp.views.Register
 import com.GanApp.viewsganapp.views.ResetPassword
+import com.GanApp.viewsganapp.views.errorMessageForgotPassword
+import com.GanApp.viewsganapp.views.errorMessageLogin
+import com.GanApp.viewsganapp.views.errorMessageRegister
+import com.GanApp.viewsganapp.views.errorMessageResetPassword
+import com.GanApp.viewsganapp.views.showErrorForgotPassword
+import com.GanApp.viewsganapp.views.showErrorLogin
+import com.GanApp.viewsganapp.views.showErrorRegister
+import com.GanApp.viewsganapp.views.showErrorResetPassword
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,19 +45,21 @@ class MainActivity : ComponentActivity() {
                         Register(navController = navController) { userData ->
                             val call = RetrofitInstance.apiService.createUser(userData)
                             call.enqueue(object : Callback<Void> {
-                                override fun onResponse(
-                                    call: Call<Void>,
-                                    response: Response<Void>
-                                ) {
+                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                     if (response.isSuccessful) {
-                                        Log.d("API Call", "Success")
+                                        Log.d("API Call", "Usuario creado con éxito")
                                     } else {
-                                        Log.d(
-                                            "API Call",
-                                            "Response not successful: ${
-                                                response.errorBody()?.string()
-                                            }"
-                                        )
+                                        val errorBody = response.errorBody()?.string()
+                                        Log.d("API Call", "Response not successful: $errorBody")
+                                        if (!errorBody.isNullOrEmpty()) {
+                                            try {
+                                                val json = JSONObject(errorBody)
+                                                errorMessageRegister = json.getString("errorMessage")
+                                                showErrorRegister = true
+                                            } catch (e: JSONException) {
+                                                Log.e("API Call", "Error parsing JSON", e)
+                                            }
+                                        }
                                     }
                                 }
 
@@ -62,19 +74,21 @@ class MainActivity : ComponentActivity() {
                         LogIn(navController = navController) { logInData ->
                             val call = RetrofitInstance.apiService.logIn(logInData)
                             call.enqueue(object : Callback<Void> {
-                                override fun onResponse(
-                                    call: Call<Void>,
-                                    response: Response<Void>
-                                ) {
+                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                     if (response.isSuccessful) {
-                                        Log.d("API Call", "Success")
+                                        Log.d("API Call", "Inicio de sesión exitoso")
                                     } else {
-                                        Log.d(
-                                            "API Call",
-                                            "Response not successful: ${
-                                                response.errorBody()?.string()
-                                            }"
-                                        )
+                                        val errorBody = response.errorBody()?.string()
+                                        Log.d("API Call", "Response not successful: $errorBody")
+                                        if (!errorBody.isNullOrEmpty()) {
+                                            try {
+                                                val json = JSONObject(errorBody)
+                                                errorMessageLogin = json.getString("errorMessage")
+                                                showErrorLogin = true
+                                            } catch (e: JSONException) {
+                                                Log.e("API Call", "Error parsing JSON", e)
+                                            }
+                                        }
                                     }
                                 }
 
@@ -99,9 +113,20 @@ class MainActivity : ComponentActivity() {
                             call.enqueue(object : Callback<Void> {
                                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                     if (response.isSuccessful) {
-                                        Log.d("API Call", "Success")
+                                        Log.d("API Call", "Correo enviado")
+                                        navController.navigate("resetPassword")
                                     } else {
-                                        Log.d("API Call", "Response not successful: ${response.errorBody()?.string()}")
+                                        val errorBody = response.errorBody()?.string()
+                                        Log.d("API Call", "Response not successful: $errorBody")
+                                        if (!errorBody.isNullOrEmpty()) {
+                                            try {
+                                                val json = JSONObject(errorBody)
+                                                errorMessageForgotPassword = json.getString("errorMessage")
+                                                showErrorForgotPassword = true
+                                            } catch (e: JSONException) {
+                                                Log.e("API Call", "Error parsing JSON", e)
+                                            }
+                                        }
                                     }
                                 }
 
@@ -118,12 +143,20 @@ class MainActivity : ComponentActivity() {
                             call.enqueue(object : Callback<Void> {
                                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                     if (response.isSuccessful) {
-                                        Log.d("API Call", "Success")
+                                        Log.d("API Call", "Contraseña restablecida")
+                                        navController.navigate("loginUser_screens")
                                     } else {
-                                        Log.d(
-                                            "API Call",
-                                            "Response not successful: ${response.errorBody()?.string()}"
-                                        )
+                                        val errorBody = response.errorBody()?.string()
+                                        Log.d("API Call", "Response not successful: $errorBody")
+                                        if (!errorBody.isNullOrEmpty()) {
+                                            try {
+                                                val json = JSONObject(errorBody)
+                                                errorMessageResetPassword = json.getString("errorMessage")
+                                                showErrorResetPassword = true
+                                            } catch (e: JSONException) {
+                                                Log.e("API Call", "Error parsing JSON", e)
+                                            }
+                                        }
                                     }
                                 }
                                 override fun onFailure(call: Call<Void>, t: Throwable) {
