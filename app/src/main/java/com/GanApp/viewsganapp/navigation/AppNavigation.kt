@@ -24,6 +24,8 @@ sealed class AppScreens(val route: String) {
     object forgotPassword : AppScreens ("forgotPassword")
     object resetPassword : AppScreens("resetPassword")
     object productRegister : AppScreens("productRegister")
+    object catalogo : AppScreens("catalogo")
+
 }
 
 @SuppressLint("ComposableDestinationInComposeScope")
@@ -82,6 +84,10 @@ fun AppScreens(navController: NavController) {
                     var descripcion by remember { mutableStateOf("") }
                     var imagenes by remember { mutableStateOf("") }
                 }
+            }
+            composable(AppScreens.catalogo.route){
+                @Composable
+                fun CatalogoPrincipal(){}
             }
         }
     }

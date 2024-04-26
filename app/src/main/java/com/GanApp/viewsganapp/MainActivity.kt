@@ -10,9 +10,10 @@ import androidx.navigation.compose.rememberNavController
 import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
+import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.views.Facebook
-import com.GanApp.viewsganapp.views.Gmail
 import com.GanApp.viewsganapp.views.ForgotPassword
+import com.GanApp.viewsganapp.views.Gmail
 import com.GanApp.viewsganapp.views.LogIn
 import com.GanApp.viewsganapp.views.ProductRegister
 import com.GanApp.viewsganapp.views.Register
@@ -20,6 +21,7 @@ import com.GanApp.viewsganapp.views.ResetPassword
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +31,7 @@ class MainActivity : ComponentActivity() {
             ViewsGanAppTheme {  // Asume que este es tu tema de Compose
                 NavHost(
                     navController = navController,
-                    startDestination = AppScreens.loginUser.route
+                    startDestination = AppScreens.catalogo.route
                 ) {
                     composable(AppScreens.viewReister.route) {
                         Register(navController = navController) { userData ->
@@ -153,7 +155,12 @@ class MainActivity : ComponentActivity() {
                             })
                         }
                     }
-                }
+
+                    composable(AppScreens.catalogo.route){
+                        CatalogoPrincipal(navController = navController)
+
+                    }
+                } 
             }
         }
     }
