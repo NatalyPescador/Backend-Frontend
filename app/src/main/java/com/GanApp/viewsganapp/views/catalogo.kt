@@ -54,7 +54,7 @@ val productList = listOf(
                             .fillMaxWidth()
                             .padding(bottom = 16.dp)
                     ) {
-                        for (i in 0 until 3) {
+                        for (i in 0 until 2) {
                             val index = rowIndex * 3 + i
                             if (index < productos.size) {
                                 Tarjeta(producto =productos[index] )
