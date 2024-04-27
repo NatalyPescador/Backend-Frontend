@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 
 class ProductViewModel : ViewModel() {
 
+
     var categorias = mutableStateOf<List<CategoriaEntity>>(listOf())
     var tiposServicio = mutableStateOf<List<TipoServicioEntity>>(listOf())
     var selectedTipoServicioId = mutableStateOf<Long?>(null)
@@ -82,6 +83,9 @@ class ProductViewModel : ViewModel() {
         }
     }
 
+    fun fetchProducts() {
+        TODO("Not yet implemented")
+    }
 
 
 }

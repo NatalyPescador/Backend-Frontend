@@ -1,20 +1,26 @@
 package com.GanApp.viewsganapp.navigation
 
+
+
+import androidx.compose.runtime.observeAsState
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.GanApp.viewsganapp.viewModels.ProductViewModel
 import com.GanApp.viewsganapp.views.ForgotPasswordData
 import com.GanApp.viewsganapp.views.LogInData
 import com.GanApp.viewsganapp.views.ProductData
 import com.GanApp.viewsganapp.views.ResetPasswordData
 import com.GanApp.viewsganapp.views.UserData
+
 
 sealed class AppScreens(val route: String) {
     object loginUser : AppScreens("loginUser_screens")
@@ -24,11 +30,22 @@ sealed class AppScreens(val route: String) {
     object forgotPassword : AppScreens ("forgotPassword")
     object resetPassword : AppScreens("resetPassword")
     object productRegister : AppScreens("productRegister")
+    object productViewModel : AppScreens("productView")
+
+    sealed class Screen(val route: String) {
+        object ProductList : Screen("productList")
+        object ProductDetail : Screen("productDetail")
+    }
 }
+
 
 @SuppressLint("ComposableDestinationInComposeScope")
 @Composable
 fun AppScreens(navController: NavController) {
+    @Composable
+    fun ProductItem(product: Int) {
+
+    }
     NavHost(
         navController = navController as NavHostController,
         startDestination = AppScreens.loginUser.route
@@ -82,10 +99,22 @@ fun AppScreens(navController: NavController) {
                     var descripcion by remember { mutableStateOf("") }
                     var imagenes by remember { mutableStateOf("") }
                 }
+
+                }
+            /** @Composable
+            fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Unit) {
+                val viewModel: ProductViewModel = viewModel()
+
+                // Observa los tipos de servicio y categorías
+                val tiposServicio by viewModel.tiposServicio.observeAsState(emptyList())
+                val categorias by viewModel.categorias.observeAsState(emptyList())
+
+                // Resto del código para mostrar y manejar los datos...
+            }
             }
         }
     }
-}
+
 
 
        
