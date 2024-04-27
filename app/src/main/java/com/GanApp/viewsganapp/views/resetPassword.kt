@@ -38,8 +38,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
+import kotlinx.coroutines.delay
 import androidx.compose.foundation.layout.Column as Column
 
+var showErrorResetPassword by mutableStateOf(false)
+var errorMessageResetPassword by mutableStateOf("")
 
 @Composable
 fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) -> Unit) {
@@ -128,7 +131,31 @@ fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) ->
 
         )
 
-        Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LaunchedEffect(showErrorResetPassword) {
+            if (showErrorResetPassword) {
+                delay(5000)
+                showErrorResetPassword = false
+            }
+        }
+
+        if (showErrorResetPassword) {
+            Box(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    errorMessageResetPassword,
+                    color = Color.Red,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Box(
             modifier = Modifier.offset(y = (-65).dp)
