@@ -1,5 +1,8 @@
 package com.GanApp.viewsganapp.views
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,6 +34,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -39,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.GanApp.viewsganapp.R
 import com.GanApp.viewsganapp.components.CategoriaDropdown
 import com.GanApp.viewsganapp.components.TipoServicioDropdown
@@ -50,12 +55,20 @@ import com.GanApp.viewsganapp.viewModels.ProductViewModel
 @Composable
 fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Unit) {
     val viewModel: ProductViewModel = viewModel()
+    val context = LocalContext.current
     var nombre by remember { mutableStateOf("") }
     var precio by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
-    var imagen by remember { mutableStateOf("") }
+    //var imagen by remember { mutableStateOf("") }
     var selectedCategoria by remember { mutableStateOf<CategoriaEntity?>(null) }
     var selectedTipoServicio by remember { mutableStateOf<TipoServicioEntity?>(null) }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri = uri
+    }
 
     // Observa cambios en selectedTipoServicio y carga las categorías relacionadas
     LaunchedEffect(selectedTipoServicio) {
@@ -75,6 +88,18 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
+        Button(onClick = { imagePickerLauncher.launch("image/*") }) {
+            Text("Seleccionar Imagen")
+        }
+
+        imageUri?.let {
+            Image(
+                painter = rememberAsyncImagePainter(model = it),
+                contentDescription = "Imagen seleccionada",
+                modifier = Modifier.size(100.dp)
+            )
+        }
 
         Row(
             modifier = Modifier
@@ -167,22 +192,6 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
 
         )
 
-        OutlinedTextField(
-            value = imagen,
-            onValueChange = {
-                val filteredText = it.replace("\n", "")
-                imagen = filteredText
-            },
-            label = { Text("Imagenes") },
-            textStyle = TextStyle(color = Color.Black),
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
-            },
-            shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 20.dp)
-
-        )
-
         TipoServicioDropdown(
             tiposServicio = viewModel.tiposServicio.value,
             selectedTipoServicio = selectedTipoServicio,
@@ -213,21 +222,20 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
             Button(
 
                 onClick = {
-                    // Usando let para asegurarnos de que ambos, selectedCategoria y selectedTipoServicio, no son nulos.
-                    selectedCategoria?.let { categoria ->
-                        selectedTipoServicio?.let { servicio ->
-                            onSubmit(
-                                ProductData(
-                                    nombre = nombre,
-                                    precio = precio,
-                                    descripcion = descripcion,
-                                    imagen = imagen,
-                                    tipoServicioId = servicio.tipoServicioId,
-                                    categoriaId = categoria.categoriaId,
-                                    usuarioId = 122  // Considera manejar este valor de manera dinámica si es necesario.
-                                )
+                    imageUri?.let { uri ->
+                        viewModel.uploadProductData(
+                            context,
+                            uri,
+                            ProductData(
+                                nombre = nombre,  // Asegúrate de que 'nombre' está definido en tu estado composable
+                                precio = precio,  // Asegúrate de que 'precio' está definido en tu estado composable
+                                descripcion = descripcion,  // Asegúrate de que 'descripcion' está definido en tu estado composable
+                                imagen = uri.toString(),
+                                tipoServicioId = selectedTipoServicio?.tipoServicioId ?: 0,
+                                categoriaId = selectedCategoria?.categoriaId ?: 0,
+                                usuarioId = 122  // Ejemplo de usuario ID
                             )
-                        }
+                        )
                     }
                 },
                 colors = ButtonDefaults.buttonColors(

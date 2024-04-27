@@ -33,13 +33,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
 import com.GanApp.viewsganapp.views.LogInData
+import kotlinx.coroutines.delay
 
-
+var showErrorLogin by mutableStateOf(false)
+var errorMessageLogin by mutableStateOf("")
 
 @Composable
 fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
@@ -131,8 +134,31 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
             }
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(25.dp))
+        LaunchedEffect(showErrorLogin) {
+            if (showErrorLogin) {
+                delay(5000)
+                showErrorLogin = false
+            }
+        }
+
+        if (showErrorLogin) {
+            Box(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    errorMessageLogin,
+                    color = Color.Red,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Row {
             Text(text = "¿Aun no tienes cuenta?")
