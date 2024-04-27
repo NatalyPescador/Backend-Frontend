@@ -143,7 +143,7 @@ class MainActivity : ComponentActivity() {
                             call.enqueue(object : Callback<Void> {
                                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                     if (response.isSuccessful) {
-                                        Log.d("API Call", "Contraseña restablecida")
+                                        Log.d("API Call", "Contraseña restablecida con éxito")
                                         navController.navigate("loginUser_screens")
                                     } else {
                                         val errorBody = response.errorBody()?.string()
