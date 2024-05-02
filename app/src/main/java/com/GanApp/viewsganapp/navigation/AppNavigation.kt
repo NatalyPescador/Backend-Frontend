@@ -31,6 +31,7 @@ sealed class AppScreens(val route: String) {
     object productRegister : AppScreens("productRegister")
     object homePage: AppScreens ("homePage")
     object profile : AppScreens ("Profile_screens")
+
 }
 
 
@@ -108,6 +109,7 @@ fun AppScreens(navController: NavController) {
 
                      }
                  }
+                 
              }
     }
 }

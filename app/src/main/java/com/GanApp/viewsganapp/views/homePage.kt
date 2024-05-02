@@ -1,7 +1,10 @@
 package com.GanApp.viewsganapp.views
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,14 +12,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,7 +40,6 @@ import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberDrawerState
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -52,9 +61,14 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.GanApp.viewsganapp.navigation.AppScreens
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.Composable as Composable
+import com.GanApp.viewsganapp.views.LogIn
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(navController: NavHostController) {
@@ -67,21 +81,21 @@ fun HomePage(navController: NavHostController) {
 
     val items = listOf(
         DrawerItem(
-            title = "Home",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home,
+            title = "Perfil",
+            selectedIcon = Icons.Filled.Person,
+            unselectedIcon = Icons.Outlined.Person,
             route = "Profile_screens"
         ),
         DrawerItem(
-            title = "Notification",
-            selectedIcon = Icons.Filled.Info,
-            unselectedIcon = Icons.Outlined.Info,
+            title = "Home",
+            selectedIcon = Icons.Filled.Home,
+            unselectedIcon = Icons.Outlined.Home,
             route = "ruta_a_home",
 
         ),
         DrawerItem(
             title = "Favorites",
-            selectedIcon = Icons.Filled.Favorite,
+            selectedIcon = Icons.Filled.FavoriteBorder,
             unselectedIcon = Icons.Outlined.FavoriteBorder,
             route = "ruta_a_home",
         ),
@@ -91,50 +105,72 @@ fun HomePage(navController: NavHostController) {
     ){
         ModalNavigationDrawer(
             drawerContent = {
-                ModalDrawerSheet {
-                    Spacer(modifier = Modifier.height(26.dp))
-                    Image(
-                        painter = painterResource(id = R.drawable.fc_logo),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .size(150.dp)
-                            .fillMaxWidth()
-                            .align(CenterHorizontally)
-                    )
-                    Spacer(modifier = Modifier.height(26.dp))
-                    items.forEachIndexed { index, drawerItem ->
-                        NavigationDrawerItem(label = {
-                            Text(text = drawerItem.title)
-                        }, selected = index == selectedItemIndex, onClick = {
-                            selectedItemIndex = index
-                            scope.launch {
-                                navigationState.close()
-                                navController.navigate(drawerItem.route)
-                            }
-                        }, icon = {
-                            Icon(
-                                imageVector = if (index == selectedItemIndex) {
-                                    drawerItem.selectedIcon
-                                } else drawerItem.unselectedIcon,
-                                contentDescription = drawerItem.title
-                            )
-                        }, badge = {
-                            drawerItem.badgeCount?.let {
-                                Text(text = drawerItem.badgeCount.toString())
-                            }
-                        }, modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                        )
 
+                ModalDrawerSheet(modifier = Modifier.padding(end = 50.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(color = Color(195,252,219))
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            Spacer(modifier = Modifier.height(26.dp))
+                            Image(
+                                painter = painterResource(id = R.drawable.icproject),
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .width(230.dp)
+                                    .height(230.dp)
+                                    .size(150.dp)
+                                    .fillMaxWidth()
+                                    .align(CenterHorizontally)
+                            )
+                            Spacer(modifier = Modifier.height(26.dp))
+                            items.forEachIndexed { index, drawerItem ->
+                                NavigationDrawerItem(label = {
+                                    Text(text = drawerItem.title)
+                                },
+                                    selected = index == selectedItemIndex,
+                                    onClick = {
+                                        selectedItemIndex = index
+                                        scope.launch {
+                                            navigationState.close()
+                                            navController.navigate(drawerItem.route)
+                                        }
+                                    },
+                                    icon = {
+                                        Icon(
+                                            imageVector = if (index == selectedItemIndex) {
+                                                drawerItem.selectedIcon
+                                            } else drawerItem.unselectedIcon,
+                                            contentDescription = drawerItem.title
+                                        )
+                                    },
+                                    badge = {
+                                        drawerItem.badgeCount?.let {
+                                            Text(text = drawerItem.badgeCount.toString())
+                                        }
+                                    },
+                                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                                )
+
+                            }
+                        }
                     }
                 }
-            },
-            drawerState = navigationState,
+            }, drawerState = navigationState,
+
+
+
         ) {
-            Scaffold(topBar = {
-                TopAppBar(title = {
-                    Text(text = "GanApp",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 30.sp)
+            Scaffold( topBar = {
+                TopAppBar(title = { Image(painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "Logo", modifier = Modifier
+                        .height(200.dp)
+                        .width(200.dp)
+                 )
 
                 }, navigationIcon = {
                     IconButton(onClick = {
@@ -143,22 +179,20 @@ fun HomePage(navController: NavHostController) {
                         }
                     }) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu",
-                            modifier = Modifier.size(40.dp))
+                            tint = Color.Black,
+                            modifier = Modifier.size(40.dp)
+
+                        )
                     }
-                },  colors = TopAppBarDefaults.topAppBarColors(Color(10, 191, 4))
+                },  colors = TopAppBarDefaults.topAppBarColors(Color(152, 255, 150))
 
                 )
             }
                 ) {
-                Column (modifier = Modifier
-                    .background(color = Color.White)){
-                    Text(
-                        text = "Hii Learner",
-                        modifier = Modifier
-                            .padding(it)
-                            .fillMaxSize(),
-                        textAlign = TextAlign.Center
-                    )
+                Column (
+                    ){
+                    LogIn(navController = navController) { }
+
                 }
 
             }
