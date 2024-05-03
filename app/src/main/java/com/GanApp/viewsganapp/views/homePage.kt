@@ -54,6 +54,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.colorspace.ColorSpaces
@@ -78,6 +79,12 @@ fun HomePage(navController: NavHostController) {
     var selectedItemIndex by rememberSaveable {
         mutableIntStateOf(0)
     }
+
+    /*LaunchedEffect(key1 = true) {
+        // Posible inicialización o acciones adicionales
+        navigationState.close()  // Ejemplo de cómo asegurar que el drawer esté cerrado al inicio
+    }*/
+
 
     val items = listOf(
         DrawerItem(
