@@ -1,10 +1,15 @@
 package com.GanApp.viewsganapp.navigation
 
 import android.annotation.SuppressLint
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -24,7 +29,11 @@ sealed class AppScreens(val route: String) {
     object forgotPassword : AppScreens ("forgotPassword")
     object resetPassword : AppScreens("resetPassword")
     object productRegister : AppScreens("productRegister")
+    object homePage: AppScreens ("homePage")
+    object profile : AppScreens ("Profile_screens")
+
 }
+
 
 @SuppressLint("ComposableDestinationInComposeScope")
 @Composable
@@ -33,12 +42,12 @@ fun AppScreens(navController: NavController) {
         navController = navController as NavHostController,
         startDestination = AppScreens.loginUser.route
     ) {
-        composable(AppScreens.loginUser.route) {
-            @Composable
-            fun LogIn(onSubmit: (LogInData) -> Unit) {
-                var correo by remember { mutableStateOf("") }
-                var password by remember { mutableStateOf("") }
-                // Composable para la pantalla de inicio de sesión
+             composable(AppScreens.loginUser.route) {
+                @Composable
+                fun LogIn(onSubmit: (LogInData) -> Unit) {
+                    var correo by remember { mutableStateOf("") }
+                    var password by remember { mutableStateOf("") }
+                    // Composable para la pantalla de inicio de sesión
             }
             composable(AppScreens.viewReister.route) {
                 @Composable
@@ -83,7 +92,25 @@ fun AppScreens(navController: NavController) {
                     var imagenes by remember { mutableStateOf("") }
                 }
             }
+            composable(AppScreens.homePage.route){
+                @Composable
+                fun HomePage() {
+
+                    val navigationState = rememberDrawerState(initialValue = DrawerValue.Closed)
+                    val scope = rememberCoroutineScope()
+                    var selectedItemIndex by rememberSaveable {
+                        mutableIntStateOf(0)
+                    }
+            }
         }
+                 composable(AppScreens.profile.route) {
+                     @Composable
+                     fun Perfil() {
+
+                     }
+                 }
+                 
+             }
     }
 }
 

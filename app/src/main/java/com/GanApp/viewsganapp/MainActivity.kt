@@ -1,5 +1,6 @@
 package com.GanApp.viewsganapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -13,7 +14,9 @@ import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Gmail
 import com.GanApp.viewsganapp.views.ForgotPassword
+import com.GanApp.viewsganapp.views.HomePage
 import com.GanApp.viewsganapp.views.LogIn
+import com.GanApp.viewsganapp.views.Perfil
 import com.GanApp.viewsganapp.views.ProductRegister
 import com.GanApp.viewsganapp.views.Register
 import com.GanApp.viewsganapp.views.ResetPassword
@@ -22,6 +25,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("ComposableDestinationInComposeScope")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -29,7 +33,7 @@ class MainActivity : ComponentActivity() {
             ViewsGanAppTheme {  // Asume que este es tu tema de Compose
                 NavHost(
                     navController = navController,
-                    startDestination = AppScreens.loginUser.route
+                    startDestination = AppScreens.homePage.route
                 ) {
                     composable(AppScreens.viewReister.route) {
                         Register(navController = navController) { userData ->
@@ -152,7 +156,19 @@ class MainActivity : ComponentActivity() {
                                 }
                             })
                         }
+
                     }
+
+                    composable(AppScreens.homePage.route){
+                        HomePage(navController = navController)
+
+                    }
+
+                    composable(AppScreens.profile.route){
+                        Perfil(navController = navController)
+
+                    }
+
                 }
             }
         }
