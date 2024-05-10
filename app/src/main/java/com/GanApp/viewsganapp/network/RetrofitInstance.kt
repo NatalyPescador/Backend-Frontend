@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
 
-    private const val BASE_URL = "https://97a7-2801-1ca-5-102-e5fc-6cc8-f212-7c3a.ngrok-free.app/GanApp/" // Reemplaza esto con tu URL base
+    private const val BASE_URL = "http://192.168.200.175:8080/GanApp/" // Reemplaza esto con tu URL base
 
     // Lazy initialization del Retrofit instance
     private val retrofit: Retrofit by lazy {
