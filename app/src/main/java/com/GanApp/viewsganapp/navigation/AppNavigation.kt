@@ -25,6 +25,7 @@ sealed class AppScreens(val route: String) {
     object resetPassword : AppScreens("resetPassword")
     object productRegister : AppScreens("productRegister")
     object catalogo : AppScreens("catalogo")
+    object detalleProd : AppScreens("detalleProd")
 
 }
 
@@ -88,6 +89,10 @@ fun AppScreens(navController: NavController) {
             composable(AppScreens.catalogo.route){
                 @Composable
                 fun CatalogoPrincipal(){}
+            }
+            composable(AppScreens.detalleProd.route){
+                @Composable
+                fun DetalleProducto(){}
             }
         }
     }

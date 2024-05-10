@@ -11,6 +11,7 @@ import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
+import com.GanApp.viewsganapp.views.DetalleProducto
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.ForgotPassword
 import com.GanApp.viewsganapp.views.Gmail
@@ -31,7 +32,7 @@ class MainActivity : ComponentActivity() {
             ViewsGanAppTheme {  // Asume que este es tu tema de Compose
                 NavHost(
                     navController = navController,
-                    startDestination = AppScreens.catalogo.route
+                    startDestination = AppScreens.detalleProd.route
                 ) {
                     composable(AppScreens.viewReister.route) {
                         Register(navController = navController) { userData ->
@@ -160,9 +161,14 @@ class MainActivity : ComponentActivity() {
                         CatalogoPrincipal(navController = navController)
 
                     }
+
+                    composable(AppScreens.detalleProd.route){
+                        DetalleProducto(navController = navController)
+                    }
                 } 
             }
         }
+
     }
 }
 

@@ -146,11 +146,9 @@ fun CatalogoPrincipal(navController: NavController) {
             Text(text = "Filtrar", fontSize = 21.sp)
 
         }
-    // Usage
-    //@Composable
-    //fun CatalogoScreen() {
+
         Catalogo(productos = productList)
-    //}
+
     }
 }
 
