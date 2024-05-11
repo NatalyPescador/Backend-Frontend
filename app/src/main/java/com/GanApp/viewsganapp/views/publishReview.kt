@@ -55,7 +55,7 @@ fun PublishReview(navController: NavController, onSubmit: (ReviewData) -> Unit) 
         modifier = Modifier
             .background(color = Color.White)
             .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+            //.verticalScroll(rememberScrollState())
             .fillMaxSize(), // Esto hará que la Column ocupe todo el tamaño disponible
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -72,7 +72,7 @@ fun PublishReview(navController: NavController, onSubmit: (ReviewData) -> Unit) 
         }
 
         Text(
-            text = "Registrarse",
+            text = "Reseñas",
             fontSize = 40.sp,
             modifier = Modifier
                 .padding(bottom = 16.dp)
@@ -95,7 +95,7 @@ fun PublishReview(navController: NavController, onSubmit: (ReviewData) -> Unit) 
 
             )
 
-        Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
+        Spacer(modifier = Modifier.height(16.dp)) // Añade espacio entre el formulario y el botón
 
         Box(
             modifier = Modifier.offset(y = 20.dp)
@@ -107,7 +107,7 @@ fun PublishReview(navController: NavController, onSubmit: (ReviewData) -> Unit) 
                 )
             )
             {
-                Text("Registrarse", color = Color.Black)
+                Text("Publicar reseña", color = Color.Black)
             }
         }
 
@@ -136,91 +136,6 @@ fun PublishReview(navController: NavController, onSubmit: (ReviewData) -> Unit) 
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        Row {
-            Text(text = "¿Ya tienes una cuenta?")
-            Spacer(modifier = Modifier.width(15.dp))
-            Text(text = "Inicia Sesión", fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable {
-                    navController.navigate("loginUser_screens")
-                })
-        }
-
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .offset(y = 20.dp),
-
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.fc_logo),
-                contentDescription = "Logo de Facebook",
-                modifier = Modifier
-                    .clickable {
-                        navController.navigate("facebook")
-                    }
-                    .height(70.dp)
-                    .width(70.dp)
-                    .offset(x = 22.dp)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.gmail_logo),
-                contentDescription = "Logo Gmail",
-                modifier = Modifier
-                    .clickable {
-                        navController.navigate("gmail")
-                    }
-                    .height(55.dp)
-                    .offset(x = 135.dp)
-                    .width(55.dp)
-            )
-        }
-        Box(modifier = Modifier.offset(y = (-10).dp)
-        ) {
-            Row {
-                Text(text = "Continuar con", modifier = Modifier
-                    .clickable {
-                        navController.navigate("facebook")
-                    }
-                    .offset(x = (-38).dp))//Facebook
-                Text(text = "Continuar con",modifier = Modifier
-                    .clickable {
-                        navController.navigate("gmail")
-                    }.offset(x = 30.dp))//Gmail
-            }
-        }
-
-        Box(modifier = Modifier.offset(y = (-15).dp)){
-            Row {
-                Text(text = "Facebook", modifier = Modifier
-                    .clickable {
-                        navController.navigate("facebook")
-                    }
-                    .offset(x = (-70).dp))
-                Text(text = "Gmail", modifier = Modifier
-                    .clickable {
-                        navController.navigate("gmail")
-                    }.offset(x = (45).dp))
-            }
-        }
-
-        Text(
-            text = "Registrate", color = Color.White,
-            fontSize = 40.sp,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-
-        )
-
-        Text(
-            text = "Registrate", color = Color.White,
-            fontSize = 40.sp,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-        )
-
     }
 }
 
