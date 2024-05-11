@@ -18,16 +18,19 @@ import com.GanApp.viewsganapp.views.HomePage
 import com.GanApp.viewsganapp.views.LogIn
 import com.GanApp.viewsganapp.views.Perfil
 import com.GanApp.viewsganapp.views.ProductRegister
+import com.GanApp.viewsganapp.views.PublishReview
 import com.GanApp.viewsganapp.views.Register
 import com.GanApp.viewsganapp.views.ResetPassword
 import com.GanApp.viewsganapp.views.errorMessageForgotPassword
 import com.GanApp.viewsganapp.views.errorMessageLogin
 import com.GanApp.viewsganapp.views.errorMessageRegister
 import com.GanApp.viewsganapp.views.errorMessageResetPassword
+import com.GanApp.viewsganapp.views.errorMessageReview
 import com.GanApp.viewsganapp.views.showErrorForgotPassword
 import com.GanApp.viewsganapp.views.showErrorLogin
 import com.GanApp.viewsganapp.views.showErrorRegister
 import com.GanApp.viewsganapp.views.showErrorResetPassword
+import com.GanApp.viewsganapp.views.showErrorReview
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -185,6 +188,35 @@ class MainActivity : ComponentActivity() {
                     composable(AppScreens.profile.route){
                         Perfil(navController = navController)
 
+                    }
+
+                    composable(AppScreens.reviews.route) {
+                        PublishReview(navController = navController) { reviewData ->
+                            val call = RetrofitInstance.apiServiceReviewApiService.publishReview(reviewData)
+                            call.enqueue(object : Callback<Void> {
+                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                    if (response.isSuccessful) {
+                                        Log.d("API Call", "Reseña publicada con éxito")
+                                    } else {
+                                        val errorBody = response.errorBody()?.string()
+                                        Log.d("API Call", "Response not successful: $errorBody")
+                                        if (!errorBody.isNullOrEmpty()) {
+                                            try {
+                                                val json = JSONObject(errorBody)
+                                                errorMessageReview = json.getString("errorMessage")
+                                                showErrorReview = true
+                                            } catch (e: JSONException) {
+                                                Log.e("API Call", "Error parsing JSON", e)
+                                            }
+                                        }
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<Void>, t: Throwable) {
+                                    Log.d("API Call", "Failure: ${t.message}")
+                                }
+                            })
+                        }
                     }
 
                 }

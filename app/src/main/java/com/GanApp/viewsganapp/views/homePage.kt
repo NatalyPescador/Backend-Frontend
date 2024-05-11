@@ -99,6 +99,12 @@ fun HomePage(navController: NavHostController) {
             unselectedIcon = Icons.Outlined.FavoriteBorder,
             route = "ruta_a_home",
         ),
+        DrawerItem(
+            title = "Reseñas",
+            selectedIcon = Icons.Filled.FavoriteBorder,
+            unselectedIcon = Icons.Outlined.FavoriteBorder,
+            route = "reviews",
+        ),
     )
 
     Surface (
