@@ -189,7 +189,7 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
                 contentDescription = "Logo de Facebook",
                 modifier = Modifier
                     .clickable {
-                        navController.navigate("productRegister")
+                        navController.navigate("facebook")
                     }
                     .height(70.dp)
                     .width(70.dp)
@@ -212,7 +212,7 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
             Row {
                 Text(text = "Continuar con", modifier = Modifier
                     .clickable {
-                        navController.navigate("productRegister")
+                        navController.navigate("facebook")
                     }
                     .offset(x = (-38).dp))//Facebook
                 Text(text = "Continuar con",modifier = Modifier
@@ -226,7 +226,7 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
             Row {
                 Text(text = "Facebook", modifier = Modifier
                     .clickable {
-                        navController.navigate("productRegister")
+                        navController.navigate("facebook")
                     }
                     .offset(x = (-70).dp))
                 Text(text = "Gmail", modifier = Modifier
