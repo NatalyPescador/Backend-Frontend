@@ -38,8 +38,15 @@ android {
     }
 
     composeOptions {
-        // Asegúrate de que esta versión es compatible con tu versión actual de Compose
-        kotlinCompilerExtensionVersion = "1.5.2" // Cambia a la versión correspondiente de tu BOM
+        kotlinCompilerExtensionVersion = "1.5.2"
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    sourceSets {
+        getByName("main").java.srcDirs("src/main/java")
     }
 }
 
