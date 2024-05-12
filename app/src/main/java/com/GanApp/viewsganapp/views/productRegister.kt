@@ -5,7 +5,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +22,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -37,7 +35,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -88,18 +89,6 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
         verticalArrangement = Arrangement.Center
     ) {
 
-        Button(onClick = { imagePickerLauncher.launch("image/*") }) {
-            Text("Seleccionar Imagen")
-        }
-
-        imageUri?.let {
-            Image(
-                painter = rememberAsyncImagePainter(model = it),
-                contentDescription = "Imagen seleccionada",
-                modifier = Modifier.size(100.dp)
-            )
-        }
-
         Row(
             modifier = Modifier
                 .padding(16.dp)
@@ -110,13 +99,14 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 modifier = Modifier.offset(y = 35.dp)
             )
         }
-
         Text(
-            text = "Registrar Producto",
-            fontSize = 40.sp,
+            text = "Registrar producto",
+            fontWeight = FontWeight.Bold,
+            fontSize = 38.sp,
+            textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(bottom = 16.dp)
-                .offset(y = 20.dp)
+                //.offset(y = (-220).dp)
 
         )
 
@@ -209,10 +199,26 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                     selectedCategoria = categoria
                 }
             )
+
         }
 
 
         Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
+
+        Button(onClick = { imagePickerLauncher.launch("image/*") },
+                colors = ButtonDefaults.buttonColors(
+                Color(10, 191, 4))
+        ) {
+            Text("Seleccionar Imagen")
+        }
+
+        imageUri?.let {
+            Image(
+                painter = rememberAsyncImagePainter(model = it),
+                contentDescription = "Imagen seleccionada",
+                modifier = Modifier.size(100.dp)
+            )
+        }
 
         Box(
             modifier = Modifier.offset(y = 20.dp)
@@ -258,31 +264,14 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        Text(
-            text = "Registrate", color = Color.White,
-            fontSize = 40.sp,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-        )
-        Text(
-            text = "Registrate", color = Color.White,
-            fontSize = 40.sp,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-        )
-        Text(
-            text = "Registrate", color = Color.White,
-            fontSize = 40.sp,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-        )
-        Text(
-            text = "Registrate", color = Color.White,
-            fontSize = 40.sp,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-        )
-
+        repeat(4) {
+            Text(
+                text = "Regístrate",
+                color = Color.White,
+                fontSize = 40.sp,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        }
     }
 }
 

@@ -33,6 +33,8 @@ sealed class AppScreens(val route: String) {
     object homePage: AppScreens ("homePage")
     object profile : AppScreens ("Profile_screens")
     object reviews : AppScreens ("reviews")
+    object catalogo : AppScreens("catalogo")
+    object detalleProd : AppScreens("detalleProd")
 
 }
 
@@ -104,6 +106,14 @@ fun AppScreens(navController: NavController) {
                         mutableIntStateOf(0)
                     }
             }
+            composable(AppScreens.catalogo.route){
+                @Composable
+                fun CatalogoPrincipal(){}
+            }
+            composable(AppScreens.detalleProd.route){
+                @Composable
+                fun DetalleProducto(){}
+            }
         }
                  composable(AppScreens.profile.route) {
                      @Composable
@@ -112,7 +122,7 @@ fun AppScreens(navController: NavController) {
                      }
                  }
 
-                 composable(AppScreens.profile.route) {
+                 composable(AppScreens.reviews.route) {
                      @Composable
                      fun PublishReview(
                          navController: NavController,
@@ -123,7 +133,7 @@ fun AppScreens(navController: NavController) {
                          }
                      }
                  }
-                 
+
              }
     }
 }

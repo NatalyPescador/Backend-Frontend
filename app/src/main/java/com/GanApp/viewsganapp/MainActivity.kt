@@ -11,6 +11,8 @@ import androidx.navigation.compose.rememberNavController
 import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
+import com.GanApp.viewsganapp.views.CatalogoPrincipal
+//import com.GanApp.viewsganapp.views.DetalleProducto
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Gmail
 import com.GanApp.viewsganapp.views.ForgotPassword
@@ -190,6 +192,14 @@ class MainActivity : ComponentActivity() {
 
                     }
 
+                    composable(AppScreens.catalogo.route){
+                        CatalogoPrincipal(navController = navController)
+
+                    }
+
+//                    composable(AppScreens.detalleProd.route){
+//                        DetalleProducto(navController = navController)
+//                    }
                     composable(AppScreens.reviews.route) {
                         PublishReview(navController = navController) { reviewData ->
                             val call = RetrofitInstance.apiServiceReviewApiService.publishReview(reviewData)
