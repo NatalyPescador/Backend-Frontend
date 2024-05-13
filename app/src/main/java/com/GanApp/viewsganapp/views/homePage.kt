@@ -121,7 +121,13 @@ fun HomePage(navController: NavHostController) {
             selectedIcon = Icons.Filled.Create,
             unselectedIcon = Icons.Outlined.Create,
             route = "productRegister"
-        )
+        ),
+        DrawerItem(
+        title = "Catálogo",
+        selectedIcon = Icons.Filled.Create,
+        unselectedIcon = Icons.Outlined.Create,
+        route = "catalogo"
+    )
     )
 
     Surface (
