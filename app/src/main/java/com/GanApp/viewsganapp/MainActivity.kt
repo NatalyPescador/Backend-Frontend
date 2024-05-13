@@ -4,16 +4,20 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
+import com.GanApp.viewsganapp.viewModels.ProductViewModel
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Gmail
 import com.GanApp.viewsganapp.views.ForgotPassword
 import com.GanApp.viewsganapp.views.LogIn
+import com.GanApp.viewsganapp.views.ProductListScreen
 import com.GanApp.viewsganapp.views.ProductRegister
 import com.GanApp.viewsganapp.views.Register
 import com.GanApp.viewsganapp.views.ResetPassword
@@ -33,8 +37,6 @@ import retrofit2.Response
 
 
 
-
-
 class MainActivity : ComponentActivity() {
 
 
@@ -45,7 +47,7 @@ class MainActivity : ComponentActivity() {
             ViewsGanAppTheme {  // Asume que este es tu tema de Compose
                 NavHost(
                     navController = navController,
-                    startDestination = AppScreens.loginUser.route
+                    startDestination = AppScreens.productListScreen.route
                 ) {
                     composable(AppScreens.viewReister.route) {
                         Register(navController = navController) { userData ->
@@ -172,14 +174,15 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    composable(AppScreens.productRegister.route){
-                        ProductRegister(navController = navController) {
-
-                        }
+                    composable(AppScreens.productListScreen.route){
+                        val productViewModel: ProductViewModel = viewModel()
+                        productViewModel.fetchProductListFromMainScope()
+                        ProductListScreen()
                     }
+
                 }
             }
         }
     }
-}
 
+}

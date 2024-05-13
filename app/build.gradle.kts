@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.GanApp.viewsganapp"
-    compileSdk = 34
+    compileSdkVersion(rootProject.extra["compileSdkVersion"] as Int)
 
     defaultConfig {
         applicationId = "com.GanApp.viewsganapp"
@@ -58,7 +58,6 @@ android {
 }
 
 dependencies {
-    //Dependencias para selecconar imagenes de galeria
     implementation ("androidx.camera:camera-camera2:1.1.0-alpha02")
     implementation ("androidx.activity:activity:1.4.0")
     implementation ("androidx.fragment:fragment:1.4.0")
@@ -72,7 +71,8 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3:1.2.0-alpha01")
+    implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0") // Añadido para ViewModel en Compose
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -83,5 +83,6 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.squareup.okhttp3:okhttp:4.9.0")
-    implementation ("io.coil-kt:coil-compose:2.1.0")
+    implementation ("io.coil-kt:coil-compose:2.6.0")
+    implementation ("androidx.compose.runtime:runtime-livedata:1.0.0-alpha12")
 }

@@ -4,8 +4,12 @@ import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
+import com.GanApp.viewsganapp.apiService.ProductRegisterApiService
 import com.GanApp.viewsganapp.models.CategoriaEntity
+import com.GanApp.viewsganapp.models.ProductoEntity
 import com.GanApp.viewsganapp.models.TipoServicioEntity
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.views.ProductData
@@ -19,10 +23,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import com.GanApp.viewsganapp.utils.FileUtils
+import kotlinx.coroutines.Dispatchers
 import okhttp3.RequestBody.Companion.asRequestBody
 
 class ProductViewModel : ViewModel() {
-
+    var productList = mutableStateOf<List<ProductoEntity>>(listOf())
     var categorias = mutableStateOf<List<CategoriaEntity>>(listOf())
     var tiposServicio = mutableStateOf<List<TipoServicioEntity>>(listOf())
     var selectedTipoServicioId = mutableStateOf<Long?>(null)
@@ -121,6 +126,32 @@ class ProductViewModel : ViewModel() {
         })
     }
 
+    fun fetchProductos(navController: NavHostController) {
 
+    }
+
+    fun fetchProductList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            loading.value = true
+            try {
+                val response = RetrofitInstance.apiServiceProduct.getProductList()
+                if (response.isSuccessful && response.body() != null) {
+                    productList.value = response.body()!!
+                } else {
+                    println("Error en la respuesta: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                println("Excepción capturada: ${e.localizedMessage}")
+            } finally {
+                loading.value = false
+            }
+        }
+    }
+    fun fetchProductListFromMainScope() {
+        viewModelScope.launch(Dispatchers.Main) {
+            fetchProductList()
+        }
+    }
 
 }
+
