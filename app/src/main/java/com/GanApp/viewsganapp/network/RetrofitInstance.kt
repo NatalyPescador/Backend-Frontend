@@ -2,6 +2,7 @@ package com.GanApp.viewsganapp.network
 
 import com.GanApp.viewsganapp.apiService.CategoryApiService
 import com.GanApp.viewsganapp.apiService.ProductRegisterApiService
+import com.GanApp.viewsganapp.apiService.ReviewApiService
 import com.GanApp.viewsganapp.apiService.TypeServiceApiService
 import com.GanApp.viewsganapp.apiService.UserRegisterApiService
 import retrofit2.Retrofit
@@ -35,8 +36,8 @@ object RetrofitInstance {
         retrofit.create(TypeServiceApiService::class.java)
     }
 
+    val apiServiceReviewApiService: ReviewApiService by lazy {
+        retrofit.create(ReviewApiService::class.java)
+    }
+
 }
-
-
-
-
