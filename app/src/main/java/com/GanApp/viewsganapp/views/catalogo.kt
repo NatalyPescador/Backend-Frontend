@@ -56,7 +56,7 @@ fun Catalogo(productos: List<ProductoEntity>) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 for (i in 0 until 3) {
-                    val index = rowIndex * 3 + i
+                    val index = rowIndex * 2 + i
                     if (index < productos.size) {
                         Tarjeta(producto = productos[index])
                     }
