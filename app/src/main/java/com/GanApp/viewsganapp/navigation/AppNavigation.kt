@@ -19,6 +19,7 @@ import com.GanApp.viewsganapp.views.ForgotPasswordData
 import com.GanApp.viewsganapp.views.LogInData
 import com.GanApp.viewsganapp.views.ProductData
 import com.GanApp.viewsganapp.views.ResetPasswordData
+import com.GanApp.viewsganapp.views.ReviewData
 import com.GanApp.viewsganapp.views.UserData
 
 sealed class AppScreens(val route: String) {
@@ -31,7 +32,7 @@ sealed class AppScreens(val route: String) {
     object productRegister : AppScreens("productRegister")
     object homePage: AppScreens ("homePage")
     object profile : AppScreens ("Profile_screens")
-
+    object reviews : AppScreens ("reviews")
     object catalogo : AppScreens("catalogo")
     object detalleProd : AppScreens("detalleProd")
 
@@ -118,6 +119,18 @@ fun AppScreens(navController: NavController) {
                      @Composable
                      fun Perfil() {
 
+                     }
+                 }
+
+                 composable(AppScreens.reviews.route) {
+                     @Composable
+                     fun PublishReview(
+                         navController: NavController,
+                         onSubmit: (ReviewData) -> Unit
+                     ) {
+                         var resena by remember {
+                             mutableStateOf("")
+                         }
                      }
                  }
 

@@ -2,10 +2,12 @@ package com.GanApp.viewsganapp.viewModels
 
 import android.content.Context
 import android.net.Uri
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.GanApp.viewsganapp.models.CategoriaEntity
+import com.GanApp.viewsganapp.models.ProductoEntity
 import com.GanApp.viewsganapp.models.TipoServicioEntity
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.views.ProductData
@@ -18,8 +20,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.io.IOException
 import com.GanApp.viewsganapp.utils.FileUtils
 import okhttp3.RequestBody.Companion.asRequestBody
+import retrofit2.HttpException
+
 
 class ProductViewModel : ViewModel() {
 
@@ -29,9 +34,12 @@ class ProductViewModel : ViewModel() {
     var loading = mutableStateOf(false)
     private val categoryApiService = RetrofitInstance.apiServiceCategory
     private val typeServiceApiService = RetrofitInstance.apiServiceTypeService
+    private val _products = mutableStateListOf<ProductoEntity>()
+    val products: List<ProductoEntity> get() = _products
 
     init{
         fetchTiposServicio()
+        getProducts()
     }
 
     // Observar cambios en selectedTipoServicioId y cargar categorías correspondientes
@@ -95,6 +103,27 @@ class ProductViewModel : ViewModel() {
         }
     }
 
+    fun getProducts() {
+        viewModelScope.launch {
+            val response = try {
+                RetrofitInstance.apiServiceProduct.getProductList()
+            } catch (e: IOException) {
+                // Handle network error
+                println("Network error: ${e.localizedMessage}")
+                return@launch
+            } catch (e: HttpException) {
+                // Handle API error
+                println("API error: ${e.localizedMessage}")
+                return@launch
+            }
+
+            if (response.isSuccessful && response.body() != null) {
+                _products.clear()
+                _products.addAll(response.body()!!)
+            }
+        }
+    }
+
     fun uploadProductData(context: Context, imageUri: Uri, productData: ProductData) {
         val gson = Gson()
         val productJson = gson.toJson(productData)
@@ -120,7 +149,4 @@ class ProductViewModel : ViewModel() {
             }
         })
     }
-
-
-
 }
