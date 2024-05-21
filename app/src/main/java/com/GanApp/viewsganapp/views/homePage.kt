@@ -206,7 +206,7 @@ fun HomePage(navController: NavHostController) {
                 ) {
                 Column (
                     ){
-                    LogIn(navController = navController) { }
+                    CatalogoPrincipal(navController = navController)
 
                 }
 
