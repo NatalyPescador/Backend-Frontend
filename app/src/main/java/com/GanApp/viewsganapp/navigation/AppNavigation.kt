@@ -125,18 +125,18 @@ fun AppScreens(navController: NavController) {
                  composable(AppScreens.reviews.route) {
                      @Composable
                      fun PublishReview(
-                         navController: NavController,
-                         onSubmit: (ReviewData) -> Unit
+//                         navController: NavController,
+//                         onSubmit: (ReviewData) -> Unit
                      ) {
-                         var resena by remember {
-                             mutableStateOf("")
+//                         var resena by remember {
+//                             mutableStateOf("")
                          }
                      }
                  }
 
              }
     }
-}
+
 
 
        

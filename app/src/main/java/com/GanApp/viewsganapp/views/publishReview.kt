@@ -3,6 +3,7 @@ package com.GanApp.viewsganapp.views
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -24,6 +26,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -38,7 +41,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.GanApp.viewsganapp.models.ReviewEntity
+import com.GanApp.viewsganapp.viewModels.ProductViewModel
+import com.GanApp.viewsganapp.viewModels.ReviewViewModel
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.layout.Column as Column
 
@@ -47,8 +55,10 @@ var showErrorReview by mutableStateOf(false)
 var errorMessageReview by mutableStateOf("")
 
 @Composable
-fun PublishReview(navController: NavController, onSubmit: (ReviewData) -> Unit) {
+//fun PublishReview(navController: NavController, onSubmit: (ReviewData) -> Unit, reviewViewModel: ReviewViewModel = viewModel()) {
+fun PublishReview(navController: NavController, reviewViewModel: ReviewViewModel = viewModel()) {
     var resena by remember { mutableStateOf("") }
+    val review by remember { mutableStateOf(reviewViewModel.reviews) }
 
 
     Column(
@@ -101,7 +111,8 @@ fun PublishReview(navController: NavController, onSubmit: (ReviewData) -> Unit) 
             modifier = Modifier.offset(y = 20.dp)
         ) {
             Button( onClick = {
-                onSubmit(ReviewData(resena)) },
+                //onSubmit(ReviewData(resena))
+                              },
                 colors = buttonColors(
                     Color(10, 191, 4)
                 )
@@ -136,12 +147,67 @@ fun PublishReview(navController: NavController, onSubmit: (ReviewData) -> Unit) 
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        Column {
+            Reseñas(reviews = review)
+        }
     }
 }
-
-
-
 
 data class ReviewData(
     val resena: String,
 )
+
+@Composable
+fun Reseñas(reviews: List<ReviewEntity>) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        items(reviews.size / 3) { rowIndex ->
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                for (i in 0 until 3) {
+                    val index = rowIndex * 3 + i
+                    if (index < reviews.size) {
+                        Cards(reviews = reviews[index])
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Cards(reviews: ReviewEntity) {
+    Surface(
+        modifier = Modifier
+            .padding(end = 8.dp)
+            .width(120.dp)
+            .height(200.dp),
+        shape = RoundedCornerShape(8.dp),
+    ) {
+        Column(
+            modifier = Modifier.clickable { /* Handle click event */ }
+        ) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "$${reviews.resena}",
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+            Text(
+                text = "por ${reviews.productoId}",
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+            Text(
+                text = "Category: ${reviews.usuarioId}",
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        }
+    }
+}

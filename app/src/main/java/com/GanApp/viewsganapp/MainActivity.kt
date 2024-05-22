@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.GanApp.viewsganapp.models.ReviewEntity
 import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
@@ -200,38 +201,44 @@ class MainActivity : ComponentActivity() {
 //                    composable(AppScreens.detalleProd.route){
 //                        DetalleProducto(navController = navController)
 //                    }
-                    composable(AppScreens.reviews.route) {
-                        PublishReview(navController = navController) { reviewData ->
-                            val call = RetrofitInstance.apiServiceReviewApiService.publishReview(reviewData)
-                            call.enqueue(object : Callback<Void> {
-                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                                    if (response.isSuccessful) {
-                                        Log.d("API Call", "Reseña publicada con éxito")
-                                    } else {
-                                        val errorBody = response.errorBody()?.string()
-                                        Log.d("API Call", "Response not successful: $errorBody")
-                                        if (!errorBody.isNullOrEmpty()) {
-                                            try {
-                                                val json = JSONObject(errorBody)
-                                                errorMessageReview = json.getString("errorMessage")
-                                                showErrorReview = true
-                                            } catch (e: JSONException) {
-                                                Log.e("API Call", "Error parsing JSON", e)
-                                            }
-                                        }
-                                    }
-                                }
 
-                                override fun onFailure(call: Call<Void>, t: Throwable) {
-                                    Log.d("API Call", "Failure: ${t.message}")
-                                }
-                            })
-                        }
+                    composable(AppScreens.reviews.route){
+                        PublishReview(navController = navController)
                     }
 
+
+
+
+//                    composable(AppScreens.reviews.route) {
+//                        PublishReview(navController = navController) { reviewData ->
+//                            val call = RetrofitInstance.apiServiceReviewApiService.publishReview(reviewData)
+//                            call.enqueue(object : Callback<Void> {
+//                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+//                                    if (response.isSuccessful) {
+//                                        Log.d("API Call", "Reseña publicada con éxito")
+//                                    } else {
+//                                        val errorBody = response.errorBody()?.string()
+//                                        Log.d("API Call", "Response not successful: $errorBody")
+//                                        if (!errorBody.isNullOrEmpty()) {
+//                                            try {
+//                                                val json = JSONObject(errorBody)
+//                                                errorMessageReview = json.getString("errorMessage")
+//                                                showErrorReview = true
+//                                            } catch (e: JSONException) {
+//                                                Log.e("API Call", "Error parsing JSON", e)
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//
+//                                override fun onFailure(call: Call<Void>, t: Throwable) {
+//                                    Log.d("API Call", "Failure: ${t.message}")
+//                                }
+//                            })
+//                        }
+                    }
                 }
             }
         }
     }
-}
 
