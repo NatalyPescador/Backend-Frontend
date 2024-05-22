@@ -24,11 +24,13 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -109,11 +111,23 @@ fun HomePage(navController: NavHostController) {
             route = "ruta_a_home",
         ),
         DrawerItem(
+            title = "Reseñas",
+            selectedIcon = Icons.Filled.Star,
+            unselectedIcon = Icons.Outlined.Star,
+            route = "reviews",
+        ),
+        DrawerItem(
             title = "Resgistrar producto",
             selectedIcon = Icons.Filled.Create,
             unselectedIcon = Icons.Outlined.Create,
             route = "productRegister"
-        )
+        ),
+        DrawerItem(
+        title = "Catálogo",
+        selectedIcon = Icons.Filled.Create,
+        unselectedIcon = Icons.Outlined.Create,
+        route = "catalogo"
+    )
     )
 
     Surface (
