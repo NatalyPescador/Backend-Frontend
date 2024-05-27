@@ -32,6 +32,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -96,7 +97,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
-                modifier = Modifier.offset(y = 35.dp)
+                modifier = Modifier.offset(y = (-20).dp)
             )
         }
         Text(
@@ -105,8 +106,8 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
             fontSize = 38.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier
-                .padding(bottom = 16.dp)
-                //.offset(y = (-220).dp)
+                //.padding(bottom = 16.dp)
+                .offset(y = (-35).dp)
 
         )
 
@@ -129,7 +130,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 )
             },
             shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 20.dp)
+            modifier = Modifier.offset(y = (-5).dp)
 
         )
 
@@ -152,7 +153,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 )
             },
             shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 20.dp),
+            modifier = Modifier.offset(y = (-5).dp),
             // Configuración del teclado para permitir solo números y puntos decimales
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             // Filtrar la entrada para permitir solo números y puntos decimales
@@ -177,7 +178,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 )
             },
             shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 20.dp)
+            modifier = Modifier.offset(y = (-5).dp)
 
         )
 
@@ -186,7 +187,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
             selectedTipoServicio = selectedTipoServicio,
             onTipoServicioSelected = { tipoServicio ->
                 selectedTipoServicio = tipoServicio
-               /* viewModel.selectedTipoServicioId.value = tipoServicio.tipoServicioId
+                /* viewModel.selectedTipoServicioId.value = tipoServicio.tipoServicioId
                 viewModel.fetchCategoriasByTipoServicio(tipoServicio.tipoServicioId)*/
             }
         )
@@ -205,9 +206,11 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
 
         Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
 
-        Button(onClick = { imagePickerLauncher.launch("image/*") },
-                colors = ButtonDefaults.buttonColors(
-                Color(10, 191, 4))
+        Button(
+            onClick = { imagePickerLauncher.launch("image/*") },
+            colors = ButtonDefaults.buttonColors(
+                Color(10, 191, 4)
+            )
         ) {
             Text("Seleccionar Imagen")
         }
@@ -264,7 +267,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        repeat(4) {
+        repeat(3) {
             Text(
                 text = "Regístrate",
                 color = Color.White,

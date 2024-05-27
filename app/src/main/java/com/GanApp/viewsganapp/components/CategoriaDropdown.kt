@@ -36,8 +36,11 @@ fun CategoriaDropdown(
     var expanded by remember { mutableStateOf(false) }
     val displayText = selectedCategoria?.nombre ?: "Tipo categoría"
 
-    Box(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-        Column {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)
+    ) {
+        Column{
             OutlinedTextField(
                 value = displayText,
                 onValueChange = {},
@@ -53,7 +56,7 @@ fun CategoriaDropdown(
                 },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
-                    .offset(x = 24.dp, y = -26.dp)
+                    .offset(x = 5.dp, y = (-30).dp)
                     .width(280.dp) // Ajusta el ancho del OutlinedTextField
                     .clickable { expanded = !expanded }
             )
@@ -63,7 +66,7 @@ fun CategoriaDropdown(
                     modifier = Modifier
                         .width(280.dp)
                         .background(Color.White)
-                        .offset(x = 24.dp, y = -30.dp),
+                        .offset(x = 24.dp, y = (-30).dp),
                     shape = RoundedCornerShape(8.dp),
                     shadowElevation = 8.dp
                 ) {

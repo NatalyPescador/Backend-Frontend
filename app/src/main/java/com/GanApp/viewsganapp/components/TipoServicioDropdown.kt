@@ -36,7 +36,7 @@ fun TipoServicioDropdown(
     var expanded by remember { mutableStateOf(false) }
     val displayText = selectedTipoServicio?.nombre ?: "Tipo de servicio"
 
-    Box(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+    Box(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
         Column {
             OutlinedTextField(
                 value = displayText,
@@ -53,7 +53,7 @@ fun TipoServicioDropdown(
                 },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
-                    .offset(x = 24.dp, y = 5.dp)
+                    .offset(x = 15.dp, y = (-10).dp)
                     .width(280.dp) // Ajusta el ancho del OutlinedTextField
                     .clickable { expanded = !expanded }
             )
