@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
@@ -33,7 +34,7 @@ fun CatalogoPrincipal(navController: NavController, productViewModel: ProductVie
             ),
             modifier = Modifier.padding(16.dp)
         ) {
-            Icon(imageVector = Icons.Default.Call, contentDescription = "telefono")
+            Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "telefono")
             Text(text = "Filtrar", fontSize = 21.sp)
         }
 

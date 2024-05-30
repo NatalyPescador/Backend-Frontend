@@ -218,10 +218,14 @@ fun HomePage(navController: NavHostController) {
                 )
             }
                 ) {
-                Column (
-                    ){
+                    innerPadding ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .background(color = Color.White) // Cambiar el fondo a blanco
+                ) {
                     CatalogoPrincipal(navController = navController)
-
                 }
 
             }

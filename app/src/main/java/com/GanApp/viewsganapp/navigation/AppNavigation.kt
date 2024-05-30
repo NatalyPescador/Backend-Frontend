@@ -1,6 +1,9 @@
 package com.GanApp.viewsganapp.navigation
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -35,6 +38,7 @@ sealed class AppScreens(val route: String) {
     object reviews : AppScreens ("reviews")
     object catalogo : AppScreens("catalogo")
     object detalleProd : AppScreens("detalleProd")
+    object editProfile : AppScreens ("edit_profile")
 
 }
 
@@ -46,12 +50,12 @@ fun AppScreens(navController: NavController) {
         navController = navController as NavHostController,
         startDestination = AppScreens.loginUser.route
     ) {
-             composable(AppScreens.loginUser.route) {
-                @Composable
-                fun LogIn(onSubmit: (LogInData) -> Unit) {
-                    var correo by remember { mutableStateOf("") }
-                    var password by remember { mutableStateOf("") }
-                    // Composable para la pantalla de inicio de sesión
+        composable(AppScreens.loginUser.route) {
+            @Composable
+            fun LogIn(onSubmit: (LogInData) -> Unit) {
+                var correo by remember { mutableStateOf("") }
+                var password by remember { mutableStateOf("") }
+                // Composable para la pantalla de inicio de sesión
             }
             composable(AppScreens.viewReister.route) {
                 @Composable
@@ -60,26 +64,28 @@ fun AppScreens(navController: NavController) {
                     var correo by remember { mutableStateOf("") }
                     var password by remember { mutableStateOf("") }
                     var numeroTelefono by remember { mutableStateOf("") }
-                // Composable para la pantalla de registro
+                    // Composable para la pantalla de registro
                 }
             }
 
-            composable(AppScreens.conecctionFacebook.route){
+            composable(AppScreens.conecctionFacebook.route) {
                 @Composable
-                fun Facebook(){}
+                fun Facebook() {
+                }
             }
 
-            composable(AppScreens.conecctionGmail.route){
+            composable(AppScreens.conecctionGmail.route) {
                 @Composable
-                fun Gmail(){}
+                fun Gmail() {
+                }
             }
-            composable(AppScreens.forgotPassword.route){
+            composable(AppScreens.forgotPassword.route) {
                 @Composable
                 fun ForgotPassword(onSubmit: (ForgotPasswordData) -> Unit) {
                     var correo by remember { mutableStateOf("") }
+                }
             }
-        }
-            composable(AppScreens.resetPassword.route){
+            composable(AppScreens.resetPassword.route) {
                 @Composable
                 fun ResetPassword(onSubmit: (ResetPasswordData) -> Unit) {
                     var token by remember { mutableStateOf("") }
@@ -87,7 +93,7 @@ fun AppScreens(navController: NavController) {
                     var confirmedPassword by remember { mutableStateOf("") }
                 }
             }
-            composable(AppScreens.productRegister.route){
+            composable(AppScreens.productRegister.route) {
                 @Composable
                 fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Unit) {
                     var nombre by remember { mutableStateOf("") }
@@ -96,7 +102,7 @@ fun AppScreens(navController: NavController) {
                     var imagenes by remember { mutableStateOf("") }
                 }
             }
-            composable(AppScreens.homePage.route){
+            composable(AppScreens.homePage.route) {
                 @Composable
                 fun HomePage() {
 
@@ -105,36 +111,61 @@ fun AppScreens(navController: NavController) {
                     var selectedItemIndex by rememberSaveable {
                         mutableIntStateOf(0)
                     }
+                }
+                composable(AppScreens.catalogo.route) {
+                    @Composable
+                    fun CatalogoPrincipal() {
+                    }
+                }
+                composable(AppScreens.detalleProd.route) {
+                    @Composable
+                    fun DetalleProducto() {
+                    }
+                }
             }
-            composable(AppScreens.catalogo.route){
+            composable(AppScreens.profile.route) {
                 @Composable
-                fun CatalogoPrincipal(){}
+                fun Perfil() {
+
+                }
             }
-            composable(AppScreens.detalleProd.route){
+
+            composable(AppScreens.reviews.route) {
                 @Composable
-                fun DetalleProducto(){}
+                fun PublishReview(
+                    navController: NavController,
+                    onSubmit: (ReviewData) -> Unit
+                ) {
+                    var resena by remember {
+                        mutableStateOf("")
+                    }
+                }
+            }
+
+            composable(AppScreens.editProfile.route) {
+                @Composable
+                fun EditarPerfil(navController: NavController) {
+
+                    // Aquí definimos los datos del perfil (simulados)
+                    var name by remember { mutableStateOf("Nombre de Usuario") }
+                    var email by remember { mutableStateOf("usuario@ejemplo.com") }
+                    var phoneNumber by remember { mutableStateOf("+123 456 789") }
+                    var password by remember { mutableStateOf("********") }
+                    var birthDate by remember { mutableStateOf("01/01/1990") }
+
+                    // Recordatorio del estado de la URI de la imagen seleccionada
+                    var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+                    // ActivityResultLauncher para seleccionar la imagen de la galería
+                    val launcher = rememberLauncherForActivityResult(
+                        contract = ActivityResultContracts.GetContent()
+                    ) { uri: Uri? ->
+                        imageUri = uri
+                    }
+                }
+
             }
         }
-                 composable(AppScreens.profile.route) {
-                     @Composable
-                     fun Perfil() {
-
-                     }
-                 }
-
-                 composable(AppScreens.reviews.route) {
-                     @Composable
-                     fun PublishReview(
-                         navController: NavController,
-                         onSubmit: (ReviewData) -> Unit
-                     ) {
-                         var resena by remember {
-                             mutableStateOf("")
-                         }
-                     }
-                 }
-
-             }
     }
 }
 

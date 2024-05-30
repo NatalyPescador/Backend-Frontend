@@ -12,6 +12,7 @@ import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
+import com.GanApp.viewsganapp.views.EditarPerfil
 //import com.GanApp.viewsganapp.views.DetalleProducto
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Gmail
@@ -48,7 +49,7 @@ class MainActivity : ComponentActivity() {
             ViewsGanAppTheme {  // Asume que este es tu tema de Compose
                 NavHost(
                     navController = navController,
-                    startDestination = AppScreens.profile.route
+                    startDestination = AppScreens.homePage.route
                 ) {
                     composable(AppScreens.viewReister.route) {
                         Register(navController = navController) { userData ->
@@ -227,6 +228,10 @@ class MainActivity : ComponentActivity() {
                                 }
                             })
                         }
+                    }
+
+                    composable(AppScreens.editProfile.route){
+                        EditarPerfil(navController = navController)
                     }
 
                 }
