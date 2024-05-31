@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,17 +44,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.style.TextAlign
+import kotlinx.coroutines.delay
+import androidx.compose.foundation.layout.Column as Column
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+var showErrorRegister by mutableStateOf(false)
+var errorMessageRegister by mutableStateOf("")
+
 @Composable
 fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
     var nombreCompleto by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var numeroTelefono by remember { mutableStateOf("") }
-
-
 
 
     Column(
@@ -101,9 +106,6 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
             modifier = Modifier.offset(y = 20.dp),
 
         )
-
-
-
 
         OutlinedTextField(
             value = correo,
@@ -171,8 +173,31 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
             }
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(25.dp))
+        LaunchedEffect(showErrorRegister) {
+            if (showErrorRegister) {
+                delay(5000)
+                showErrorRegister = false
+            }
+        }
+
+        if (showErrorRegister) {
+            Box(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    errorMessageRegister,
+                    color = Color.Red,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Row {
             Text(text = "¿Ya tienes una cuenta?")
