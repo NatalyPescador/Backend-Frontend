@@ -39,6 +39,7 @@ fun CatalogoPrincipal(navController: NavController, productViewModel: ProductVie
         }
 
         Catalogo(productos = products)
+
     }
 }
 
@@ -107,3 +108,5 @@ fun Tarjeta(producto: ProductoEntity) {
         }
     }
 }
+
+

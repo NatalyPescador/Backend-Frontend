@@ -85,7 +85,7 @@ fun Perfil(navController: NavController){
             CenterAlignedTopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate("catalogo") }) {
+                    IconButton(onClick = { navController.navigate("homePage") }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             modifier = Modifier.size(35.dp),
@@ -94,7 +94,7 @@ fun Perfil(navController: NavController){
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Acción al hacer clic en el ícono de acción */ }) {
+                    IconButton(onClick = { navController.navigate("favotito") }) {
                         Icon(
                             imageVector = Icons.Filled.Favorite,
                             modifier = Modifier

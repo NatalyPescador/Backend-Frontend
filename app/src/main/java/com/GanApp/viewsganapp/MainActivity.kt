@@ -15,6 +15,7 @@ import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.views.EditarPerfil
 //import com.GanApp.viewsganapp.views.DetalleProducto
 import com.GanApp.viewsganapp.views.Facebook
+import com.GanApp.viewsganapp.views.Favoritos
 import com.GanApp.viewsganapp.views.Gmail
 import com.GanApp.viewsganapp.views.ForgotPassword
 import com.GanApp.viewsganapp.views.HomePage
@@ -232,6 +233,10 @@ class MainActivity : ComponentActivity() {
 
                     composable(AppScreens.editProfile.route){
                         EditarPerfil(navController = navController)
+                    }
+
+                    composable(AppScreens.favorite.route){
+                        Favoritos(navController = navController)
                     }
 
                 }

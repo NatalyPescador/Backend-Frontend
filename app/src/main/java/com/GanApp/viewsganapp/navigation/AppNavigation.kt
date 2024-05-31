@@ -39,6 +39,7 @@ sealed class AppScreens(val route: String) {
     object catalogo : AppScreens("catalogo")
     object detalleProd : AppScreens("detalleProd")
     object editProfile : AppScreens ("edit_profile")
+    object favorite: AppScreens ("favotito")
 
 }
 
@@ -164,6 +165,12 @@ fun AppScreens(navController: NavController) {
                     }
                 }
 
+            }
+
+            composable(AppScreens.favorite.route){
+                fun Favoritos(navController: NavController){
+
+                }
             }
         }
     }
