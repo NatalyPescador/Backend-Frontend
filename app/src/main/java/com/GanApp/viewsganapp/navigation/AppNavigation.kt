@@ -26,6 +26,7 @@ sealed class AppScreens(val route: String) {
     object productRegister : AppScreens("productRegister")
     object catalogo : AppScreens("catalogo")
     object detalleProd : AppScreens("detalleProd")
+    object menuDetalleProd : AppScreens("menuDetalleProd")
 
 }
 
@@ -93,6 +94,10 @@ fun AppScreens(navController: NavController) {
             composable(AppScreens.detalleProd.route){
                 @Composable
                 fun DetalleProducto(){}
+            }
+            composable(AppScreens.menuDetalleProd.route){
+                @Composable
+                fun menuDetalleProd(){}
             }
         }
     }

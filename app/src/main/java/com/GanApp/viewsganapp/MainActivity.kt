@@ -8,10 +8,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.GanApp.viewsganapp.navigation.AppScreens
+import com.GanApp.viewsganapp.navigation.AppScreens.detalleProd
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
-import com.GanApp.viewsganapp.views.DetalleProducto
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.ForgotPassword
 import com.GanApp.viewsganapp.views.Gmail
@@ -19,6 +19,8 @@ import com.GanApp.viewsganapp.views.LogIn
 import com.GanApp.viewsganapp.views.ProductRegister
 import com.GanApp.viewsganapp.views.Register
 import com.GanApp.viewsganapp.views.ResetPassword
+import com.GanApp.viewsganapp.views.VerDetalle
+import com.GanApp.viewsganapp.views.menuDetalleProd
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,7 +34,7 @@ class MainActivity : ComponentActivity() {
             ViewsGanAppTheme {  // Asume que este es tu tema de Compose
                 NavHost(
                     navController = navController,
-                    startDestination = AppScreens.detalleProd.route
+                    startDestination = AppScreens.menuDetalleProd.route
                 ) {
                     composable(AppScreens.viewReister.route) {
                         Register(navController = navController) { userData ->
@@ -162,9 +164,14 @@ class MainActivity : ComponentActivity() {
 
                     }
 
-                    composable(AppScreens.detalleProd.route){
-                        DetalleProducto(navController = navController)
+                    composable(detalleProd.route){
+                        VerDetalle(navController = navController)
                     }
+                    
+                    composable(AppScreens.menuDetalleProd.route){
+                        menuDetalleProd(navController = navController)
+                    }
+
                 } 
             }
         }

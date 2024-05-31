@@ -43,7 +43,6 @@ import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
 
 
-
 @Composable
 fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Unit) {
     var nombre by remember { mutableStateOf("") }

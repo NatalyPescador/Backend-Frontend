@@ -21,7 +21,7 @@ import com.GanApp.viewsganapp.R
 
 @Composable
 
-fun HomePage (){
+fun menuDetalleProd (){
 
     Column (
         modifier = Modifier
