@@ -51,9 +51,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import androidx.compose.runtime.Composable as Composable
 
 
@@ -68,10 +73,8 @@ fun HomePage(navController: NavHostController) {
         mutableIntStateOf(0)
     }
 
-    /*LaunchedEffect(key1 = true) {
-        // Posible inicialización o acciones adicionales
-        navigationState.close()  // Ejemplo de cómo asegurar que el drawer esté cerrado al inicio
-    }*/
+    // Estado de carga añadido
+    var isLoading by remember { mutableStateOf(false) }
 
 
     val items = listOf(
@@ -117,7 +120,7 @@ fun HomePage(navController: NavHostController) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(color = Color(195,252,219))
+                            .background(color = Color(195, 252, 219))
                     ) {
                         Column(
                             modifier = Modifier
@@ -143,8 +146,19 @@ fun HomePage(navController: NavHostController) {
                                     onClick = {
                                         selectedItemIndex = index
                                         scope.launch {
+                                            isLoading = true // Comienza la carga
                                             navigationState.close()
-                                            navController.navigate(drawerItem.route)
+                                            // Retraso simulado para la carga
+                                            delay(1000L) // 1 segundo de retraso simulado
+                                            navController.navigate(drawerItem.route) {
+                                                // Evita la duplicación de destinos en la pila de back stack
+                                                popUpTo(navController.graph.startDestinationId) {
+                                                    saveState = true
+                                                }
+                                                launchSingleTop = true
+                                                restoreState = true
+                                            }
+                                            //isLoading = false // Termina la carga
                                         }
                                     },
                                     icon = {
@@ -168,9 +182,6 @@ fun HomePage(navController: NavHostController) {
                     }
                 }
             }, drawerState = navigationState,
-
-
-
         ) {
             Scaffold( topBar = {
                 TopAppBar(title = { Image(painter = painterResource(id = R.drawable.logo),
@@ -195,8 +206,7 @@ fun HomePage(navController: NavHostController) {
 
                 )
             }
-                ) {
-                    innerPadding ->
+            ) { innerPadding ->
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -207,11 +217,24 @@ fun HomePage(navController: NavHostController) {
                 }
 
             }
-
         }
-    }
 
-    // to define navigation drawer here
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White), // Fondo blanco
+                contentAlignment = Alignment.Center // Centrar el contenido
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.icono_proyect), // Tu imagen de carga
+                    contentDescription = "Loading",
+                    modifier = Modifier.size(100.dp)
+                )
+            }
+        }
+        // to define navigation drawer here
+    }
 }
 
 data class DrawerItem(
