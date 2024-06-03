@@ -19,6 +19,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.GanApp.viewsganapp.R
 
 @Composable
@@ -48,14 +50,14 @@ fun Catalogo(productos: List<ProductoEntity>) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        items(productos.size / 3) { rowIndex ->
+        items(productos.size / 2) { rowIndex ->
             Row(
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                for (i in 0 until 3) {
+                for (i in 0 until 2) {
                     val index = rowIndex * 2 + i
                     if (index < productos.size) {
                         Tarjeta(producto = productos[index])
@@ -78,9 +80,10 @@ fun Tarjeta(producto: ProductoEntity) {
         Column(
             modifier = Modifier.clickable { /* Handle click event */ }
         ) {
+            val imageUrl = "https://vwjsb0g9-8080.use2.devtunnels.ms/uploads/${producto.imagen}"
             Image(
-                painter = painterResource(id = R.drawable.gmail_logo),
-                contentDescription = null,
+                painter = rememberAsyncImagePainter(model = imageUrl),
+                contentDescription = producto.nombre ?: "Sin nombre",
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),

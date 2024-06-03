@@ -3,7 +3,6 @@ package com.GanApp.viewsganapp.views
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,27 +15,23 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Create
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -56,22 +51,12 @@ import androidx.compose.ui.unit.dp
 import com.GanApp.viewsganapp.R
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.colorspace.ColorSpaces
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.GanApp.viewsganapp.navigation.AppScreens
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.Composable as Composable
-import com.GanApp.viewsganapp.views.LogIn
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,11 +108,23 @@ fun HomePage(navController: NavHostController) {
             route = "productRegister"
         ),
         DrawerItem(
-        title = "Catálogo",
-        selectedIcon = Icons.Filled.Create,
-        unselectedIcon = Icons.Outlined.Create,
-        route = "catalogo"
-    )
+            title = "Catálogo",
+            selectedIcon = Icons.Filled.Create,
+            unselectedIcon = Icons.Outlined.Create,
+            route = "catalogo"
+        ),
+        DrawerItem(
+            title = "CreateChat",
+            selectedIcon = Icons.Filled.Create,
+            unselectedIcon = Icons.Outlined.Create,
+            route = "CreateChatView"
+        ),
+        DrawerItem(
+            title = "ShowChats",
+            selectedIcon = Icons.Filled.Create,
+            unselectedIcon = Icons.Outlined.Create,
+            route = "ChatView"
+        )
     )
 
     Surface (
