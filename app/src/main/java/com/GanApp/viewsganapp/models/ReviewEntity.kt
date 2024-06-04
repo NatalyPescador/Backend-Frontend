@@ -4,15 +4,15 @@ import com.google.gson.annotations.SerializedName
 
 data class ReviewEntity(
 
-    @SerializedName("resenas_id")
+    @SerializedName("resenasId")
     val resenasId: Long,
 
-    @SerializedName("resenna")
+    @SerializedName("resena")
     val resena: String,
 
-    @SerializedName("producto_id")
+    @SerializedName("productoId")
     val productoId: String,
 
-    @SerializedName("usuario_id")
+    @SerializedName("usuarioId")
     val usuarioId: String,
 )

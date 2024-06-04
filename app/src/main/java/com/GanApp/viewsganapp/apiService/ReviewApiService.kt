@@ -15,5 +15,5 @@ public interface ReviewApiService {
     fun publishReview(@Body reviewData: ReviewData): Call<Void>
 
     @GET("reseñas")
-    suspend fun getReviews(): Response<List<ReviewEntity>>
+    fun getReviews(): Call<List<ReviewEntity>>
 }

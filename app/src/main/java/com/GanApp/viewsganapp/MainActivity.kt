@@ -55,7 +55,10 @@ class MainActivity : ComponentActivity() {
                         Register(navController = navController) { userData ->
                             val call = RetrofitInstance.apiService.createUser(userData)
                             call.enqueue(object : Callback<Void> {
-                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                override fun onResponse(
+                                    call: Call<Void>,
+                                    response: Response<Void>
+                                ) {
                                     if (response.isSuccessful) {
                                         Log.d("API Call", "Usuario creado con éxito")
                                     } else {
@@ -64,7 +67,8 @@ class MainActivity : ComponentActivity() {
                                         if (!errorBody.isNullOrEmpty()) {
                                             try {
                                                 val json = JSONObject(errorBody)
-                                                errorMessageRegister = json.getString("errorMessage")
+                                                errorMessageRegister =
+                                                    json.getString("errorMessage")
                                                 showErrorRegister = true
                                             } catch (e: JSONException) {
                                                 Log.e("API Call", "Error parsing JSON", e)
@@ -84,7 +88,10 @@ class MainActivity : ComponentActivity() {
                         LogIn(navController = navController) { logInData ->
                             val call = RetrofitInstance.apiService.logIn(logInData)
                             call.enqueue(object : Callback<Void> {
-                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                override fun onResponse(
+                                    call: Call<Void>,
+                                    response: Response<Void>
+                                ) {
                                     if (response.isSuccessful) {
                                         Log.d("API Call", "Inicio de sesión exitoso")
                                     } else {
@@ -109,19 +116,23 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    composable(AppScreens.conecctionFacebook.route){
+                    composable(AppScreens.conecctionFacebook.route) {
                         Facebook(navController = navController)
                     }
 
-                    composable(AppScreens.conecctionGmail.route){
+                    composable(AppScreens.conecctionGmail.route) {
                         Gmail(navController = navController)
                     }
 
-                    composable(AppScreens.forgotPassword.route){
+                    composable(AppScreens.forgotPassword.route) {
                         ForgotPassword(navController = navController) { forgotPasswordData ->
-                            val call = RetrofitInstance.apiService.forgotPassword(forgotPasswordData)
+                            val call =
+                                RetrofitInstance.apiService.forgotPassword(forgotPasswordData)
                             call.enqueue(object : Callback<Void> {
-                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                override fun onResponse(
+                                    call: Call<Void>,
+                                    response: Response<Void>
+                                ) {
                                     if (response.isSuccessful) {
                                         Log.d("API Call", "Correo enviado")
                                         navController.navigate("resetPassword")
@@ -131,7 +142,8 @@ class MainActivity : ComponentActivity() {
                                         if (!errorBody.isNullOrEmpty()) {
                                             try {
                                                 val json = JSONObject(errorBody)
-                                                errorMessageForgotPassword = json.getString("errorMessage")
+                                                errorMessageForgotPassword =
+                                                    json.getString("errorMessage")
                                                 showErrorForgotPassword = true
                                             } catch (e: JSONException) {
                                                 Log.e("API Call", "Error parsing JSON", e)
@@ -147,11 +159,14 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    composable(AppScreens.resetPassword.route){
-                        ResetPassword (navController = navController){ resetPasswordData ->
+                    composable(AppScreens.resetPassword.route) {
+                        ResetPassword(navController = navController) { resetPasswordData ->
                             val call = RetrofitInstance.apiService.resetPassword(resetPasswordData)
                             call.enqueue(object : Callback<Void> {
-                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                override fun onResponse(
+                                    call: Call<Void>,
+                                    response: Response<Void>
+                                ) {
                                     if (response.isSuccessful) {
                                         Log.d("API Call", "Contraseña restablecida con éxito")
                                         navController.navigate("loginUser_screens")
@@ -161,7 +176,8 @@ class MainActivity : ComponentActivity() {
                                         if (!errorBody.isNullOrEmpty()) {
                                             try {
                                                 val json = JSONObject(errorBody)
-                                                errorMessageResetPassword = json.getString("errorMessage")
+                                                errorMessageResetPassword =
+                                                    json.getString("errorMessage")
                                                 showErrorResetPassword = true
                                             } catch (e: JSONException) {
                                                 Log.e("API Call", "Error parsing JSON", e)
@@ -169,6 +185,7 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
                                 }
+
                                 override fun onFailure(call: Call<Void>, t: Throwable) {
                                     Log.d("API Call", "Failure: ${t.message}")
                                 }
@@ -176,24 +193,24 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    composable(AppScreens.productRegister.route){
+                    composable(AppScreens.productRegister.route) {
                         ProductRegister(navController = navController) {
 
                         }
 
                     }
 
-                    composable(AppScreens.homePage.route){
+                    composable(AppScreens.homePage.route) {
                         HomePage(navController = navController)
 
                     }
 
-                    composable(AppScreens.profile.route){
+                    composable(AppScreens.profile.route) {
                         Perfil(navController = navController)
 
                     }
 
-                    composable(AppScreens.catalogo.route){
+                    composable(AppScreens.catalogo.route) {
                         CatalogoPrincipal(navController = navController)
 
                     }
@@ -202,43 +219,46 @@ class MainActivity : ComponentActivity() {
 //                        DetalleProducto(navController = navController)
 //                    }
 
-                    composable(AppScreens.reviews.route){
-                        PublishReview(navController = navController)
-                    }
+//                    composable(AppScreens.reviews.route){
+//                        PublishReview(navController = navController)
+//                    }
 
 
+                    composable(AppScreens.reviews.route) {
+                        PublishReview(navController = navController) { reviewData ->
+                            val call =
+                                RetrofitInstance.apiServiceReviewApiService.publishReview(reviewData)
+                            call.enqueue(object : Callback<Void> {
+                                override fun onResponse(
+                                    call: Call<Void>,
+                                    response: Response<Void>
+                                ) {
+                                    if (response.isSuccessful) {
+                                        Log.d("API Call", "Reseña publicada con éxito")
+                                    } else {
+                                        val errorBody = response.errorBody()?.string()
+                                        Log.d("API Call", "Response not successful: $errorBody")
+                                        if (!errorBody.isNullOrEmpty()) {
+                                            try {
+                                                val json = JSONObject(errorBody)
+                                                errorMessageReview = json.getString("errorMessage")
+                                                showErrorReview = true
+                                            } catch (e: JSONException) {
+                                                Log.e("API Call", "Error parsing JSON", e)
+                                            }
+                                        }
+                                    }
+                                }
 
-
-//                    composable(AppScreens.reviews.route) {
-//                        PublishReview(navController = navController) { reviewData ->
-//                            val call = RetrofitInstance.apiServiceReviewApiService.publishReview(reviewData)
-//                            call.enqueue(object : Callback<Void> {
-//                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-//                                    if (response.isSuccessful) {
-//                                        Log.d("API Call", "Reseña publicada con éxito")
-//                                    } else {
-//                                        val errorBody = response.errorBody()?.string()
-//                                        Log.d("API Call", "Response not successful: $errorBody")
-//                                        if (!errorBody.isNullOrEmpty()) {
-//                                            try {
-//                                                val json = JSONObject(errorBody)
-//                                                errorMessageReview = json.getString("errorMessage")
-//                                                showErrorReview = true
-//                                            } catch (e: JSONException) {
-//                                                Log.e("API Call", "Error parsing JSON", e)
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//
-//                                override fun onFailure(call: Call<Void>, t: Throwable) {
-//                                    Log.d("API Call", "Failure: ${t.message}")
-//                                }
-//                            })
-//                        }
+                                override fun onFailure(call: Call<Void>, t: Throwable) {
+                                    Log.d("API Call", "Failure: ${t.message}")
+                                }
+                            })
+                        }
                     }
                 }
             }
         }
     }
+}
 
