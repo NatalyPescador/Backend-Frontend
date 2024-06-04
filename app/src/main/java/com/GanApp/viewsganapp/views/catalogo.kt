@@ -1,5 +1,6 @@
 package com.GanApp.viewsganapp.views
 
+import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +23,8 @@ import androidx.compose.ui.layout.ContentScale
 import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.GanApp.viewsganapp.R
+import com.GanApp.viewsganapp.network.RetrofitInstance
+import kotlinx.coroutines.launch
 
 @Composable
 fun CatalogoPrincipal(navController: NavController, productViewModel: ProductViewModel = viewModel()) {
@@ -70,6 +73,9 @@ fun Catalogo(productos: List<ProductoEntity>) {
 
 @Composable
 fun Tarjeta(producto: ProductoEntity) {
+    val filename = producto.imagen?.substringAfterLast('\\') ?: ""
+    val imageUrl = "http://192.168.1.64:8080/GanApp/uploads/$filename"
+
     Surface(
         modifier = Modifier
             .padding(end = 8.dp)
@@ -80,7 +86,6 @@ fun Tarjeta(producto: ProductoEntity) {
         Column(
             modifier = Modifier.clickable { /* Handle click event */ }
         ) {
-            val imageUrl = "https://vwjsb0g9-8080.use2.devtunnels.ms/uploads/${producto.imagen}"
             Image(
                 painter = rememberAsyncImagePainter(model = imageUrl),
                 contentDescription = producto.nombre ?: "Sin nombre",
@@ -103,7 +108,7 @@ fun Tarjeta(producto: ProductoEntity) {
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
             Text(
-                text = "Category: ${producto.categoriaId}",
+                text = "Categoría: ${producto.categoriaId}",
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
         }

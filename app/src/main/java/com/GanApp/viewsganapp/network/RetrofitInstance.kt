@@ -6,15 +6,12 @@ import com.GanApp.viewsganapp.apiService.ProductRegisterApiService
 import com.GanApp.viewsganapp.apiService.ReviewApiService
 import com.GanApp.viewsganapp.apiService.TypeServiceApiService
 import com.GanApp.viewsganapp.apiService.UserRegisterApiService
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.time.LocalDateTime
 
 object RetrofitInstance {
 
-    private const val BASE_URL = "https://vwjsb0g9-8080.use2.devtunnels.ms/GanApp/" // Reemplaza esto con tu URL base
+    const val BASE_URL = "http://192.168.1.64:8080/GanApp/" // Reemplaza esto con tu URL base
 
     // Lazy initialization del Retrofit instance
     private val retrofit: Retrofit by lazy {
