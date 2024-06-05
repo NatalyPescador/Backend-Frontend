@@ -3,7 +3,6 @@ package com.GanApp.viewsganapp.views
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,12 +15,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -29,16 +25,13 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -58,22 +51,18 @@ import androidx.compose.ui.unit.dp
 import com.GanApp.viewsganapp.R
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.colorspace.ColorSpaces
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.GanApp.viewsganapp.navigation.AppScreens
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import androidx.compose.runtime.Composable as Composable
-import com.GanApp.viewsganapp.views.LogIn
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,10 +75,8 @@ fun HomePage(navController: NavHostController) {
         mutableIntStateOf(0)
     }
 
-    /*LaunchedEffect(key1 = true) {
-        // Posible inicialización o acciones adicionales
-        navigationState.close()  // Ejemplo de cómo asegurar que el drawer esté cerrado al inicio
-    }*/
+    // Estado de carga añadido
+    var isLoading by remember { mutableStateOf(false) }
 
 
     val items = listOf(
@@ -100,17 +87,17 @@ fun HomePage(navController: NavHostController) {
             route = "Profile_screens"
         ),
         DrawerItem(
-            title = "Home",
+            title = "Catálodo",
             selectedIcon = Icons.Filled.Home,
             unselectedIcon = Icons.Outlined.Home,
-            route = "ruta_a_home",
+            route = "homePage",
 
         ),
         DrawerItem(
             title = "Favorites",
             selectedIcon = Icons.Filled.FavoriteBorder,
             unselectedIcon = Icons.Outlined.FavoriteBorder,
-            route = "ruta_a_home",
+            route = "favotito",
         ),
         DrawerItem(
             title = "Reseñas",
@@ -123,12 +110,6 @@ fun HomePage(navController: NavHostController) {
             selectedIcon = Icons.Filled.Create,
             unselectedIcon = Icons.Outlined.Create,
             route = "productRegister"
-        ),
-        DrawerItem(
-            title = "Catálogo",
-            selectedIcon = Icons.Filled.ShoppingCart,
-            unselectedIcon = Icons.Outlined.ShoppingCart,
-            route = "catalogo"
         )
     )
 
@@ -141,7 +122,7 @@ fun HomePage(navController: NavHostController) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(color = Color(195,252,219))
+                            .background(color = Color(195, 252, 219))
                     ) {
                         Column(
                             modifier = Modifier
@@ -149,11 +130,11 @@ fun HomePage(navController: NavHostController) {
                         ) {
                             Spacer(modifier = Modifier.height(26.dp))
                             Image(
-                                painter = painterResource(id = R.drawable.icproject),
+                                painter = painterResource(id = R.drawable.icono_proyect),
                                 contentDescription = "",
                                 modifier = Modifier
-                                    .width(230.dp)
-                                    .height(230.dp)
+                                    .width(150.dp)
+                                    .height(150.dp)
                                     .size(150.dp)
                                     .fillMaxWidth()
                                     .align(CenterHorizontally)
@@ -167,8 +148,19 @@ fun HomePage(navController: NavHostController) {
                                     onClick = {
                                         selectedItemIndex = index
                                         scope.launch {
+                                            isLoading = true // Comienza la carga
                                             navigationState.close()
-                                            navController.navigate(drawerItem.route)
+                                            // Retraso simulado para la carga
+                                            delay(1000L) // 1 segundo de retraso simulado
+                                            navController.navigate(drawerItem.route) {
+                                                // Evita la duplicación de destinos en la pila de back stack
+                                                popUpTo(navController.graph.startDestinationId) {
+                                                    saveState = true
+                                                }
+                                                launchSingleTop = true
+                                                restoreState = true
+                                            }
+                                            //isLoading = false // Termina la carga
                                         }
                                     },
                                     icon = {
@@ -192,9 +184,6 @@ fun HomePage(navController: NavHostController) {
                     }
                 }
             }, drawerState = navigationState,
-
-
-
         ) {
             Scaffold( topBar = {
                 TopAppBar(title = { Image(painter = painterResource(id = R.drawable.logo),
@@ -219,19 +208,35 @@ fun HomePage(navController: NavHostController) {
 
                 )
             }
+            ) { innerPadding ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .background(color = Color.White) // Cambiar el fondo a blanco
                 ) {
-                Column (
-                    ){
-                    LogIn(navController = navController) { }
-
+                    CatalogoPrincipal(navController = navController)
                 }
 
             }
-
         }
-    }
 
-    // to define navigation drawer here
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White), // Fondo blanco
+                contentAlignment = Alignment.Center // Centrar el contenido
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.icono_proyect), // Tu imagen de carga
+                    contentDescription = "Loading",
+                    modifier = Modifier.size(100.dp)
+                )
+            }
+        }
+        // to define navigation drawer here
+    }
 }
 
 data class DrawerItem(

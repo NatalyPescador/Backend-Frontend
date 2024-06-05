@@ -13,8 +13,10 @@ import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
+import com.GanApp.viewsganapp.views.EditarPerfil
 //import com.GanApp.viewsganapp.views.DetalleProducto
 import com.GanApp.viewsganapp.views.Facebook
+import com.GanApp.viewsganapp.views.Favoritos
 import com.GanApp.viewsganapp.views.Gmail
 import com.GanApp.viewsganapp.views.ForgotPassword
 import com.GanApp.viewsganapp.views.HomePage
@@ -126,8 +128,7 @@ class MainActivity : ComponentActivity() {
 
                     composable(AppScreens.forgotPassword.route) {
                         ForgotPassword(navController = navController) { forgotPasswordData ->
-                            val call =
-                                RetrofitInstance.apiService.forgotPassword(forgotPasswordData)
+                            val call = RetrofitInstance.apiService.forgotPassword(forgotPasswordData)
                             call.enqueue(object : Callback<Void> {
                                 override fun onResponse(
                                     call: Call<Void>,
@@ -218,12 +219,6 @@ class MainActivity : ComponentActivity() {
 //                    composable(AppScreens.detalleProd.route){
 //                        DetalleProducto(navController = navController)
 //                    }
-
-//                    composable(AppScreens.reviews.route){
-//                        PublishReview(navController = navController)
-//                    }
-
-
                     composable(AppScreens.reviews.route) {
                         PublishReview(navController = navController) { reviewData ->
                             val call =
@@ -256,6 +251,15 @@ class MainActivity : ComponentActivity() {
                             })
                         }
                     }
+
+                    composable(AppScreens.editProfile.route){
+                        EditarPerfil(navController = navController)
+                    }
+
+                    composable(AppScreens.favorite.route){
+                        Favoritos(navController = navController)
+                    }
+
                 }
             }
         }

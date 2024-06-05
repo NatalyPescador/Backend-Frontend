@@ -123,7 +123,8 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
 
         ) {
             Button(
-                onClick = { onSubmit(LogInData(correo, password)) },
+                onClick = { navController.navigate("homePage")
+                    onSubmit(LogInData(correo, password)) },
                 colors = ButtonDefaults.buttonColors(
                     Color(10, 191, 4),
                     contentColor = Color.Black

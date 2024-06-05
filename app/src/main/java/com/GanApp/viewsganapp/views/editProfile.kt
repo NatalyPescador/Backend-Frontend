@@ -7,99 +7,67 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import coil.compose.rememberAsyncImagePainter
 import com.GanApp.viewsganapp.R
-import com.GanApp.viewsganapp.apiService.ReviewApiService
-import androidx.compose.material3.Icon as Icon
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Perfil(navController: NavController){
+fun EditarPerfil(navController: NavController){
 
     // Aquí definimos los datos del perfil (simulados)
-    val name = "Nombre de Usuario"
-    val email = "usuario@ejemplo.com"
-    val phoneNumber = "+123 456 789"
-    val password = "********"
+    var name by remember { mutableStateOf("Nombre de Usuario") }
+    var email by remember { mutableStateOf("usuario@ejemplo.com") }
+    var phoneNumber by remember { mutableStateOf("+123 456 789") }
+    var password by remember { mutableStateOf("Hola") }
+    var birthDate by remember { mutableStateOf("01/01/1990") }
 
-    // URL de la imagen de perfil desde el backend
-    val profileImageUrl = "https://example.com/path/to/profile/image.jpg" // Reemplaza esta URL con la URL real
+    // Estado para mostrar u ocultar la contraseña
+    var passwordVisible by remember { mutableStateOf(false) }
 
+    // Recordatorio del estado de la URI de la imagen seleccionada
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
 
+    // ActivityResultLauncher para seleccionar la imagen de la galería
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri = uri
+    }
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = {},
+                title = { Text("") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate("homePage") }) {
+                    IconButton(onClick = { navController.navigate("Profile_screens") }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             modifier = Modifier.size(35.dp),
                             contentDescription = "Volver"
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { navController.navigate("favotito") }) {
-                        Icon(
-                            imageVector = Icons.Filled.Favorite,
-                            modifier = Modifier
-                                .size(35.dp),
-                            contentDescription = "Favorito"
                         )
                     }
                 },
@@ -118,13 +86,11 @@ fun Perfil(navController: NavController){
                 .fillMaxHeight()
                 .background(Color.White)
                 .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-        )
-
-        {
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Text(
-                text = "Mi Perfil",
+                text = "Editar Perfil",
                 fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -141,22 +107,33 @@ fun Perfil(navController: NavController){
                     .clip(CircleShape) // Hacer que la imagen sea circular
                     .background(Color.LightGray)
                     .border(2.dp, Color.Gray, CircleShape) // Borde alrededor de la imagen
-
+                    .clickable { launcher.launch("image/*") } // Abre la galería para seleccionar una imagen
             ) {
-                Image(
-                    painter = rememberAsyncImagePainter(profileImageUrl),
-                    contentDescription = "Foto de perfil",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
+                if (imageUri == null) {
+                    // Mostrar el ícono de "más" si no hay imagen seleccionada
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = "Agregar Imagen",
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(100.dp)
+                    )
+                } else {
+                    // Mostrar la imagen seleccionada
+                    Image(
+                        painter = rememberAsyncImagePainter(imageUri),
+                        contentDescription = "Foto de perfil",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
             OutlinedTextField(
                 value = name,
-                onValueChange = { /* No es necesario hacer nada ya que es de solo lectura */ },
+                onValueChange = { name = it },
                 label = { Text(text = "Nombre") },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
@@ -171,7 +148,7 @@ fun Perfil(navController: NavController){
 
             OutlinedTextField(
                 value = email,
-                onValueChange = { /* No es necesario hacer nada ya que es de solo lectura */ },
+                onValueChange = { email = it },
                 label = { Text("Gmail") },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
@@ -181,13 +158,11 @@ fun Perfil(navController: NavController){
                     .offset(y = (-20).dp)
                     .padding(16.dp),
                 shape = RoundedCornerShape(20.dp)
-
-
             )
 
             OutlinedTextField(
                 value = phoneNumber,
-                onValueChange = { /* No es necesario hacer nada ya que es de solo lectura */ },
+                onValueChange = { phoneNumber = it },
                 label = { Text("Telefono") },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
@@ -201,35 +176,45 @@ fun Perfil(navController: NavController){
 
             OutlinedTextField(
                 value = password,
-                onValueChange = { /* No es necesario hacer nada ya que es de solo lectura */ },
+                onValueChange = { password = it },
                 label = { Text("Contraseña") },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     Icon(imageVector = Icons.Filled.Lock, contentDescription = "Contraseña")
                 },
+                trailingIcon = {
+                    Row {
+                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            Icon(
+                                imageVector = if (passwordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                                contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
+                            )
+                        }
+                    }
+                },
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 modifier = Modifier
                     .offset(y = (-60).dp)
                     .padding(16.dp),
                 shape = RoundedCornerShape(20.dp)
             )
 
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Box(
                 modifier = Modifier.offset(y = (-50).dp)
-
             ) {
                 Button(
-                    onClick =  { navController.navigate("edit_profile")  },
+                    onClick = { /* Aquí puedes manejar la acción de guardar cambios */ },
                     colors = ButtonDefaults.buttonColors(
-                        Color(10, 191, 4),
+                        containerColor = Color(10, 191, 4),
                         contentColor = Color.Black
                     )
-                )
-                {
-                    Text("Editar perfil", color = Color.Black)
+                ) {
+                    Text("Guardar cambios", color = Color.Black)
                 }
             }
-            // Aquí puedes agregar cualquier otro contenido que desees mostrar.
         }
     }
-
 }
