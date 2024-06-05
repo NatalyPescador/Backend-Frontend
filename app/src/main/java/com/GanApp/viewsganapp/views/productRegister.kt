@@ -238,7 +238,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                                 imagen = uri.toString(),
                                 tipoServicioId = selectedTipoServicio?.tipoServicioId ?: 0,
                                 categoriaId = selectedCategoria?.categoriaId ?: 0,
-                                usuarioId = 122  // Ejemplo de usuario ID
+                                usuarioId = 8  // Ejemplo de usuario ID
                             )
                         )
                     }
