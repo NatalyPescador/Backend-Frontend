@@ -39,7 +39,7 @@ sealed class AppScreens(val route: String) {
     object catalogo : AppScreens("catalogo")
     object detalleProd : AppScreens("detalleProd")
     object editProfile : AppScreens ("edit_profile")
-    object favorite: AppScreens ("favotito")
+    object favorite: AppScreens ("favorito")
 
 }
 

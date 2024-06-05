@@ -76,7 +76,6 @@ fun HomePage(navController: NavHostController) {
     // Estado de carga añadido
     var isLoading by remember { mutableStateOf(false) }
 
-
     val items = listOf(
         DrawerItem(
             title = "Perfil",
@@ -85,17 +84,16 @@ fun HomePage(navController: NavHostController) {
             route = "Profile_screens"
         ),
         DrawerItem(
-            title = "Catálodo",
+            title = "Catálogo",
             selectedIcon = Icons.Filled.Home,
             unselectedIcon = Icons.Outlined.Home,
             route = "homePage",
-
         ),
         DrawerItem(
-            title = "Favorites",
+            title = "Favoritos",
             selectedIcon = Icons.Filled.FavoriteBorder,
             unselectedIcon = Icons.Outlined.FavoriteBorder,
-            route = "favotito",
+            route = "favorito",
         ),
         DrawerItem(
             title = "Reseñas",
@@ -104,18 +102,16 @@ fun HomePage(navController: NavHostController) {
             route = "reviews",
         ),
         DrawerItem(
-            title = "Resgistrar producto",
+            title = "Registrar producto",
             selectedIcon = Icons.Filled.Create,
             unselectedIcon = Icons.Outlined.Create,
             route = "productRegister"
         )
     )
 
-    Surface (
-    ){
+    Box {
         ModalNavigationDrawer(
             drawerContent = {
-
                 ModalDrawerSheet(modifier = Modifier.padding(end = 50.dp)) {
                     Box(
                         modifier = Modifier
@@ -144,12 +140,11 @@ fun HomePage(navController: NavHostController) {
                                 },
                                     selected = index == selectedItemIndex,
                                     onClick = {
+                                        isLoading = true // Comienza la carga inmediatamente
                                         selectedItemIndex = index
                                         scope.launch {
-                                            isLoading = true // Comienza la carga
+                                            delay(100L) // Pequeño retraso para asegurar que la IU se actualice
                                             navigationState.close()
-                                            // Retraso simulado para la carga
-                                            delay(1000L) // 1 segundo de retraso simulado
                                             navController.navigate(drawerItem.route) {
                                                 // Evita la duplicación de destinos en la pila de back stack
                                                 popUpTo(navController.graph.startDestinationId) {
@@ -158,7 +153,8 @@ fun HomePage(navController: NavHostController) {
                                                 launchSingleTop = true
                                                 restoreState = true
                                             }
-                                            //isLoading = false // Termina la carga
+                                            delay(100L) // Asegurarse de que la IU tenga tiempo de actualizarse
+                                            isLoading = false // Termina la carga
                                         }
                                     },
                                     icon = {
@@ -176,34 +172,36 @@ fun HomePage(navController: NavHostController) {
                                     },
                                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                                 )
-
                             }
                         }
                     }
                 }
-            }, drawerState = navigationState,
+            },
+            drawerState = navigationState,
         ) {
-            Scaffold( topBar = {
-                TopAppBar(title = { Image(painter = painterResource(id = R.drawable.logo),
-                    contentDescription = "Logo", modifier = Modifier
-                        .height(200.dp)
-                        .width(200.dp)
-                 )
-
+            Scaffold(topBar = {
+                TopAppBar(title = {
+                    Image(
+                        painter = painterResource(id = R.drawable.logo),
+                        contentDescription = "Logo",
+                        modifier = Modifier
+                            .height(200.dp)
+                            .width(200.dp)
+                    )
                 }, navigationIcon = {
                     IconButton(onClick = {
                         scope.launch {
                             navigationState.open()
                         }
                     }) {
-                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu",
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = "Menu",
                             tint = Color.Black,
                             modifier = Modifier.size(40.dp)
-
                         )
                     }
-                },  colors = TopAppBarDefaults.topAppBarColors(Color(152, 255, 150))
-
+                }, colors = TopAppBarDefaults.topAppBarColors(Color(152, 255, 150))
                 )
             }
             ) { innerPadding ->
@@ -215,7 +213,6 @@ fun HomePage(navController: NavHostController) {
                 ) {
                     CatalogoPrincipal(navController = navController)
                 }
-
             }
         }
 
@@ -223,19 +220,20 @@ fun HomePage(navController: NavHostController) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.White), // Fondo blanco
+                    .background(Color(0x80000000)), // Fondo semi-transparente
                 contentAlignment = Alignment.Center // Centrar el contenido
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.icono_proyect), // Tu imagen de carga
                     contentDescription = "Loading",
-                    modifier = Modifier.size(100.dp)
+                    modifier = Modifier
+                        .size(200.dp) // Ajusta el tamaño de la imagen aquí
                 )
             }
         }
-        // to define navigation drawer here
     }
 }
+
 
 data class DrawerItem(
     val title: String,

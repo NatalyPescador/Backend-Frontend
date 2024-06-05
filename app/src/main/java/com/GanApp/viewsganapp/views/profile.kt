@@ -188,7 +188,7 @@ fun Perfil(navController: NavController){
             OutlinedTextField(
                 value = phoneNumber,
                 onValueChange = { /* No es necesario hacer nada ya que es de solo lectura */ },
-                label = { Text("Telefono") },
+                label = { Text("Teléfono") },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     Icon(imageVector = Icons.Filled.Phone, contentDescription = "Telefono")

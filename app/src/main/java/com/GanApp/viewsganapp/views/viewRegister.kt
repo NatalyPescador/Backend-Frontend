@@ -162,7 +162,7 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
         Box(
             modifier = Modifier.offset(y = 20.dp)
         ) {
-            Button( onClick = {
+            Button( onClick = { navController.navigate("homePage")
                 onSubmit(UserData(nombreCompleto, correo, password, numeroTelefono)) },
                 colors = buttonColors(
                     Color(10, 191, 4)

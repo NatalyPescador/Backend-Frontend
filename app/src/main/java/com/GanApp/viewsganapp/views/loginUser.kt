@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
-import com.GanApp.viewsganapp.views.LogInData
 import kotlinx.coroutines.delay
 
 var showErrorLogin by mutableStateOf(false)
@@ -123,8 +122,8 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
 
         ) {
             Button(
-                onClick = { navController.navigate("homePage")
-                    onSubmit(LogInData(correo, password)) },
+                onClick = { onSubmit(LogInData(correo, password))
+                            navController.navigate("homePage")},
                 colors = ButtonDefaults.buttonColors(
                     Color(10, 191, 4),
                     contentColor = Color.Black
@@ -172,10 +171,10 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
         Spacer(modifier = Modifier.height(15.dp))
         Text(text = "¿Olvidaste tú contraseña?",
             modifier = Modifier
-            .clickable {
-                navController.navigate("forgotPassword")
-            }
-            .offset(x = 50.dp))
+                .clickable {
+                    navController.navigate("forgotPassword")
+                }
+                .offset(x = 50.dp))
 
         Row(
             modifier = Modifier
