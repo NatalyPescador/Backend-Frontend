@@ -261,43 +261,39 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
             ) {
                 Button(
 
-                    onClick = {
-                        imageUri?.let { uri ->
-                            viewModel.uploadProductData(
-                                context,
-                                uri,
-                                ProductData(
-                                    nombre = nombre,  // Asegúrate de que 'nombre' está definido en tu estado composable
-                                    precio = precio,  // Asegúrate de que 'precio' está definido en tu estado composable
-                                    descripcion = descripcion,  // Asegúrate de que 'descripcion' está definido en tu estado composable
-                                    imagen = uri.toString(),
-                                    tipoServicioId = selectedTipoServicio?.tipoServicioId ?: 0,
-                                    categoriaId = selectedCategoria?.categoriaId ?: 0,
-                                    usuarioId = 122  // Ejemplo de usuario ID
-                                )
+                onClick = {
+                    imageUri?.let { uri ->
+                        viewModel.uploadProductData(
+                            context,
+                            uri,
+                            ProductData(
+                                nombre = nombre,  // Asegúrate de que 'nombre' está definido en tu estado composable
+                                precio = precio,  // Asegúrate de que 'precio' está definido en tu estado composable
+                                descripcion = descripcion,  // Asegúrate de que 'descripcion' está definido en tu estado composable
+                                imagen = uri.toString(),
+                                tipoServicioId = selectedTipoServicio?.tipoServicioId ?: 0,
+                                categoriaId = selectedCategoria?.categoriaId ?: 0,
+                                usuarioId = 8  // Ejemplo de usuario ID
                             )
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        Color(10, 191, 4),
-                        contentColor = Color.Black
-                    )
-                )
-                {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        // Utiliza el ícono PNG convertido en vector drawable
-                        Icon(
-                            painter = painterResource(id = R.drawable.promocion_icn),
-                            contentDescription = "Descripción del icono",
-                            modifier = Modifier.size(24.dp) // Tamaño del ícono
-                        )
-                        Text(
-                            "Publicar",
-                            color = Color.Black,
-                            modifier = Modifier.padding(start = 8.dp)
                         )
                     }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    Color(10, 191, 4),
+                    contentColor = Color.Black
+                )
+            )
+            {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    // Utiliza el ícono PNG convertido en vector drawable
+                    Icon(
+                        painter = painterResource(id = R.drawable.promocion_icn),
+                        contentDescription = "Descripción del icono",
+                        modifier = Modifier.size(24.dp) // Tamaño del ícono
+                    )
+                    Text("Publicar", color = Color.Black, modifier = Modifier.padding(start = 8.dp))
                 }
+            }
 
             }
 

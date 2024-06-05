@@ -1,5 +1,6 @@
 package com.GanApp.viewsganapp.views
 
+import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -10,6 +11,7 @@ import androidx.navigation.NavController
 import com.GanApp.viewsganapp.models.ProductoEntity
 import com.GanApp.viewsganapp.viewModels.ProductViewModel
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,7 +22,15 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.GanApp.viewsganapp.R
+import com.GanApp.viewsganapp.network.RetrofitInstance
+import kotlinx.coroutines.launch
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
 fun CatalogoPrincipal(navController: NavController, productViewModel: ProductViewModel = viewModel()) {
@@ -50,14 +60,14 @@ fun Catalogo(productos: List<ProductoEntity>) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        items(productos.size / 3) { rowIndex ->
+        items(productos.size / 2) { rowIndex ->
             Row(
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                for (i in 0 until 3) {
+                for (i in 0 until 2) {
                     val index = rowIndex * 2 + i
                     if (index < productos.size) {
                         Tarjeta(producto = productos[index])
@@ -70,19 +80,25 @@ fun Catalogo(productos: List<ProductoEntity>) {
 
 @Composable
 fun Tarjeta(producto: ProductoEntity) {
+    val filename = producto.imagen?.substringAfterLast('\\') ?: ""
+    val imageUrl = "http://10.175.144.94:8080/GanApp/uploads/$filename"
+    val numberFormat = NumberFormat.getInstance(Locale("es", "CO")).apply {
+        maximumFractionDigits = 0
+    }
+
     Surface(
         modifier = Modifier
             .padding(end = 8.dp)
-            .width(120.dp)
-            .height(200.dp),
+            .width(150.dp)
+            .height(260.dp),
         shape = RoundedCornerShape(8.dp),
     ) {
         Column(
             modifier = Modifier.clickable { /* Handle click event */ }
         ) {
             Image(
-                painter = painterResource(id = R.drawable.gmail_logo),
-                contentDescription = null,
+                painter = rememberAsyncImagePainter(model = imageUrl),
+                contentDescription = producto.nombre ?: "Sin nombre",
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
@@ -91,18 +107,24 @@ fun Tarjeta(producto: ProductoEntity) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = producto.nombre ?: "Sin nombre",
-                modifier = Modifier.padding(horizontal = 8.dp)
+                modifier = Modifier.padding(horizontal = 8.dp),
+                fontWeight = FontWeight.Bold
             )
             Text(
-                text = "$${producto.precio}",
-                modifier = Modifier.padding(horizontal = 8.dp)
+                text = "$${numberFormat.format(producto.precio.toDouble())}",
+                modifier = Modifier.padding(horizontal = 8.dp),
+                fontStyle = FontStyle.Italic
             )
-            Text(
+            /*Text(
                 text = "por ${producto.usuarioId}",
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
             Text(
-                text = "Category: ${producto.categoriaId}",
+                text = "Categoría: ${producto.categoriaId}",
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )*/
+            Text(
+                text = "${producto.descripcion}",
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
         }

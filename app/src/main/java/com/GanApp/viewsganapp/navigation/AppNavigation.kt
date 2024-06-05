@@ -40,6 +40,8 @@ sealed class AppScreens(val route: String) {
     object detalleProd : AppScreens("detalleProd")
     object editProfile : AppScreens ("edit_profile")
     object favorite: AppScreens ("favorito")
+    object CreateChatView : AppScreens("CreateChatView")
+    object ChatView : AppScreens("ChatView")
 
 }
 
@@ -58,6 +60,8 @@ fun AppScreens(navController: NavController) {
                 var password by remember { mutableStateOf("") }
                 // Composable para la pantalla de inicio de sesión
             }
+        }
+
             composable(AppScreens.viewReister.route) {
                 @Composable
                 fun Register(onSubmit: (UserData) -> Unit) {
@@ -80,13 +84,15 @@ fun AppScreens(navController: NavController) {
                 fun Gmail() {
                 }
             }
-            composable(AppScreens.forgotPassword.route) {
+
+            composable(AppScreens.forgotPassword.route){
                 @Composable
                 fun ForgotPassword(onSubmit: (ForgotPasswordData) -> Unit) {
                     var correo by remember { mutableStateOf("") }
                 }
             }
-            composable(AppScreens.resetPassword.route) {
+
+            composable(AppScreens.resetPassword.route){
                 @Composable
                 fun ResetPassword(onSubmit: (ResetPasswordData) -> Unit) {
                     var token by remember { mutableStateOf("") }
@@ -113,35 +119,35 @@ fun AppScreens(navController: NavController) {
                         mutableIntStateOf(0)
                     }
                 }
-                composable(AppScreens.catalogo.route) {
+
+                composable(AppScreens.catalogo.route){
                     @Composable
-                    fun CatalogoPrincipal() {
-                    }
+                    fun CatalogoPrincipal(){}
                 }
-                composable(AppScreens.detalleProd.route) {
+
+                composable(AppScreens.detalleProd.route){
                     @Composable
-                    fun DetalleProducto() {
-                    }
+                    fun DetalleProducto(){}
                 }
+
             }
+
             composable(AppScreens.profile.route) {
-                @Composable
-                fun Perfil() {
-
-                }
+                 @Composable
+                 fun Perfil() {}
             }
 
-                 composable(AppScreens.reviews.route) {
-                     @Composable
-                     fun PublishReview(
-//                         navController: NavController,
-//                         onSubmit: (ReviewData) -> Unit
-                     ) {
-//                         var resena by remember {
-//                             mutableStateOf("")
-                         }
+            composable(AppScreens.reviews.route) {
+                 @Composable
+                 fun PublishReview(
+                     navController: NavController,
+                     onSubmit: (ReviewData) -> Unit
+                 ) {
+                     var resena by remember {
+                         mutableStateOf("")
                      }
                  }
+            }
 
             composable(AppScreens.editProfile.route) {
                 @Composable
@@ -172,11 +178,15 @@ fun AppScreens(navController: NavController) {
 
                 }
             }
+
+            composable(AppScreens.CreateChatView.route){
+                @Composable
+                fun CreateChat(navController: NavHostController){}
+            }
+
+            composable(AppScreens.ChatView.route){
+                @Composable
+                fun ShowChats(navController: NavController){}
+            }
         }
     }
-
-
-
-       
-
-

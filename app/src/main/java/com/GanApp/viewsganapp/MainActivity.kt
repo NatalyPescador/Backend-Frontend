@@ -13,6 +13,7 @@ import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
+import com.GanApp.viewsganapp.views.CreateChat
 import com.GanApp.viewsganapp.views.EditarPerfil
 //import com.GanApp.viewsganapp.views.DetalleProducto
 import com.GanApp.viewsganapp.views.Facebook
@@ -26,6 +27,7 @@ import com.GanApp.viewsganapp.views.ProductRegister
 import com.GanApp.viewsganapp.views.PublishReview
 import com.GanApp.viewsganapp.views.Register
 import com.GanApp.viewsganapp.views.ResetPassword
+import com.GanApp.viewsganapp.views.ShowChats
 import com.GanApp.viewsganapp.views.errorMessageForgotPassword
 import com.GanApp.viewsganapp.views.errorMessageLogin
 import com.GanApp.viewsganapp.views.errorMessageRegister
@@ -249,6 +251,7 @@ class MainActivity : ComponentActivity() {
                                     Log.d("API Call", "Failure: ${t.message}")
                                 }
                             })
+
                         }
                     }
 
@@ -260,6 +263,13 @@ class MainActivity : ComponentActivity() {
                         Favoritos(navController = navController)
                     }
 
+                    composable(AppScreens.CreateChatView.route){
+                        CreateChat(navController = navController)
+                    }
+                    composable(AppScreens.ChatView.route){
+                        val userId = 15L
+                        ShowChats(navController = navController, userId = userId)
+                    }
                 }
             }
         }
