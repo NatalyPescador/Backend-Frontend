@@ -94,7 +94,7 @@ fun Perfil(navController: NavController){
                     }
                 },
                 actions = {
-                    IconButton(onClick = { navController.navigate("favotito") }) {
+                    IconButton(onClick = { navController.navigate("favorito") }) {
                         Icon(
                             imageVector = Icons.Filled.Favorite,
                             modifier = Modifier

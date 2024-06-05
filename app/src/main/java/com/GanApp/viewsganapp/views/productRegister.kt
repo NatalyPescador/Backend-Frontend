@@ -122,7 +122,6 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
         )
 
         {
-
             Row(
                 modifier = Modifier
                     .padding(16.dp)

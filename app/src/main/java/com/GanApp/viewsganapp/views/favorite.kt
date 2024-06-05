@@ -70,17 +70,19 @@ fun Favoritos(navController: NavController){
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "",
-                fontSize = 35.sp,
-                fontWeight = FontWeight.Bold,
+        ) { 
+            Row(
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth()
-                    .wrapContentWidth(Alignment.CenterHorizontally),
-                color = Color.Black // Cambia este color según tus necesidades
-            )
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.trabajando), contentDescription = "Logo",
+                    modifier = Modifier
+                        .width(300.dp)
+                        .height(300.dp)
+                )
+            }
         }
     }
 }
