@@ -136,6 +136,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 text = "Registrar producto",
                 fontWeight = FontWeight.Bold,
                 fontSize = 38.sp,
+                color = Color.Black,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     //.padding(bottom = 16.dp)
@@ -150,7 +151,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                     val filteredText = it.replace("\n", "")
                     nombre = filteredText
                 },
-                label = { Text("Nombre producto") },
+                label = { Text("Nombre producto", color=Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     // Cargar el recurso de la imagen PNG como un pintor
@@ -175,7 +176,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                     }
                     precio = filteredText
                 },
-                label = { Text("Precio") },
+                label = { Text("Precio", color=Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     val painter = painterResource(id = R.drawable.dolar_icn)
@@ -200,7 +201,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                     val filteredText = it.replace("\n", "")
                     descripcion = filteredText
                 },
-                label = { Text("Descripcion") },
+                label = { Text("Descripcion", color=Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     val painter = painterResource(id = R.drawable.descripcion_icn)

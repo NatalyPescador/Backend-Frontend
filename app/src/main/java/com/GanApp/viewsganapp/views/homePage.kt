@@ -180,6 +180,7 @@ fun HomePage(navController: NavHostController) {
                                             } else drawerItem.unselectedIcon,
                                             contentDescription = drawerItem.title
                                         )
+
                                     },
                                     badge = {
                                         drawerItem.badgeCount?.let {
@@ -187,6 +188,7 @@ fun HomePage(navController: NavHostController) {
                                         }
                                     },
                                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+
                                 )
                             }
                         }
