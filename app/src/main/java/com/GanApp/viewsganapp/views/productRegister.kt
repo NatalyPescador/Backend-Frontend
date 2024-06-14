@@ -220,8 +220,6 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 selectedTipoServicio = selectedTipoServicio,
                 onTipoServicioSelected = { tipoServicio ->
                     selectedTipoServicio = tipoServicio
-                    /* viewModel.selectedTipoServicioId.value = tipoServicio.tipoServicioId
-                    viewModel.fetchCategoriasByTipoServicio(tipoServicio.tipoServicioId)*/
                 }
             )
 
