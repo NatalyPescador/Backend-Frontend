@@ -1,7 +1,6 @@
 package com.GanApp.viewsganapp
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
@@ -9,21 +8,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.navigation.AppScreens.detalleProd
-import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.views.Facebook
-import com.GanApp.viewsganapp.views.ForgotPassword
 import com.GanApp.viewsganapp.views.Gmail
-import com.GanApp.viewsganapp.views.LogIn
-import com.GanApp.viewsganapp.views.ProductRegister
-import com.GanApp.viewsganapp.views.Register
-import com.GanApp.viewsganapp.views.ResetPassword
 import com.GanApp.viewsganapp.views.VerDetalle
 import com.GanApp.viewsganapp.views.menuDetalleProd
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 class MainActivity : ComponentActivity() {
@@ -36,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = AppScreens.menuDetalleProd.route
                 ) {
-                    composable(AppScreens.viewReister.route) {
+                    /*composable(AppScreens.viewReister.route) {
                         Register(navController = navController) { userData ->
                             val call = RetrofitInstance.apiService.createUser(userData)
                             call.enqueue(object : Callback<Void> {
@@ -88,7 +78,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             })
                         }
-                    }
+                    }*/
 
                     composable(AppScreens.conecctionFacebook.route){
                         Facebook(navController = navController)
@@ -98,7 +88,7 @@ class MainActivity : ComponentActivity() {
                         Gmail(navController = navController)
                     }
 
-                    composable(AppScreens.forgotPassword.route){
+                    /*composable(AppScreens.forgotPassword.route){
                         ForgotPassword(navController = navController) { forgotPasswordData ->
                             val call = RetrofitInstance.apiService.forgotPassword(forgotPasswordData)
                             call.enqueue(object : Callback<Void> {
@@ -140,7 +130,7 @@ class MainActivity : ComponentActivity() {
 
                     composable(AppScreens.productRegister.route){
                         ProductRegister(navController = navController) { productRegister ->
-                            val call = RetrofitInstance.apiServiceProduct.createProduct(productRegister)
+                            val call = apiServiceProduct.createProduct(productRegister)
                             call.enqueue(object : Callback<Void> {
                                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                     if (response.isSuccessful) {
@@ -157,7 +147,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             })
                         }
-                    }
+                    }*/
 
                     composable(AppScreens.catalogo.route){
                         CatalogoPrincipal(navController = navController)

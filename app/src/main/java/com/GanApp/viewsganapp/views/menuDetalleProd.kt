@@ -75,32 +75,32 @@ fun menuDetalleProd(navController: NavHostController) {
 
 
     val items = listOf(
-        DrawerItem(
+        DrawerItemDetalleProd(
             title = "Perfil",
             selectedIcon = Icons.Filled.Person,
             unselectedIcon = Icons.Outlined.Person,
             route = "Profile_screens"
         ),
-        DrawerItem(
+        DrawerItemDetalleProd(
             title = "Catálodo",
             selectedIcon = Icons.Filled.Home,
             unselectedIcon = Icons.Outlined.Home,
             route = "homePage",
 
             ),
-        DrawerItem(
+        DrawerItemDetalleProd(
             title = "Favorites",
             selectedIcon = Icons.Filled.FavoriteBorder,
             unselectedIcon = Icons.Outlined.FavoriteBorder,
             route = "favotito",
         ),
-        DrawerItem(
+        DrawerItemDetalleProd(
             title = "Reseñas",
             selectedIcon = Icons.Filled.Star,
             unselectedIcon = Icons.Outlined.Star,
             route = "reviews",
         ),
-        DrawerItem(
+        DrawerItemDetalleProd(
             title = "Resgistrar producto",
             selectedIcon = Icons.Filled.Create,
             unselectedIcon = Icons.Outlined.Create,
@@ -214,7 +214,7 @@ fun menuDetalleProd(navController: NavHostController) {
     // to define navigation drawer here
 }
 
-data class DrawerItem(
+data class DrawerItemDetalleProd(
     val title: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
