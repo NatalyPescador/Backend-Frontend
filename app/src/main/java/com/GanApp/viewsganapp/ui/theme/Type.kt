@@ -10,12 +10,12 @@ import com.GanApp.viewsganapp.R
 
 // Set of Material typography styles to start with
 val Nunito = FontFamily(
-    Font(R.font.nunito, )
+    Font(R.font.nunito, Normal)
 )
 val Typography = Typography(
 
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = Nunito,
         fontWeight = Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
