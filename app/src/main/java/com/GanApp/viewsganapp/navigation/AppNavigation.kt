@@ -42,6 +42,7 @@ sealed class AppScreens(val route: String) {
     object favorite: AppScreens ("favorito")
     object CreateChatView : AppScreens("CreateChatView")
     object ChatView : AppScreens("ChatView")
+    object menuDetalleProd : AppScreens("menuDetalleProd")
 
 }
 
@@ -118,71 +119,26 @@ fun AppScreens(navController: NavController) {
                     var selectedItemIndex by rememberSaveable {
                         mutableIntStateOf(0)
                     }
-                }
-
-                composable(AppScreens.catalogo.route){
-                    @Composable
-                    fun CatalogoPrincipal(){}
-                }
-
-                composable(AppScreens.detalleProd.route){
-                    @Composable
-                    fun DetalleProducto(){}
-                }
-
             }
-
-            composable(AppScreens.profile.route) {
-                 @Composable
-                 fun Perfil() {}
+            composable(AppScreens.catalogo.route){
+                @Composable
+                fun CatalogoPrincipal(){}
             }
+            composable(AppScreens.detalleProd.route){
+                @Composable
+                fun DetalleProducto(){}
+            }
+            composable(AppScreens.menuDetalleProd.route){
+                @Composable
+                fun menuDetalleProd(){}
+            }
+        }
+                 composable(AppScreens.profile.route) {
+                     @Composable
+                     fun Perfil() {
 
-            composable(AppScreens.reviews.route) {
-                 @Composable
-                 fun PublishReview(
-                     navController: NavController,
-                     onSubmit: (ReviewData) -> Unit
-                 ) {
-                     var resena by remember {
-                         mutableStateOf("")
                      }
                  }
-            }
-
-            composable(AppScreens.editProfile.route) {
-                @Composable
-                fun EditarPerfil(navController: NavController) {
-
-                    // Aquí definimos los datos del perfil (simulados)
-                    var name by remember { mutableStateOf("Nombre de Usuario") }
-                    var email by remember { mutableStateOf("usuario@ejemplo.com") }
-                    var phoneNumber by remember { mutableStateOf("+123 456 789") }
-                    var password by remember { mutableStateOf("********") }
-                    var birthDate by remember { mutableStateOf("01/01/1990") }
-
-                    // Recordatorio del estado de la URI de la imagen seleccionada
-                    var imageUri by remember { mutableStateOf<Uri?>(null) }
-
-                    // ActivityResultLauncher para seleccionar la imagen de la galería
-                    val launcher = rememberLauncherForActivityResult(
-                        contract = ActivityResultContracts.GetContent()
-                    ) { uri: Uri? ->
-                        imageUri = uri
-                    }
-                }
-
-            }
-
-            composable(AppScreens.favorite.route){
-                fun Favoritos(navController: NavController){
-
-                }
-            }
-
-            composable(AppScreens.CreateChatView.route){
-                @Composable
-                fun CreateChat(navController: NavHostController){}
-            }
 
             composable(AppScreens.ChatView.route){
                 @Composable

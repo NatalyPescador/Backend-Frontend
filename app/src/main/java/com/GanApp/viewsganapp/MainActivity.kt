@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.GanApp.viewsganapp.models.ReviewEntity
 import com.GanApp.viewsganapp.navigation.AppScreens
+import com.GanApp.viewsganapp.navigation.AppScreens.detalleProd
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
@@ -59,10 +60,7 @@ class MainActivity : ComponentActivity() {
                         Register(navController = navController) { userData ->
                             val call = RetrofitInstance.apiService.createUser(userData)
                             call.enqueue(object : Callback<Void> {
-                                override fun onResponse(
-                                    call: Call<Void>,
-                                    response: Response<Void>
-                                ) {
+                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                     if (response.isSuccessful) {
                                         Log.d("API Call", "Usuario creado con éxito")
                                     } else {
@@ -188,7 +186,6 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
                                 }
-
                                 override fun onFailure(call: Call<Void>, t: Throwable) {
                                     Log.d("API Call", "Failure: ${t.message}")
                                 }
@@ -275,4 +272,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+
 
