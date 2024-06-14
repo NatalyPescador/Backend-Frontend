@@ -255,13 +255,6 @@ class MainActivity : ComponentActivity() {
                     composable(AppScreens.editProfile.route){
                         EditarPerfil(navController = navController)
                     }
-                    composable(detalleProd.route){
-                        VerDetalle(navController = navController)
-                    }
-
-                    composable(AppScreens.menuDetalleProd.route){
-                        menuDetalleProd(navController = navController)
-                    }
 
                     composable(AppScreens.favorite.route){
                         Favoritos(navController = navController)

@@ -251,12 +251,10 @@ fun HomePage(navController: NavHostController) {
 }
 
 
-data class DrawerItem(
+data class DrawerItem (
     val title: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
     val badgeCount: Int? = null,
     val route: String
 )
-
-
