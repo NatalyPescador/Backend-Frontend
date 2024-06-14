@@ -110,6 +110,7 @@ fun AppScreens(navController: NavController) {
                     var imagenes by remember { mutableStateOf("") }
                 }
             }
+
             composable(AppScreens.homePage.route) {
                 @Composable
                 fun HomePage() {
@@ -119,30 +120,33 @@ fun AppScreens(navController: NavController) {
                     var selectedItemIndex by rememberSaveable {
                         mutableIntStateOf(0)
                     }
+                }
             }
             composable(AppScreens.catalogo.route){
                 @Composable
                 fun CatalogoPrincipal(){}
             }
+
             composable(AppScreens.detalleProd.route){
                 @Composable
                 fun DetalleProducto(){}
             }
+
             composable(AppScreens.menuDetalleProd.route){
                 @Composable
                 fun menuDetalleProd(){}
             }
-        }
-                 composable(AppScreens.profile.route) {
-                     @Composable
-                     fun Perfil() {
 
-                     }
-                 }
+            composable(AppScreens.profile.route) {
+                @Composable
+                fun Perfil() {}
+            }
 
             composable(AppScreens.ChatView.route){
                 @Composable
                 fun ShowChats(navController: NavController){}
             }
+
+
         }
     }

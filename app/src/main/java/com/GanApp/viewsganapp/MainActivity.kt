@@ -29,11 +29,13 @@ import com.GanApp.viewsganapp.views.PublishReview
 import com.GanApp.viewsganapp.views.Register
 import com.GanApp.viewsganapp.views.ResetPassword
 import com.GanApp.viewsganapp.views.ShowChats
+import com.GanApp.viewsganapp.views.VerDetalle
 import com.GanApp.viewsganapp.views.errorMessageForgotPassword
 import com.GanApp.viewsganapp.views.errorMessageLogin
 import com.GanApp.viewsganapp.views.errorMessageRegister
 import com.GanApp.viewsganapp.views.errorMessageResetPassword
 import com.GanApp.viewsganapp.views.errorMessageReview
+import com.GanApp.viewsganapp.views.menuDetalleProd
 import com.GanApp.viewsganapp.views.showErrorForgotPassword
 import com.GanApp.viewsganapp.views.showErrorLogin
 import com.GanApp.viewsganapp.views.showErrorRegister
@@ -54,7 +56,7 @@ class MainActivity : ComponentActivity() {
             ViewsGanAppTheme {  // Asume que este es tu tema de Compose
                 NavHost(
                     navController = navController,
-                    startDestination = AppScreens.productRegister.route
+                    startDestination = AppScreens.homePage.route
                 ) {
                     composable(AppScreens.viewReister.route) {
                         Register(navController = navController) { userData ->
@@ -215,9 +217,15 @@ class MainActivity : ComponentActivity() {
 
                     }
 
-//                    composable(AppScreens.detalleProd.route){
-//                        DetalleProducto(navController = navController)
-//                    }
+                   composable(AppScreens.detalleProd.route){
+                       VerDetalle(navController = navController)
+                   }
+
+                    composable(AppScreens.menuDetalleProd.route){
+                        menuDetalleProd(navController = navController)
+                    }
+
+
                     composable(AppScreens.reviews.route) {
                         PublishReview(navController = navController) { reviewData ->
                             val call =
