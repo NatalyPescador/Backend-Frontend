@@ -1,6 +1,7 @@
 package com.GanApp.viewsganapp.network
 
 import com.GanApp.viewsganapp.apiService.CategoryApiService
+import com.GanApp.viewsganapp.apiService.ChatApiService
 import com.GanApp.viewsganapp.apiService.ProductRegisterApiService
 import com.GanApp.viewsganapp.apiService.ReviewApiService
 import com.GanApp.viewsganapp.apiService.TypeServiceApiService
@@ -10,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
 
-    private const val BASE_URL = "http://10.175.144.98:8080/GanApp/" // Reemplaza esto con tu URL base
+    private const val BASE_URL = "http://10.175.144.26:8080/GanApp/" // Reemplaza esto con tu URL base
 
     // Lazy initialization del Retrofit instance
     private val retrofit: Retrofit by lazy {
@@ -38,6 +39,10 @@ object RetrofitInstance {
 
     val apiServiceReviewApiService: ReviewApiService by lazy {
         retrofit.create(ReviewApiService::class.java)
+    }
+
+    val apiServiceChats: ChatApiService by lazy {
+        retrofit.create(ChatApiService::class.java)
     }
 
 }
