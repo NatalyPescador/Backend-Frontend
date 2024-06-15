@@ -68,11 +68,6 @@ fun menuDetalleProd(navController: NavHostController) {
         mutableIntStateOf(0)
     }
 
-    /*LaunchedEffect(key1 = true) {
-        // Posible inicialización o acciones adicionales
-        navigationState.close()  // Ejemplo de cómo asegurar que el drawer esté cerrado al inicio
-    }*/
-
 
     val items = listOf(
         DrawerItemDetalleProd(
