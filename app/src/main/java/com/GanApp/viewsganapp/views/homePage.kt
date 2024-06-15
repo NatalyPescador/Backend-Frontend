@@ -124,6 +124,12 @@ fun HomePage(navController: NavHostController) {
             selectedIcon = Icons.Filled.Create,
             unselectedIcon = Icons.Outlined.Create,
             route = "ChatView"
+        ),
+        DrawerItem(
+            title = "ShowMessages",
+            selectedIcon = Icons.Filled.Create,
+            unselectedIcon = Icons.Outlined.Create,
+            route = "ChatMessages"
         )
     )
 

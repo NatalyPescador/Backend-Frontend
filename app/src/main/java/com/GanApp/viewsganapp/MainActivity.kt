@@ -8,12 +8,12 @@ import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.GanApp.viewsganapp.components.ChatMessage
 import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
-import com.GanApp.viewsganapp.views.CreateChat
-//import com.GanApp.viewsganapp.views.DetalleProducto
+import com.GanApp.viewsganapp.components.CreateChat
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Gmail
 import com.GanApp.viewsganapp.views.ForgotPassword
@@ -237,6 +237,9 @@ class MainActivity : ComponentActivity() {
                     composable(AppScreens.ChatView.route){
                         val userId = 15L
                         ShowChats(navController = navController, userId = userId)
+                    }
+                    composable(AppScreens.ChatMessages.route){
+                        ChatMessage(navController = navController, 2L)
                     }
                 }
             }

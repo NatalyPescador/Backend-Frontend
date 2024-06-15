@@ -37,6 +37,7 @@ sealed class AppScreens(val route: String) {
     object detalleProd : AppScreens("detalleProd")
     object CreateChatView : AppScreens("CreateChatView")
     object ChatView : AppScreens("ChatView")
+    object ChatMessages : AppScreens("ChatMessages")
 
 }
 
@@ -150,6 +151,11 @@ fun AppScreens(navController: NavController) {
             composable(AppScreens.ChatView.route){
                 @Composable
                 fun ShowChats(navController: NavController){}
+            }
+
+            composable(AppScreens.ChatMessages.route){
+                @Composable
+                fun chatMessage(navController: NavController){}
             }
 
     }

@@ -1,4 +1,4 @@
-package com.GanApp.viewsganapp.views
+package com.GanApp.viewsganapp.components
 
 import android.util.Log
 import androidx.compose.foundation.Image
