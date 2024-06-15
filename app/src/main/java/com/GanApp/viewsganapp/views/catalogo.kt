@@ -1,137 +1,41 @@
 package com.GanApp.viewsganapp.views
 
-//import androidx.compose.material.MaterialTheme
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import android.util.Log
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.GanApp.viewsganapp.models.ProductoEntity
+import com.GanApp.viewsganapp.viewModels.ProductViewModel
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.GanApp.viewsganapp.R
-
-
-// Data class representing a product
-data class Producto(
-    val tipoServicioId: Long,
-    val nombre: String,
-    val precio: Double,
-    val imageUrl: Int,
-    val usuarioId: Long,
-    val categoriaId: Long
-
-)
-
-// Datos de muestra para demostración
-val productList = listOf(
-    Producto(1, "Producto 1", 100.00, R.drawable.gmail_logo, 1, 1),
-    Producto(2, "Producto 2", 200.00, R.drawable.gmail_logo, 2, 1),
-    Producto(3, "Producto 3", 300.00, R.drawable.gmail_logo, 3, 1),
-    Producto(1, "Producto 1", 100.00, R.drawable.gmail_logo, 1, 1),
-    Producto(2, "Producto 2", 200.00, R.drawable.gmail_logo, 2, 1),
-    Producto(3, "Producto 3", 300.00, R.drawable.gmail_logo, 3, 1),
-    // Add more products as needed
-)
-
-
-        @Composable
-        fun Catalogo(productos: List<Producto>) {
-
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            )
-            {
-
-                items(productos.size / 3) { rowIndex ->
-                    Row(modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                        for (i in 0 until 2) {
-                            val index = rowIndex * 3 + i
-                            if (index < productos.size) {
-                                Tarjeta(producto =productos[index] )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-
-    @Composable
-    fun Tarjeta(producto: Producto) {
-        Surface(
-            modifier = Modifier
-                .padding(end = 8.dp)
-                .width(120.dp)
-                .height(200.dp),
-            shape = RoundedCornerShape(8.dp),
-            //elevation = 4.dp
-        ) {
-            Column(
-                modifier = Modifier.clickable { /* Handle click event */ }
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.gmail_logo),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(120.dp),
-
-
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = producto.nombre,
-                    //style = MaterialTheme.typography.body1,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-                Text(
-                    text = "$${producto.precio}",
-                    //style = MaterialTheme.typography.subtitle1,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-                Text(
-                    text = "por ${producto.usuarioId}",
-                    //style = MaterialTheme.typography.caption,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-                Text(
-                    text = "Category: ${producto.categoriaId}",
-                    //style = MaterialTheme.typography.caption,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-            }
-        }
-    }
+import com.GanApp.viewsganapp.network.RetrofitInstance
+import kotlinx.coroutines.launch
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
-fun CatalogoPrincipal(navController: NavController) {
+fun CatalogoPrincipal(navController: NavController, productViewModel: ProductViewModel = viewModel()) {
+    val products by remember { mutableStateOf(productViewModel.products) }
+
     Column {
         Button(
             onClick = { /* Handle filter button click */ },
@@ -140,17 +44,91 @@ fun CatalogoPrincipal(navController: NavController) {
             ),
             modifier = Modifier.padding(16.dp)
         ) {
-
-            Icon(imageVector = Icons.Default.Person, contentDescription = "telefono")
-
+            Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "telefono")
             Text(text = "Filtrar", fontSize = 21.sp)
-
         }
 
-        Catalogo(productos = productList)
+        Catalogo(productos = products)
 
     }
 }
 
+@Composable
+fun Catalogo(productos: List<ProductoEntity>) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        items(productos.size / 2) { rowIndex ->
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                for (i in 0 until 2) {
+                    val index = rowIndex * 2 + i
+                    if (index < productos.size) {
+                        Tarjeta(producto = productos[index])
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Tarjeta(producto: ProductoEntity) {
+    val filename = producto.imagen?.substringAfterLast('\\') ?: ""
+    val imageUrl = "http://10.175.144.26:8080/GanApp/uploads/$filename"
+    val numberFormat = NumberFormat.getInstance(Locale("es", "CO")).apply {
+        maximumFractionDigits = 0
+    }
+
+    Surface(
+        modifier = Modifier
+            .padding(end = 8.dp)
+            .width(150.dp)
+            .height(260.dp),
+        shape = RoundedCornerShape(8.dp),
+    ) {
+        Column(
+            modifier = Modifier.clickable { /* Handle click event */ }
+        ) {
+            Image(
+                painter = rememberAsyncImagePainter(model = imageUrl),
+                contentDescription = producto.nombre ?: "Sin nombre",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = producto.nombre ?: "Sin nombre",
+                modifier = Modifier.padding(horizontal = 8.dp),
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "$${numberFormat.format(producto.precio.toDouble())}",
+                modifier = Modifier.padding(horizontal = 8.dp),
+                fontStyle = FontStyle.Italic
+            )
+            /*Text(
+                text = "por ${producto.usuarioId}",
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+            Text(
+                text = "Categoría: ${producto.categoriaId}",
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )*/
+            Text(
+                text = "${producto.descripcion}",
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        }
+    }
+}
 
 

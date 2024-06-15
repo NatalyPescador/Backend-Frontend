@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
-import com.GanApp.viewsganapp.views.LogInData
 import kotlinx.coroutines.delay
 
 var showErrorLogin by mutableStateOf(false)
@@ -123,7 +122,8 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
 
         ) {
             Button(
-                onClick = { onSubmit(LogInData(correo, password)) },
+                onClick = { onSubmit(LogInData(correo, password))
+                            navController.navigate("homePage")},
                 colors = ButtonDefaults.buttonColors(
                     Color(10, 191, 4),
                     contentColor = Color.Black
@@ -171,10 +171,10 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
         Spacer(modifier = Modifier.height(15.dp))
         Text(text = "¿Olvidaste tú contraseña?",
             modifier = Modifier
-            .clickable {
-                navController.navigate("forgotPassword")
-            }
-            .offset(x = 50.dp))
+                .clickable {
+                    navController.navigate("forgotPassword")
+                }
+                .offset(x = 50.dp))
 
         Row(
             modifier = Modifier
@@ -189,7 +189,7 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
                 contentDescription = "Logo de Facebook",
                 modifier = Modifier
                     .clickable {
-                        navController.navigate("productRegister")
+                        navController.navigate("facebook")
                     }
                     .height(70.dp)
                     .width(70.dp)
@@ -212,7 +212,7 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
             Row {
                 Text(text = "Continuar con", modifier = Modifier
                     .clickable {
-                        navController.navigate("productRegister")
+                        navController.navigate("facebook")
                     }
                     .offset(x = (-38).dp))//Facebook
                 Text(text = "Continuar con",modifier = Modifier
@@ -226,7 +226,7 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
             Row {
                 Text(text = "Facebook", modifier = Modifier
                     .clickable {
-                        navController.navigate("productRegister")
+                        navController.navigate("facebook")
                     }
                     .offset(x = (-70).dp))
                 Text(text = "Gmail", modifier = Modifier

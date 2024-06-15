@@ -34,11 +34,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
 import androidx.compose.material.icons.filled.Lock as Lock1
 
 @Composable
-fun newPassword(onSubmit: (newPasswordData) -> Unit) {
+fun newPassword(navController: NavController, onSubmit: (newPasswordData) -> Unit) {
     var correo by remember { mutableStateOf("") }
     var numeroTelefono by remember { mutableStateOf("") }
 
@@ -128,7 +129,8 @@ fun newPassword(onSubmit: (newPasswordData) -> Unit) {
 
         ) {
             Button(
-                { onSubmit(newPasswordData(correo,numeroTelefono)) },
+                onClick = { onSubmit(newPasswordData(correo,numeroTelefono))
+                    navController.navigate("homePage")},
                 colors = ButtonDefaults.buttonColors(Color(10, 191, 4),
                     contentColor = Color.Black)
             )

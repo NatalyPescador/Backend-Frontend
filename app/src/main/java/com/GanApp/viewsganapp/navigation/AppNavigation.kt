@@ -1,6 +1,9 @@
 package com.GanApp.viewsganapp.navigation
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -19,6 +22,7 @@ import com.GanApp.viewsganapp.views.ForgotPasswordData
 import com.GanApp.viewsganapp.views.LogInData
 import com.GanApp.viewsganapp.views.ProductData
 import com.GanApp.viewsganapp.views.ResetPasswordData
+import com.GanApp.viewsganapp.views.ReviewData
 import com.GanApp.viewsganapp.views.UserData
 
 sealed class AppScreens(val route: String) {
@@ -31,9 +35,13 @@ sealed class AppScreens(val route: String) {
     object productRegister : AppScreens("productRegister")
     object homePage: AppScreens ("homePage")
     object profile : AppScreens ("Profile_screens")
-
+    object reviews : AppScreens ("reviews")
     object catalogo : AppScreens("catalogo")
     object detalleProd : AppScreens("detalleProd")
+    object editProfile : AppScreens ("edit_profile")
+    object favorite: AppScreens ("favorito")
+    object CreateChatView : AppScreens("CreateChatView")
+    object ChatView : AppScreens("ChatView")
     object menuDetalleProd : AppScreens("menuDetalleProd")
 
 }
@@ -46,13 +54,15 @@ fun AppScreens(navController: NavController) {
         navController = navController as NavHostController,
         startDestination = AppScreens.loginUser.route
     ) {
-             composable(AppScreens.loginUser.route) {
-                @Composable
-                fun LogIn(onSubmit: (LogInData) -> Unit) {
-                    var correo by remember { mutableStateOf("") }
-                    var password by remember { mutableStateOf("") }
-                    // Composable para la pantalla de inicio de sesión
+        composable(AppScreens.loginUser.route) {
+            @Composable
+            fun LogIn(onSubmit: (LogInData) -> Unit) {
+                var correo by remember { mutableStateOf("") }
+                var password by remember { mutableStateOf("") }
+                // Composable para la pantalla de inicio de sesión
             }
+        }
+
             composable(AppScreens.viewReister.route) {
                 @Composable
                 fun Register(onSubmit: (UserData) -> Unit) {
@@ -60,25 +70,29 @@ fun AppScreens(navController: NavController) {
                     var correo by remember { mutableStateOf("") }
                     var password by remember { mutableStateOf("") }
                     var numeroTelefono by remember { mutableStateOf("") }
-                // Composable para la pantalla de registro
+                    // Composable para la pantalla de registro
                 }
             }
 
-            composable(AppScreens.conecctionFacebook.route){
+            composable(AppScreens.conecctionFacebook.route) {
                 @Composable
-                fun Facebook(){}
+                fun Facebook() {
+                }
             }
 
-            composable(AppScreens.conecctionGmail.route){
+            composable(AppScreens.conecctionGmail.route) {
                 @Composable
-                fun Gmail(){}
+                fun Gmail() {
+                }
             }
+
             composable(AppScreens.forgotPassword.route){
                 @Composable
                 fun ForgotPassword(onSubmit: (ForgotPasswordData) -> Unit) {
                     var correo by remember { mutableStateOf("") }
+                }
             }
-        }
+
             composable(AppScreens.resetPassword.route){
                 @Composable
                 fun ResetPassword(onSubmit: (ResetPasswordData) -> Unit) {
@@ -87,7 +101,7 @@ fun AppScreens(navController: NavController) {
                     var confirmedPassword by remember { mutableStateOf("") }
                 }
             }
-            composable(AppScreens.productRegister.route){
+            composable(AppScreens.productRegister.route) {
                 @Composable
                 fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Unit) {
                     var nombre by remember { mutableStateOf("") }
@@ -96,7 +110,8 @@ fun AppScreens(navController: NavController) {
                     var imagenes by remember { mutableStateOf("") }
                 }
             }
-            composable(AppScreens.homePage.route){
+
+            composable(AppScreens.homePage.route) {
                 @Composable
                 fun HomePage() {
 
@@ -105,32 +120,33 @@ fun AppScreens(navController: NavController) {
                     var selectedItemIndex by rememberSaveable {
                         mutableIntStateOf(0)
                     }
+                }
             }
             composable(AppScreens.catalogo.route){
                 @Composable
                 fun CatalogoPrincipal(){}
             }
+
             composable(AppScreens.detalleProd.route){
                 @Composable
                 fun DetalleProducto(){}
             }
+
             composable(AppScreens.menuDetalleProd.route){
                 @Composable
                 fun menuDetalleProd(){}
             }
+
+            composable(AppScreens.profile.route) {
+                @Composable
+                fun Perfil() {}
+            }
+
+            composable(AppScreens.ChatView.route){
+                @Composable
+                fun ShowChats(navController: NavController){}
+            }
+
+
         }
-                 composable(AppScreens.profile.route) {
-                     @Composable
-                     fun Perfil() {
-
-                     }
-                 }
-
-             }
     }
-}
-
-
-       
-
-
