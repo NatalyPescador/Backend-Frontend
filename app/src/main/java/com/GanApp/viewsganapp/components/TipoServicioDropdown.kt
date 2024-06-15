@@ -37,14 +37,13 @@ fun TipoServicioDropdown(
     val displayText = selectedTipoServicio?.nombre ?: "Tipo de servicio"
 
     Box(modifier = Modifier
-        .fillMaxWidth()
         .padding(8.dp)) {
         Column {
             OutlinedTextField(
                 value = displayText,
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Tipo servicio") },
+                label = { Text("Tipo servicio", color = Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     Icon(
@@ -55,8 +54,8 @@ fun TipoServicioDropdown(
                 },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
-                    .offset(x = 15.dp, y = (-10).dp)
-                    .width(280.dp) // Ajusta el ancho del OutlinedTextField
+                    .width(280.dp) // Ajusta el ancho para que sea igual a los otros campos
+                    .offset(y = (-5).dp)
                     .clickable { expanded = !expanded }
             )
 
@@ -65,9 +64,9 @@ fun TipoServicioDropdown(
                     modifier = Modifier
                         .width(280.dp)
                         .background(Color.White)
-                        .offset(x = 24.dp, y = 2.dp),
-                    shape = RoundedCornerShape(15.dp)
-                    , shadowElevation = 8.dp
+                        .offset(y = 2.dp),
+                    shape = RoundedCornerShape(15.dp),
+                    shadowElevation = 8.dp
                 ) {
                     LazyColumn(
                         modifier = Modifier
@@ -92,3 +91,4 @@ fun TipoServicioDropdown(
         }
     }
 }
+
