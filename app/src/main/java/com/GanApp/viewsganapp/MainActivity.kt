@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.GanApp.viewsganapp.components.ChatMessage
 import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.network.RetrofitInstance
@@ -238,8 +240,12 @@ class MainActivity : ComponentActivity() {
                         val userId = 15L
                         ShowChats(navController = navController, userId = userId)
                     }
-                    composable(AppScreens.ChatMessages.route){
-                        ChatMessage(navController = navController, 2L)
+                    composable(
+                        route = AppScreens.ChatMessages.route,
+                        arguments = listOf(navArgument("chatId") { type = NavType.LongType })
+                    ) { backStackEntry ->
+                        val chatId = backStackEntry.arguments?.getLong("chatId") ?: 0L
+                        ChatMessage(navController = navController, chatId = chatId)
                     }
                 }
             }

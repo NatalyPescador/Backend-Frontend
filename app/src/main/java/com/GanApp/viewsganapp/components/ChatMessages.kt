@@ -70,7 +70,7 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                 .verticalScroll(rememberScrollState())
         ) {
             messages.forEach { msg ->
-                MessageBubble(message = msg.message, isSentByCurrentUser = msg.senderId == 15L)
+                MessageBubble(message = msg.message, isSentByCurrentUser = msg.senderId == 8L)
             }
         }
 
@@ -94,7 +94,7 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                             chatId = chatId,
                             message = message,
                             status = "SENT",
-                            senderId = 15L  // Ajuste temporal para prueba
+                            senderId = 8L  // Ajuste temporal para prueba
                         )
                         chatViewModel.sendMessage(messageDto)
                         message = ""  // Limpiar el campo de texto después de enviar
