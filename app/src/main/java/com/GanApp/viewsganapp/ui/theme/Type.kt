@@ -8,16 +8,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.GanApp.viewsganapp.R
 
-<<<<<<< HEAD
-// Set of Material typography styles to start with
-val Nunito = FontFamily(
-    Font(R.font.nunito, Normal)
-=======
-val manropeFamily = FontFamily(
-    Font(R.font.utendo_semibold, FontWeight.SemiBold),
+val Roboto = FontFamily(
+
     Font(R.font.roboto_light, FontWeight.Light),
     Font(R.font.roboto_regular, FontWeight.Normal)
->>>>>>> yuli
+)
+
+val Utendo = (
+    Font(R.font.utendo_semibold, FontWeight.SemiBold)
 )
 
 // Set of Material typography styles to start with
@@ -25,13 +23,8 @@ val Typography = Typography(
 
     //defaultFontFamily = manropeFamily,
     bodyLarge = TextStyle(
-<<<<<<< HEAD
-        fontFamily = Nunito,
-        fontWeight = Normal,
-=======
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
->>>>>>> yuli
+        fontFamily = Roboto ,
+        fontWeight = FontWeight.Light,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp

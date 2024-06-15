@@ -58,18 +58,6 @@ fun VerDetalle(navController: NavController) {
                 Text(text = "Filtrar", fontSize = 18.sp)
             }
 
-            Button(
-                onClick = { },
-                colors = ButtonDefaults.buttonColors(
-                    Color(10, 191, 4)
-                ),
-                modifier = Modifier.padding(16.dp)
-            )
-            {
-                Icon(imageVector = Icons.Default.Person, contentDescription = "iniciar sesión")
-                //Text("Iniciar Sesión", fontSize = 18.sp)
-            }
-
         }
 
         Row(
