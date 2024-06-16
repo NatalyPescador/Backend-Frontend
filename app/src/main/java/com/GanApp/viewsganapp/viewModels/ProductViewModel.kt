@@ -142,6 +142,10 @@ class ProductViewModel : ViewModel() {
         }
     }
 
+    fun clearSelectedProduct() {
+        _product.value = null
+    }
+
     fun uploadProductData(context: Context, imageUri: Uri, productData: ProductData) {
         val gson = Gson()
         val productJson = gson.toJson(productData)

@@ -81,7 +81,7 @@ fun Catalogo(productos: List<ProductoEntity>) {
 @Composable
 fun Tarjeta(producto: ProductoEntity) {
     val filename = producto.imagen?.substringAfterLast('\\') ?: ""
-    val imageUrl = "http://10.175.145.145:8080/GanApp/uploads/$filename"
+    val imageUrl = "http://192.168.1.13:8080/GanApp/uploads/$filename"
     val numberFormat = NumberFormat.getInstance(Locale("es", "CO")).apply {
         maximumFractionDigits = 0
     }

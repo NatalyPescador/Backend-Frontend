@@ -24,17 +24,25 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
+import com.GanApp.viewsganapp.viewModels.ProductViewModel
 
+
+// VerDetalle.kt
 
 @Composable
-fun VerDetalle(navController: NavController) {
+fun VerDetalle(navController: NavController, productId: Long, productViewModel: ProductViewModel = viewModel()) {
+    productViewModel.getProductById(productId)
+    val selectedProduct by remember { productViewModel.selectedProduct }
 
     Column(
         modifier = Modifier
@@ -115,84 +123,82 @@ fun VerDetalle(navController: NavController) {
 
         }
 
-
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Descripción: ", fontSize = 18.sp
+            text = "Nombre del ejemplar: ${selectedProduct?.nombre ?: ""}",
+            fontSize = 18.sp
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Raza: ", fontSize = 18.sp
+            text = "Precio: ${selectedProduct?.precio ?: ""}",
+            fontSize = 18.sp
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Departamento: ", fontSize = 18.sp
+            text = "Descripción: ${selectedProduct?.descripcion ?: ""}",
+            fontSize = 18.sp
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Municipio: ", fontSize = 18.sp
+            text = "Raza: ${selectedProduct?.raza ?: ""}",
+            fontSize = 18.sp
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Nombre del ejemplar: ", fontSize = 18.sp
+            text = "Sexo: ${selectedProduct?.sexo ?: ""}",
+            fontSize = 18.sp
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Criadero: ", fontSize = 18.sp
+            text = "Peso: ${selectedProduct?.uom ?: ""}",
+            fontSize = 18.sp
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Sexo: ", fontSize = 18.sp
+            text = "Edad: ${selectedProduct?.edad ?: ""}",
+            fontSize = 18.sp
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Peso: ", fontSize = 18.sp
+            text = "Cantidad: ${selectedProduct?.cantidad ?: ""}",
+            fontSize = 18.sp
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Edad: ", fontSize = 18.sp
+            text = "Departamento: ${selectedProduct?.departamento ?: ""}",
+            fontSize = 18.sp
         )
+
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Precio: ", fontSize = 18.sp
+            text = "Municipio: ${selectedProduct?.municipio ?: ""}",
+            fontSize = 18.sp
         )
-        Spacer(modifier = Modifier.height(8.dp))
 
-        Text(
-            text = "Vendedor: ", fontSize = 18.sp
-        )
         Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Categoría: ", fontSize = 18.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Cantidad: ", fontSize = 18.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Cantidad: ", fontSize = 18.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
 
     }
 }
 
-
+// Datos de ejemplo para las imágenes adicionales
 val additionalImages = listOf(
     R.drawable.logo,
     R.drawable.gannap_cabeza,

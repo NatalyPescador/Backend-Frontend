@@ -218,7 +218,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                    composable(AppScreens.detalleProd.route){
-                       VerDetalle(navController = navController)
+                       VerDetalle(navController = navController, 17)
                    }
 
                     composable(AppScreens.menuDetalleProd.route){
