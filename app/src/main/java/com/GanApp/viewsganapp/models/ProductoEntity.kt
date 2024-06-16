@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class ProductoEntity(
 
         @SerializedName("productoId")
-        val prodcutoId: Long,
+        val productoId: Long,
 
         @SerializedName("nombre")
         val nombre: String? = null,
@@ -49,4 +49,4 @@ data class ProductoEntity(
         @SerializedName("usuarioId")
         val usuarioId: Long,
 
-)
+        )

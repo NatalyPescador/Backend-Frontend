@@ -48,13 +48,12 @@ fun CatalogoPrincipal(navController: NavController, productViewModel: ProductVie
             Text(text = "Filtrar", fontSize = 21.sp)
         }
 
-        Catalogo(productos = products)
-
+        Catalogo(productos = products, navController = navController)
     }
 }
 
 @Composable
-fun Catalogo(productos: List<ProductoEntity>) {
+fun Catalogo(productos: List<ProductoEntity>, navController: NavController) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -70,7 +69,7 @@ fun Catalogo(productos: List<ProductoEntity>) {
                 for (i in 0 until 2) {
                     val index = rowIndex * 2 + i
                     if (index < productos.size) {
-                        Tarjeta(producto = productos[index])
+                        Tarjeta(producto = productos[index], navController = navController)
                     }
                 }
             }
@@ -79,7 +78,7 @@ fun Catalogo(productos: List<ProductoEntity>) {
 }
 
 @Composable
-fun Tarjeta(producto: ProductoEntity) {
+fun Tarjeta(producto: ProductoEntity, navController: NavController) {
     val filename = producto.imagen?.substringAfterLast('\\') ?: ""
     val imageUrl = "http://192.168.1.13:8080/GanApp/uploads/$filename"
     val numberFormat = NumberFormat.getInstance(Locale("es", "CO")).apply {
@@ -94,7 +93,9 @@ fun Tarjeta(producto: ProductoEntity) {
         shape = RoundedCornerShape(8.dp),
     ) {
         Column(
-            modifier = Modifier.clickable { /* Handle click event */ }
+            modifier = Modifier.clickable {
+                navController.navigate("detalleProd/${producto.productoId}")
+            }
         ) {
             Image(
                 painter = rememberAsyncImagePainter(model = imageUrl),
@@ -115,6 +116,10 @@ fun Tarjeta(producto: ProductoEntity) {
                 modifier = Modifier.padding(horizontal = 8.dp),
                 fontStyle = FontStyle.Italic
             )
+            Text(
+                text = "${producto.descripcion}",
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
             /*Text(
                 text = "por ${producto.usuarioId}",
                 modifier = Modifier.padding(horizontal = 8.dp)
@@ -123,10 +128,6 @@ fun Tarjeta(producto: ProductoEntity) {
                 text = "Categoría: ${producto.categoriaId}",
                 modifier = Modifier.padding(horizontal = 8.dp)
             )*/
-            Text(
-                text = "${producto.descripcion}",
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
         }
     }
 }
