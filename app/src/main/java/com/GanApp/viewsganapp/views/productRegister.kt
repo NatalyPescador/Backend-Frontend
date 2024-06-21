@@ -67,6 +67,13 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
     var nombre by remember { mutableStateOf("") }
     var precio by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
+    var raza by remember { mutableStateOf("") }
+    var sexo by remember { mutableStateOf("") }
+    var uom by remember { mutableStateOf("") }
+    var edad by remember { mutableStateOf("") }
+    var cantidad by remember { mutableStateOf("") }
+    var departamento by remember { mutableStateOf("") }
+    var municipio by remember { mutableStateOf("") }
     var selectedCategoria by remember { mutableStateOf<CategoriaEntity?>(null) }
     var selectedTipoServicio by remember { mutableStateOf<TipoServicioEntity?>(null) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -211,6 +218,145 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 )
             }
 
+            OutlinedTextField(
+                value = raza,
+                onValueChange = {
+                    val filteredText = it.replace("\n", "")
+                    raza = filteredText
+                },
+                label = { Text("Raza", color=Color.Black) },
+                textStyle = TextStyle(color = Color.Black),
+                leadingIcon = {
+                    val painter = painterResource(id = R.drawable.nombre_producto_icn)
+                    Icon(
+                        painter = painter, contentDescription = "Raza",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier.offset(y = (-5).dp)
+            )
+
+            OutlinedTextField(
+                value = sexo,
+                onValueChange = {
+                    val filteredText = it.replace("\n", "")
+                    sexo = filteredText
+                },
+                label = { Text("Sexo", color=Color.Black) },
+                textStyle = TextStyle(color = Color.Black),
+                leadingIcon = {
+                    val painter = painterResource(id = R.drawable.nombre_producto_icn)
+                    Icon(
+                        painter = painter, contentDescription = "Sexo",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier.offset(y = (-5).dp)
+            )
+
+            OutlinedTextField(
+                value = uom,
+                onValueChange = {
+                    val filteredText = it.replace("\n", "")
+                    uom = filteredText
+                },
+                label = { Text("Unidad de Medida", color=Color.Black) },
+                textStyle = TextStyle(color = Color.Black),
+                leadingIcon = {
+                    val painter = painterResource(id = R.drawable.nombre_producto_icn)
+                    Icon(
+                        painter = painter, contentDescription = "Unidad de Medida",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier.offset(y = (-5).dp)
+            )
+
+            OutlinedTextField(
+                value = edad,
+                onValueChange = {
+                    val filteredText = it.filter { char -> char.isDigit() || char == '.' }
+                    edad = filteredText
+                },
+                label = { Text("Edad", color=Color.Black) },
+                textStyle = TextStyle(color = Color.Black),
+                leadingIcon = {
+                    val painter = painterResource(id = R.drawable.dolar_icn)
+                    Icon(
+                        painter = painter, contentDescription = "Edad",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier.offset(y = (-5).dp),
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                keyboardActions = KeyboardActions.Default,
+                singleLine = true
+            )
+
+            OutlinedTextField(
+                value = cantidad,
+                onValueChange = {
+                    val filteredText = it.filter { char -> char.isDigit() || char == '.' }
+                    cantidad = filteredText
+                },
+                label = { Text("Cantidad", color=Color.Black) },
+                textStyle = TextStyle(color = Color.Black),
+                leadingIcon = {
+                    val painter = painterResource(id = R.drawable.dolar_icn)
+                    Icon(
+                        painter = painter, contentDescription = "Cantidad",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier.offset(y = (-5).dp),
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                keyboardActions = KeyboardActions.Default,
+                singleLine = true
+            )
+
+            OutlinedTextField(
+                value = departamento,
+                onValueChange = {
+                    val filteredText = it.replace("\n", "")
+                    departamento = filteredText
+                },
+                label = { Text("Departamento", color=Color.Black) },
+                textStyle = TextStyle(color = Color.Black),
+                leadingIcon = {
+                    val painter = painterResource(id = R.drawable.nombre_producto_icn)
+                    Icon(
+                        painter = painter, contentDescription = "Departamento",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier.offset(y = (-5).dp)
+            )
+
+            OutlinedTextField(
+                value = municipio,
+                onValueChange = {
+                    val filteredText = it.replace("\n", "")
+                    municipio = filteredText
+                },
+                label = { Text("Municipio", color=Color.Black) },
+                textStyle = TextStyle(color = Color.Black),
+                leadingIcon = {
+                    val painter = painterResource(id = R.drawable.nombre_producto_icn)
+                    Icon(
+                        painter = painter, contentDescription = "Municipio",
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier.offset(y = (-5).dp)
+            )
+
             Spacer(modifier = Modifier.height(5.dp))
 
             Button(
@@ -239,6 +385,13 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                                     nombre = nombre,
                                     precio = precio,
                                     descripcion = descripcion,
+                                    raza = raza,
+                                    sexo = sexo,
+                                    uom = uom,
+                                    edad = edad,
+                                    cantidad = cantidad,
+                                    departamento = departamento,
+                                    municipio = municipio,
                                     imagen = uri.toString(),
                                     tipoServicioId = selectedTipoServicio?.tipoServicioId ?: 0,
                                     categoriaId = selectedCategoria?.categoriaId ?: 0,
@@ -280,6 +433,13 @@ data class ProductData(
     val nombre: String,
     val precio: String,
     val descripcion: String,
+    val raza: String,
+    val sexo: String,
+    val uom: String,
+    val edad: String,
+    val cantidad: String,
+    val departamento: String,
+    val municipio: String,
     val imagen: String,
     val tipoServicioId: Long,
     val categoriaId: Long,

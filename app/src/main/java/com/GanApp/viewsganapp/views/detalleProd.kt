@@ -62,7 +62,7 @@ fun VerDetalle(navController: NavController, productId: Long, productViewModel: 
     productViewModel.getProductById(productId)
     val selectedProduct by remember { productViewModel.selectedProduct }
     val filename = selectedProduct?.imagen?.substringAfterLast('\\') ?: ""
-    val imageUrl = "http://10.175.145.205:8080/GanApp/uploads/$filename"
+    val imageUrl = "http://192.168.1.13:8080/GanApp/uploads/$filename"
 
     Column(
         modifier = Modifier
