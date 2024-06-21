@@ -1,5 +1,6 @@
 package com.GanApp.viewsganapp.views
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,19 +51,41 @@ import com.GanApp.viewsganapp.R
 import com.GanApp.viewsganapp.components.loadReviews
 import com.GanApp.viewsganapp.models.ProductoEntity
 import com.GanApp.viewsganapp.models.ReviewEntity
+import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.viewModels.ProductViewModel
+import com.GanApp.viewsganapp.viewModels.ReviewViewModel
 import kotlinx.coroutines.delay
+import org.json.JSONException
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 var showErrorReview by mutableStateOf(false)
 var errorMessageReview by mutableStateOf("")
 
 @Composable
-fun VerDetalle(navController: NavController, productId: Long, productViewModel: ProductViewModel = viewModel()) {
+fun VerDetalle(navController: NavController, productId: Long) {
+    val productViewModel: ProductViewModel = viewModel()
     productViewModel.getProductById(productId)
     val selectedProduct by remember { productViewModel.selectedProduct }
     val filename = selectedProduct?.imagen?.substringAfterLast('\\') ?: ""
     val imageUrl = "http://192.168.1.13:8080/GanApp/uploads/$filename"
+
+    //Variables de reseña
+    val reviewViewModel : ReviewViewModel = viewModel()
+    reviewViewModel.getReviewByProductId(productId)
+    val selectedReview by remember { reviewViewModel.selectedReviews }
+    var resena by remember { mutableStateOf("") }
+    var reviewsState = remember { mutableStateOf(listOf<ReviewEntity>()) }
+    val reviews by reviewsState
+    val coroutineScope = rememberCoroutineScope()
+    var reloadPage = remember { mutableStateOf(false) }
+
+    LaunchedEffect(reloadPage) {
+        loadReviews(coroutineScope, reviewsState)
+    }
 
     Column(
         modifier = Modifier
@@ -212,57 +235,10 @@ fun VerDetalle(navController: NavController, productId: Long, productViewModel: 
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-        
-        //PublishReview(navController = navController, onSubmit = )
-
-    }
-}
-
-// Datos de ejemplo para las imágenes adicionales
-//val additionalImages = listOf(
-//    R.drawable.logo,
-//    R.drawable.gannap_cabeza,
-//    R.drawable.gmail_logo,
-//    R.drawable.imagenes_icn,
-//    R.drawable.gannap_cabeza
-//)
-
-@Composable
-fun PublishReview(navController: NavController, onSubmit: (ReviewData) -> Unit) {
-    var resena by remember { mutableStateOf("") }
-    var reviewsState = remember { mutableStateOf(listOf<ReviewEntity>()) }
-    val reviews by reviewsState
-    val coroutineScope = rememberCoroutineScope()
-    var reloadPage = remember { mutableStateOf(false) }
-
-    LaunchedEffect(reloadPage) {
-        loadReviews(coroutineScope, reviewsState)
-    }
-
-
-    Column(
-        modifier = Modifier
-            .background(color = Color.White)
-            .padding(16.dp)
-            //.verticalScroll(rememberScrollState())
-            .fillMaxSize(), // Esto hará que la Column ocupe todo el tamaño disponible
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
-                modifier = Modifier.offset(y = 35.dp)
-            )
-        }
 
         Text(
             text = "Reseñas",
-            fontSize = 40.sp,
+            fontSize = 20.sp,
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .offset(y = 20.dp)
@@ -286,18 +262,14 @@ fun PublishReview(navController: NavController, onSubmit: (ReviewData) -> Unit) 
 
         Spacer(modifier = Modifier.height(16.dp)) // Añade espacio entre el formulario y el botón
 
-        Box(
-            modifier = Modifier.offset(y = 20.dp)
-        ) {
-            Button( onClick = {
-                onSubmit(ReviewData(resena))
-                reloadPage.value = true
-            },
-                colors = ButtonDefaults.buttonColors(
-                    Color(10, 191, 4)
-                )
-            )
-            {
+        Box(modifier = Modifier.padding(16.dp)) {
+            Button(
+                onClick = {
+                    val reviewData = ReviewData(productoId = productId, resena = resena)
+                    reviewViewModel.publishReview(reviewData)
+                },
+                colors = ButtonDefaults.buttonColors(Color(10, 191, 4))
+            ) {
                 Text("Publicar reseña", color = Color.Black)
             }
         }
@@ -332,10 +304,22 @@ fun PublishReview(navController: NavController, onSubmit: (ReviewData) -> Unit) 
         Column {
             Reviews(reviews = reviews)
         }
+
+
     }
 }
 
+// Datos de ejemplo para las imágenes adicionales
+//val additionalImages = listOf(
+//    R.drawable.logo,
+//    R.drawable.gannap_cabeza,
+//    R.drawable.gmail_logo,
+//    R.drawable.imagenes_icn,
+//    R.drawable.gannap_cabeza
+//)
+
 data class ReviewData(
+    val productoId: Long,
     val resena: String,
 )
 
