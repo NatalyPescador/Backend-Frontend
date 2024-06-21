@@ -19,7 +19,7 @@ import retrofit2.Response
 
 class ReviewViewModel: ViewModel() {
     var loading = mutableStateOf(false)
-    var selectedReviews = mutableStateOf<List<ArrayList<Any>>>(emptyList())
+    var selectedReviews = mutableStateOf<List<ReviewEntity>>(emptyList())
 
     fun getReviewByProductId(productId: Long) {
         viewModelScope.launch {
@@ -27,8 +27,7 @@ class ReviewViewModel: ViewModel() {
             try {
                 val response = RetrofitInstance.apiServiceReviewApiService.getReviewByProductId(productId)
                 if (response.isSuccessful) {
-                    val reviewsList = response.body() ?: emptyList()
-                    selectedReviews.value = reviewsList.map { arrayListOf(it.usuarioId, it.resena) }
+                    selectedReviews.value = response.body() ?: emptyList()
                 } else {
                     println("Error en la respuesta: ${response.errorBody()?.string()}")
                 }
