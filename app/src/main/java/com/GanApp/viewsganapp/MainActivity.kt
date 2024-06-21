@@ -217,9 +217,10 @@ class MainActivity : ComponentActivity() {
 
                     }
 
-                   composable(AppScreens.detalleProd.route){
-                       VerDetalle(navController = navController)
-                   }
+                    composable(AppScreens.detalleProd.route) { backStackEntry ->
+                        val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
+                        VerDetalle(navController = navController, productId = productId)
+                    }
 
                     composable(AppScreens.menuDetalleProd.route){
                         menuDetalleProd(navController = navController)

@@ -198,7 +198,7 @@ fun menuDetalleProd(navController: NavHostController) {
                         .padding(innerPadding)
                         .background(color = Color.White) // Cambiar el fondo a blanco
                 ) {
-                    VerDetalle(navController = navController)
+                    VerDetalle(navController = navController, 17)
                 }
 
             }
