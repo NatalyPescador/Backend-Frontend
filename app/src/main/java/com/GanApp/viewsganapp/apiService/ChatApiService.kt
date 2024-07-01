@@ -9,11 +9,12 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ChatApiService {
 
     @POST("create")
-    suspend fun createChat (@Body chatDto : ChatDto): Response<ChatDto>
+    suspend fun createChat (@Body chatDto : ChatDto): Response<ChatEntity>
 
     @POST("send")
     suspend fun createMessage (@Body messageDto : MessageDto): Response<MessageDto>
@@ -23,4 +24,11 @@ interface ChatApiService {
 
     @GET("user/{userId}/chats")
     suspend fun getChatsByUserId(@Path("userId") userId : Long): Response<List<ChatEntity>>
+
+    @GET("chat/verifyExists")
+    suspend fun verifyChatExists(
+        @Query("productId") productId: Long,
+        @Query("userId") userId: Long,
+        @Query("receiverId") receiverId: Long
+    ): Response<ChatEntity>
 }

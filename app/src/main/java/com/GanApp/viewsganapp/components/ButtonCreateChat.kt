@@ -18,6 +18,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,11 +40,24 @@ fun CreateChat(navController: NavHostController, buttonCreateChatViewModel: Butt
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val snackbarMessage by buttonCreateChatViewModel.snackbarMessage.collectAsState()
+    val chatId by buttonCreateChatViewModel.chatId.collectAsState()
 
     LaunchedEffect(snackbarMessage) {
         snackbarMessage?.let {
             snackbarHostState.showSnackbar(it)
             buttonCreateChatViewModel._snackbarMessage.value = null // Reset message after showing
+        }
+    }
+
+    LaunchedEffect(chatId){
+        chatId?.let{
+            navController.navigate("chat_message/$it")
+        }
+    }
+
+    DisposableEffect(Unit){
+        onDispose {
+            buttonCreateChatViewModel.reserDate()
         }
     }
 
@@ -90,7 +104,7 @@ fun CreateChat(navController: NavHostController, buttonCreateChatViewModel: Butt
                 Button(onClick = {
                     coroutineScope.launch {
                         try {
-                            buttonCreateChatViewModel.createChat(productId = 14L, userId = 15L, receiverId = 8L)
+                            buttonCreateChatViewModel.createOrFetchChat(productId = 14L, userId = 15L, receiverId = 8L)
                             Log.d("chatView", "Botón presionado para crear el chat")
                         } catch (e: Exception) {
                             Log.e("chatView", "Error al crear el chat: ${e.message}", e)
