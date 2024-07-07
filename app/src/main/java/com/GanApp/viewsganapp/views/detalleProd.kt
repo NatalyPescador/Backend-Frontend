@@ -1,6 +1,5 @@
 package com.GanApp.viewsganapp.views
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -34,12 +32,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -47,19 +42,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.GanApp.viewsganapp.R
-import com.GanApp.viewsganapp.components.loadReviews
-import com.GanApp.viewsganapp.models.ProductoEntity
 import com.GanApp.viewsganapp.models.ReviewEntity
-import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.viewModels.ProductViewModel
 import com.GanApp.viewsganapp.viewModels.ReviewViewModel
 import kotlinx.coroutines.delay
-import org.json.JSONException
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 
 var showErrorReview by mutableStateOf(false)
@@ -78,14 +65,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
     reviewViewModel.getReviewByProductId(productId)
     val selectedReview by remember { reviewViewModel.selectedReviews }
     var resena by remember { mutableStateOf("") }
-    var reviewsState = remember { mutableStateOf(listOf<ReviewEntity>()) }
-    val reviews by reviewsState
-    val coroutineScope = rememberCoroutineScope()
-    var reloadPage = remember { mutableStateOf(false) }
 
-    LaunchedEffect(reloadPage) {
-        loadReviews(coroutineScope, reviewsState)
-    }
 
     Column(
         modifier = Modifier
@@ -302,7 +282,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
 
 
         Column {
-            Reviews(reviews = reviews)
+            Reviews(reviews = selectedReview)
         }
 
 
