@@ -1,49 +1,43 @@
 package com.GanApp.viewsganapp.views
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.GanApp.viewsganapp.R
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import coil.compose.rememberAsyncImagePainter
+import java.text.NumberFormat
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Favoritos(navController: NavController){
+fun Favoritos(navController: NavController) {
+    val favoriteItems = listOf(
+        ProductoEntity(1, "Producto 1", "Descripción 1", 10000.0, "url1"),
+        ProductoEntity(2, "Producto 2", "Descripción 2", 20000.0, "url2"),
+        ProductoEntity(3, "Producto 3", "Descripción 3", 30000.0, "url3"),
+        ProductoEntity(4, "Producto 4", "Descripción 4", 40000.0, "url4")
+    )
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("") },
+                title = { Text("Favoritos", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.Black) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("homePage") }) {
                         Icon(
@@ -54,35 +48,83 @@ fun Favoritos(navController: NavController){
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(152, 255, 150), // Cambia este color según tus necesidades
-                    titleContentColor = Color.White, // Color del título
-                    navigationIconContentColor = Color.Black, // Color del icono de navegación
-                    actionIconContentColor = Color.Red // Color de los iconos de acción
+                    containerColor = Color(152, 255, 150),
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.Black,
+                    actionIconContentColor = Color.Red
                 )
             )
         }
     ) { innerPadding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxHeight()
-                .background(Color.White)
-                .verticalScroll(rememberScrollState()),
+                .background(Color.White),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) { 
-            Row(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.trabajando), contentDescription = "Logo",
+            verticalArrangement = Arrangement.Top
+        ) {
+            items(favoriteItems.chunked(2)) { rowItems ->
+                Row(
                     modifier = Modifier
-                        .width(300.dp)
-                        .height(300.dp)
-                )
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    rowItems.forEach { item ->
+                        Tarjeta(producto = item, navController = navController)
+                    }
+                }
             }
         }
     }
 }
+
+@Composable
+fun Tarjeta(producto: ProductoEntity, navController: NavController) {
+    val numberFormat = NumberFormat.getInstance(Locale("es", "CO")).apply {
+        maximumFractionDigits = 0
+    }
+
+    Surface(
+        modifier = Modifier
+            .padding(end = 8.dp)
+            .width(150.dp)
+            .height(230.dp),
+        shape = RoundedCornerShape(8.dp),
+    ) {
+        Column(
+            modifier = Modifier.clickable {
+                navController.navigate("detalleProd/${producto.productoId}")
+            }
+        ) {
+            Image(
+                painter = rememberAsyncImagePainter(model = "http://10.175.145.205:8080/GanApp/uploads/${producto.imagen}"),
+                contentDescription = producto.nombre ?: "Sin nombre",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = producto.nombre ?: "Sin nombre",
+                modifier = Modifier.padding(horizontal = 8.dp),
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "$${numberFormat.format(producto.precio)}",
+                modifier = Modifier.padding(horizontal = 8.dp),
+                fontStyle = FontStyle.Italic
+            )
+        }
+    }
+}
+
+data class ProductoEntity(
+    val productoId: Int,
+    val nombre: String?,
+    val descripcion: String?,
+    val precio: Double,
+    val imagen:String?
+)

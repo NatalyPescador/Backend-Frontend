@@ -133,21 +133,27 @@ fun AppScreens(navController: NavController) {
             VerDetalle(navController = navController, productId = productId)
         }
 
-            composable(AppScreens.menuDetalleProd.route){
-                @Composable
-                fun menuDetalleProd(){}
-            }
-
-            composable(AppScreens.profile.route) {
-                @Composable
-                fun Perfil() {}
-            }
-
-            composable(AppScreens.ChatView.route){
-                @Composable
-                fun ShowChats(navController: NavController){}
-            }
-
-
+        composable(AppScreens.menuDetalleProd.route){
+            @Composable
+            fun menuDetalleProd(){}
         }
+
+        composable(AppScreens.profile.route) {
+            @Composable
+            fun Perfil() {}
+        }
+
+        composable(AppScreens.ChatView.route){
+            @Composable
+            fun ShowChats(navController: NavController){}
+        }
+
+        composable(AppScreens.favorite.route){
+            @Composable
+            fun Favoritos(navController: NavController){
+
+            }
+        }
+
     }
+}
