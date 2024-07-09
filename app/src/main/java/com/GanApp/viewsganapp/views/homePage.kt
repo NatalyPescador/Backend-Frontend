@@ -85,13 +85,13 @@ fun HomePage(navController: NavHostController) {
             title = "Catálogo",
             selectedIcon = Icons.Filled.Home,
             unselectedIcon = Icons.Outlined.Home,
-            route = "homePage",
+            route = "homePage"
         ),
         DrawerItem(
             title = "Favoritos",
             selectedIcon = Icons.Filled.FavoriteBorder,
             unselectedIcon = Icons.Outlined.FavoriteBorder,
-            route = "favorito",
+            route = "favorito"
         ),
         DrawerItem(
             title = "Reseñas",
