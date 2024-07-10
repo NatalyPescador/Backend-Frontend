@@ -262,147 +262,147 @@ fun VerDetalle(navController: NavController, productId: Long) {
             }
         }
     }
-        Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            text = "Nombre del ejemplar: ${selectedProduct?.nombre ?: ""}",
-            fontSize = 18.sp,
+    Text(
+        text = "Nombre del ejemplar: ${selectedProduct?.nombre ?: ""}",
+        fontSize = 18.sp,
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+        text = "Precio: ${selectedProduct?.precio ?: ""}",
+        fontSize = 18.sp
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+        text = "Descripción: ${selectedProduct?.descripcion ?: ""}",
+        fontSize = 18.sp
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+        text = "Raza: ${selectedProduct?.raza ?: ""}",
+        fontSize = 18.sp
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+        text = "Sexo: ${selectedProduct?.sexo ?: ""}",
+        fontSize = 18.sp
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+        text = "Peso: ${selectedProduct?.uom ?: ""}",
+        fontSize = 18.sp
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+        text = "Edad: ${selectedProduct?.edad ?: ""}",
+        fontSize = 18.sp
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+        text = "Cantidad: ${selectedProduct?.cantidad ?: ""}",
+        fontSize = 18.sp
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+        text = "Departamento: ${selectedProduct?.departamento ?: ""}",
+        fontSize = 18.sp
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+        text = "Municipio: ${selectedProduct?.municipio ?: ""}",
+        fontSize = 18.sp
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+        text = "Reseñas",
+        fontSize = 20.sp,
+        modifier = Modifier
+            .padding(bottom = 16.dp)
+            .offset(y = 20.dp)
+
+    )
+
+    OutlinedTextField(
+        value = resena,
+        onValueChange = {
+            resena = it
+        },
+        label = { Text("Reseña") },
+        textStyle = TextStyle(color = Color.Black),
+        leadingIcon = {
+            Icon(imageVector = Icons.Default.Person, contentDescription = "telefono")
+        },
+        shape = RoundedCornerShape(20.dp), // Ajusta el radio del borde según tus preferencias
+        modifier = Modifier.offset(y = 20.dp),
+
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+    Spacer(modifier = Modifier.height(16.dp)) // Añade espacio entre el formulario y el botón
 
-        Text(
-            text = "Precio: ${selectedProduct?.precio ?: ""}",
-            fontSize = 18.sp
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Descripción: ${selectedProduct?.descripcion ?: ""}",
-            fontSize = 18.sp
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Raza: ${selectedProduct?.raza ?: ""}",
-            fontSize = 18.sp
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Sexo: ${selectedProduct?.sexo ?: ""}",
-            fontSize = 18.sp
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Peso: ${selectedProduct?.uom ?: ""}",
-            fontSize = 18.sp
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Edad: ${selectedProduct?.edad ?: ""}",
-            fontSize = 18.sp
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Cantidad: ${selectedProduct?.cantidad ?: ""}",
-            fontSize = 18.sp
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Departamento: ${selectedProduct?.departamento ?: ""}",
-            fontSize = 18.sp
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Municipio: ${selectedProduct?.municipio ?: ""}",
-            fontSize = 18.sp
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Reseñas",
-            fontSize = 20.sp,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-                .offset(y = 20.dp)
-
-        )
-
-        OutlinedTextField(
-            value = resena,
-            onValueChange = {
-                resena = it
+    Box(modifier = Modifier.padding(16.dp)) {
+        Button(
+            onClick = {
+                val reviewData = ReviewData(productoId = productId, resena = resena)
+                reviewViewModel.publishReview(reviewData)
             },
-            label = { Text("Reseña") },
-            textStyle = TextStyle(color = Color.Black),
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Person, contentDescription = "telefono")
-            },
-            shape = RoundedCornerShape(20.dp), // Ajusta el radio del borde según tus preferencias
-            modifier = Modifier.offset(y = 20.dp),
-
-            )
-
-        Spacer(modifier = Modifier.height(16.dp)) // Añade espacio entre el formulario y el botón
-
-        Box(modifier = Modifier.padding(16.dp)) {
-            Button(
-                onClick = {
-                    val reviewData = ReviewData(productoId = productId, resena = resena)
-                    reviewViewModel.publishReview(reviewData)
-                },
-                colors = ButtonDefaults.buttonColors(Color(10, 191, 4))
-            ) {
-                Text("Publicar reseña", color = Color.Black)
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LaunchedEffect(showErrorRegister) {
-            if (showErrorRegister) {
-                delay(5000)
-                showErrorRegister = false
-            }
-        }
-
-        if (showErrorRegister) {
-            Box(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    errorMessageRegister,
-                    color = Color.Red,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        Column {
-            Reviews(reviews = selectedReview)
+            colors = ButtonDefaults.buttonColors(Color(10, 191, 4))
+        ) {
+            Text("Publicar reseña", color = Color.Black)
         }
     }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    LaunchedEffect(showErrorRegister) {
+        if (showErrorRegister) {
+            delay(5000)
+            showErrorRegister = false
+        }
+    }
+
+    if (showErrorRegister) {
+        Box(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+        ) {
+            Text(
+                errorMessageRegister,
+                color = Color.Red,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        }
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+
+    Column {
+        Reviews(reviews = selectedReview)
+    }
+}
 
 
 data class ReviewData(
