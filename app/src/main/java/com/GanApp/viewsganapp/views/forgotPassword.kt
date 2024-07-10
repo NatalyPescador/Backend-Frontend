@@ -98,7 +98,7 @@ fun ForgotPassword(navController: NavController, onSubmit: (ForgotPasswordData) 
         )
 
         Text(
-            text = "Introduce tu correo electrónico y te enviaremos un codigo para que puedas ingresar de nuevo.",
+            text = "Introduce tu correo electrónico y te enviaremos un código para que puedas ingresar de nuevo.",
             fontSize = 20.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -114,7 +114,7 @@ fun ForgotPassword(navController: NavController, onSubmit: (ForgotPasswordData) 
                 correo = filteredText
                 isCorreoValido = isValidEmail(filteredText) // Verificar si el correo tiene un formato válido
             },
-            label = { Text("Ingrese su correo electronico") },
+            label = { Text("Ingrese su correo electrónico") },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Email, contentDescription = "gmail")

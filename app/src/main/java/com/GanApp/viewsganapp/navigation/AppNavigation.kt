@@ -1,6 +1,9 @@
 package com.GanApp.viewsganapp.navigation
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -16,6 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import androidx.navigation.navArgument
 import com.GanApp.viewsganapp.components.ChatMessage
 import com.GanApp.viewsganapp.views.ForgotPasswordData
@@ -24,6 +28,7 @@ import com.GanApp.viewsganapp.views.ProductData
 import com.GanApp.viewsganapp.views.ResetPasswordData
 import com.GanApp.viewsganapp.views.ReviewData
 import com.GanApp.viewsganapp.views.UserData
+import com.GanApp.viewsganapp.views.VerDetalle
 
 sealed class AppScreens(val route: String) {
     object loginUser : AppScreens("loginUser_screens")
@@ -37,10 +42,13 @@ sealed class AppScreens(val route: String) {
     object profile : AppScreens ("Profile_screens")
     object reviews : AppScreens ("reviews")
     object catalogo : AppScreens("catalogo")
-    object detalleProd : AppScreens("detalleProd")
+    object detalleProd : AppScreens("detalleProd/{productId}")
+    object editProfile : AppScreens ("edit_profile")
+    object favorite: AppScreens ("favorito")
     object CreateChatView : AppScreens("CreateChatView")
     object ChatView : AppScreens("ChatView")
     object ChatMessages : AppScreens("chat_message/{chatId}")
+    object menuDetalleProd : AppScreens("menuDetalleProd")
 
 }
 
@@ -68,18 +76,20 @@ fun AppScreens(navController: NavController) {
                     var correo by remember { mutableStateOf("") }
                     var password by remember { mutableStateOf("") }
                     var numeroTelefono by remember { mutableStateOf("") }
-                // Composable para la pantalla de registro
+                    // Composable para la pantalla de registro
                 }
             }
 
-            composable(AppScreens.conecctionFacebook.route){
+            composable(AppScreens.conecctionFacebook.route) {
                 @Composable
-                fun Facebook(){}
+                fun Facebook() {
+                }
             }
 
-            composable(AppScreens.conecctionGmail.route){
+            composable(AppScreens.conecctionGmail.route) {
                 @Composable
-                fun Gmail(){}
+                fun Gmail() {
+                }
             }
 
             composable(AppScreens.forgotPassword.route){
@@ -97,7 +107,7 @@ fun AppScreens(navController: NavController) {
                     var confirmedPassword by remember { mutableStateOf("") }
                 }
             }
-            composable(AppScreens.productRegister.route){
+            composable(AppScreens.productRegister.route) {
                 @Composable
                 fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Unit) {
                     var nombre by remember { mutableStateOf("") }
@@ -106,7 +116,8 @@ fun AppScreens(navController: NavController) {
                     var imagenes by remember { mutableStateOf("") }
                 }
             }
-            composable(AppScreens.homePage.route){
+
+            composable(AppScreens.homePage.route) {
                 @Composable
                 fun HomePage() {
 
@@ -116,45 +127,37 @@ fun AppScreens(navController: NavController) {
                         mutableIntStateOf(0)
                     }
                 }
-
-                composable(AppScreens.catalogo.route){
-                    @Composable
-                    fun CatalogoPrincipal(){}
-                }
-
-                composable(AppScreens.detalleProd.route){
-                    @Composable
-                    fun DetalleProducto(){}
-                }
-
+            }
+        composable(AppScreens.catalogo.route) {
+            CatalogoPrincipal(navController = navController)
             }
 
-            composable(AppScreens.profile.route) {
-                 @Composable
-                 fun Perfil() {}
-            }
+        composable(AppScreens.detalleProd.route) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
+            VerDetalle(navController = navController, productId = productId)
+        }
 
-            composable(AppScreens.reviews.route) {
-                 @Composable
-                 fun PublishReview(
-                     navController: NavController,
-                     onSubmit: (ReviewData) -> Unit
-                 ) {
-                     var resena by remember {
-                         mutableStateOf("")
-                     }
-                 }
-            }
+        composable(AppScreens.menuDetalleProd.route){
+            @Composable
+            fun menuDetalleProd(){}
+        }
 
-            composable(AppScreens.CreateChatView.route){
-                @Composable
-                fun CreateChat(navController: NavHostController){}
-            }
+        composable(AppScreens.profile.route) {
+            @Composable
+            fun Perfil() {}
+        }
 
-            composable(AppScreens.ChatView.route){
-                @Composable
-                fun ShowChats(navController: NavController){}
+        composable(AppScreens.ChatView.route){
+            @Composable
+            fun ShowChats(navController: NavController){}
+        }
+
+        composable(AppScreens.favorite.route){
+            @Composable
+            fun Favoritos(navController: NavController){
+
             }
+        }
 
             composable(
                 route = AppScreens.ChatMessages.route,

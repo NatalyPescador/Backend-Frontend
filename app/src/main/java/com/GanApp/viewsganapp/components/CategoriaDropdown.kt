@@ -34,27 +34,27 @@ fun CategoriaDropdown(
     onCategoriaSelected: (CategoriaEntity) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val displayText = selectedCategoria?.nombre ?: "Tipo categoría"
+    val displayText = selectedCategoria?.nombre ?: "Categoría"
 
-    Box(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+    Box(modifier = Modifier.padding(8.dp)) {
         Column {
             OutlinedTextField(
                 value = displayText,
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Tipo categoria") },
+                label = { Text("Categoría", color = Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Filled.ArrowDropDown,
-                        contentDescription = "Expandir",
+                        contentDescription = "Categoría",
                         modifier = Modifier.size(30.dp).clickable { expanded = !expanded }
                     )
                 },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
-                    .offset(x = 24.dp, y = -26.dp)
-                    .width(280.dp) // Ajusta el ancho del OutlinedTextField
+                    .width(280.dp) // Ajusta el ancho para que sea igual a los otros campos
+                    .offset(y = (-5).dp)
                     .clickable { expanded = !expanded }
             )
 
@@ -63,8 +63,8 @@ fun CategoriaDropdown(
                     modifier = Modifier
                         .width(280.dp)
                         .background(Color.White)
-                        .offset(x = 24.dp, y = -30.dp),
-                    shape = RoundedCornerShape(8.dp),
+                        .offset(y = 2.dp),
+                    shape = RoundedCornerShape(15.dp),
                     shadowElevation = 8.dp
                 ) {
                     LazyColumn(
