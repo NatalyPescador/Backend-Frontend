@@ -91,7 +91,7 @@ fun ShowChats(navController: NavHostController, userId: Long, chatViewModel: Cha
             )
 
             chats.forEach { chat ->
-                ChatItem(chat = chat)
+                ChatItem(chat = chat, navController = navController)
                 Spacer(modifier = Modifier.height(8.dp))
             }
 

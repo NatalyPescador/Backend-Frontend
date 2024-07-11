@@ -5,16 +5,19 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.GanApp.viewsganapp.components.ChatMessage
 import com.GanApp.viewsganapp.models.ReviewEntity
 import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.navigation.AppScreens.detalleProd
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
-import com.GanApp.viewsganapp.views.CreateChat
+import com.GanApp.viewsganapp.components.CreateChat
 import com.GanApp.viewsganapp.views.EditarPerfil
 //import com.GanApp.viewsganapp.views.DetalleProducto
 import com.GanApp.viewsganapp.views.Facebook
@@ -237,8 +240,15 @@ class MainActivity : ComponentActivity() {
                         CreateChat(navController = navController)
                     }
                     composable(AppScreens.ChatView.route){
-                        val userId = 15L
+                        val userId = 16L
                         ShowChats(navController = navController, userId = userId)
+                    }
+                    composable(
+                        route = AppScreens.ChatMessages.route,
+                        arguments = listOf(navArgument("chatId") { type = NavType.LongType })
+                    ) { backStackEntry ->
+                        val chatId = backStackEntry.arguments?.getLong("chatId") ?: 0L
+                        ChatMessage(navController = navController, chatId = chatId)
                     }
                 }
             }

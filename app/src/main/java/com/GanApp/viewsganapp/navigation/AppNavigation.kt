@@ -16,9 +16,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
+import androidx.navigation.navArgument
+import com.GanApp.viewsganapp.components.ChatMessage
 import com.GanApp.viewsganapp.views.ForgotPasswordData
 import com.GanApp.viewsganapp.views.LogInData
 import com.GanApp.viewsganapp.views.ProductData
@@ -44,6 +47,7 @@ sealed class AppScreens(val route: String) {
     object favorite: AppScreens ("favorito")
     object CreateChatView : AppScreens("CreateChatView")
     object ChatView : AppScreens("ChatView")
+    object ChatMessages : AppScreens("chat_message/{chatId}")
     object menuDetalleProd : AppScreens("menuDetalleProd")
 
 }
@@ -154,6 +158,14 @@ fun AppScreens(navController: NavController) {
 
             }
         }
+
+            composable(
+                route = AppScreens.ChatMessages.route,
+                arguments = listOf(navArgument("chatId") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val chatId = backStackEntry.arguments?.getLong("chatId") ?: 0L
+                ChatMessage(navController = navController, chatId = chatId)
+            }
 
     }
 }
