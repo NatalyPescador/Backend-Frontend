@@ -14,8 +14,7 @@ import java.time.LocalDateTime
 
 object RetrofitInstance {
 
-    private const val BASE_URL = "http://10.175.145.230:8080/GanApp/" // Reemplaza esto con tu URL base
-    const val BASE_URL = "http://10.175.144.22:8080/GanApp/" // Reemplaza esto con tu URL base
+    const val BASE_URL = "http://10.175.145.52:8080/GanApp/" // Reemplaza esto con tu URL base
 
     private val gson: Gson = GsonBuilder()
         .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
@@ -25,7 +24,7 @@ object RetrofitInstance {
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
 

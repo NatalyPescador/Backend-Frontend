@@ -240,7 +240,7 @@ class MainActivity : ComponentActivity() {
                         CreateChat(navController = navController)
                     }
                     composable(AppScreens.ChatView.route){
-                        val userId = 16L
+                        val userId = 8L
                         ShowChats(navController = navController, userId = userId)
                     }
                     composable(
