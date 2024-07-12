@@ -60,7 +60,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun menuDetalleProd(navController: NavHostController, productId: Long) {
+fun MostrarMenuDetalleProd(navController: NavHostController, productId: Long) {
 
     val navigationState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
