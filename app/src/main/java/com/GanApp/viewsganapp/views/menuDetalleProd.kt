@@ -60,7 +60,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun menuDetalleProd(navController: NavHostController) {
+fun menuDetalleProd(navController: NavHostController, productId: Long) {
 
     val navigationState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -198,7 +198,7 @@ fun menuDetalleProd(navController: NavHostController) {
                         .padding(innerPadding)
                         .background(color = Color.White) // Cambiar el fondo a blanco
                 ) {
-                    VerDetalle(navController = navController, 17)
+                    VerDetalle(navController = navController, productId)
                 }
 
             }

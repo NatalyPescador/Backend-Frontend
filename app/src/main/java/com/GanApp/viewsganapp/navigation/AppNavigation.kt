@@ -48,7 +48,7 @@ sealed class AppScreens(val route: String) {
     object CreateChatView : AppScreens("CreateChatView")
     object ChatView : AppScreens("ChatView")
     object ChatMessages : AppScreens("chat_message/{chatId}")
-    object menuDetalleProd : AppScreens("menuDetalleProd")
+    object menuDetalleProd : AppScreens("menuDetalleProd/{productId}")
 
 }
 

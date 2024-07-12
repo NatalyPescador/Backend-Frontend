@@ -80,7 +80,7 @@ fun Catalogo(productos: List<ProductoEntity>, navController: NavController) {
 @Composable
 fun Tarjeta(producto: ProductoEntity, navController: NavController) {
     val filename = producto.imagen?.substringAfterLast('\\') ?: ""
-    val imageUrl = "http://10.175.144.22:8080/GanApp/uploads/$filename"
+    val imageUrl = "http://10.175.144.25:8080/GanApp/uploads/$filename"
     val numberFormat = NumberFormat.getInstance(Locale("es", "CO")).apply {
         maximumFractionDigits = 0
     }
@@ -94,7 +94,7 @@ fun Tarjeta(producto: ProductoEntity, navController: NavController) {
     ) {
         Column(
             modifier = Modifier.clickable {
-                navController.navigate("detalleProd/${producto.productoId}")
+                navController.navigate("menuDetalleProd/${producto.productoId}")
             }
         ) {
             Image(
