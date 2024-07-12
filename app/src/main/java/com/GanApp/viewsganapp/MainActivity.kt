@@ -37,7 +37,7 @@ import com.GanApp.viewsganapp.views.errorMessageLogin
 import com.GanApp.viewsganapp.views.errorMessageRegister
 import com.GanApp.viewsganapp.views.errorMessageResetPassword
 import com.GanApp.viewsganapp.views.errorMessageReview
-import com.GanApp.viewsganapp.views.menuDetalleProd
+import com.GanApp.viewsganapp.views.MostrarMenuDetalleProd
 import com.GanApp.viewsganapp.views.showErrorForgotPassword
 import com.GanApp.viewsganapp.views.showErrorLogin
 import com.GanApp.viewsganapp.views.showErrorRegister
@@ -224,8 +224,9 @@ class MainActivity : ComponentActivity() {
                         VerDetalle(navController = navController, productId = productId)
                     }
 
-                    composable(AppScreens.menuDetalleProd.route){
-                        menuDetalleProd(navController = navController)
+                    composable(AppScreens.menuDetalleProd.route){ backStackEntry ->
+                        val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
+                        MostrarMenuDetalleProd(navController = navController, productId = productId)
                     }
 
                     composable(AppScreens.editProfile.route){
