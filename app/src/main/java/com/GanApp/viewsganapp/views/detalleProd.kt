@@ -3,7 +3,6 @@ package com.GanApp.viewsganapp.views
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,7 +51,6 @@ import com.GanApp.viewsganapp.viewModels.ReviewViewModel
 import kotlinx.coroutines.delay
 
 
-
 var showErrorReview by mutableStateOf(false)
 var errorMessageReview by mutableStateOf("")
 
@@ -62,7 +60,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
     productViewModel.getProductById(productId)
     val selectedProduct by remember { productViewModel.selectedProduct }
     val filename = selectedProduct?.imagen?.substringAfterLast('\\') ?: ""
-    val imageUrl = "http://10.175.144.25:8080/GanApp/uploads/$filename"
+    val imageUrl = "http://10.175.145.52:8080/GanApp/uploads/$filename"
 
     //Variables de reseña
     val reviewViewModel : ReviewViewModel = viewModel()
@@ -83,24 +81,13 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = 70.dp) // Espacio para el botón fijo
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Button(
-                    onClick = { /* Handle filter button click */ },
-                    colors = ButtonDefaults.buttonColors(Color(10, 191, 4)),
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(text = "Filtrar", fontSize = 18.sp)
-                }
-            }
+
 
             Row(
                 modifier = Modifier
                     .padding(16.dp)
-                    .fillMaxWidth()
+                    //.fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
             ) {
                 Image(
                     painter = rememberAsyncImagePainter(model = imageUrl),
@@ -108,6 +95,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
                     modifier = Modifier
                         .width(300.dp)
                         .height(350.dp)
+
                 )
             }
 
