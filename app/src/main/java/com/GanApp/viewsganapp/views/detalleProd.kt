@@ -70,8 +70,9 @@ fun VerDetalle(navController: NavController, productId: Long) {
     val selectedReview by remember { reviewViewModel.selectedReviews }
     var resena by remember { mutableStateOf("") }
 
-
+    //Variables de ventana emergente
     var showDescription by remember { mutableStateOf(false) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -374,21 +375,21 @@ fun VerDetalle(navController: NavController, productId: Long) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        LaunchedEffect(showErrorRegister) {
-            if (showErrorRegister) {
+        LaunchedEffect(showErrorReview) {
+            if (showErrorReview) {
                 delay(5000)
-                showErrorRegister = false
+                showErrorReview = false
             }
         }
 
-        if (showErrorRegister) {
+        if (showErrorReview) {
             Box(
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth()
             ) {
                 Text(
-                    errorMessageRegister,
+                    errorMessageReview,
                     color = Color.Red,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = 8.dp)
