@@ -42,6 +42,11 @@ sealed class AppScreens(val route: String) {
     object favorite: AppScreens ("favorito")
     object CreateChatView : AppScreens("CreateChatView")
     object ChatView : AppScreens("ChatView")
+    companion object {
+        fun editProfile(any: Any) {
+
+        }
+    }
 
 }
 

@@ -1,16 +1,12 @@
 package com.GanApp.viewsganapp.views
 
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,10 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Lock
@@ -42,6 +35,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,33 +47,32 @@ import androidx.navigation.NavController
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import com.GanApp.viewsganapp.R
-import com.GanApp.viewsganapp.apiService.ReviewApiService
+import com.GanApp.viewsganapp.viewmodels.UserProfileViewModel
 import androidx.compose.material3.Icon as Icon
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Perfil(navController: NavController){
+fun Perfil(navController: NavHostController, viewModel: UserProfileViewModel) {
+    val user by viewModel.user.collectAsState()
+    val loading by viewModel.loading
 
-    // Aquí definimos los datos del perfil (simulados)
-    val name = "Nombre de Usuario"
-    val email = "usuario@ejemplo.com"
-    val phoneNumber = "+123 456 789"
-    val password = "********"
+    var isEditing by remember { mutableStateOf(true) }
+    var nombreCompleto by remember { mutableStateOf(user?.nombreCompleto ?: "") }
+    var correo by remember { mutableStateOf(user?.correo ?: "") }
+    var numeroTelefono by remember { mutableStateOf(user?.numeroTelefono ?: "") }
 
-    // URL de la imagen de perfil desde el backend
-    val profileImageUrl = "https://example.com/path/to/profile/image.jpg" // Reemplaza esta URL con la URL real
-
-
+    // Inicializa la carga de datos del usuario
+    LaunchedEffect(Unit) {
+        viewModel.fetchUserData(3L) // Aquí puedes pasar el ID de usuario que necesites
+    }
 
     Scaffold(
         topBar = {
@@ -97,8 +91,7 @@ fun Perfil(navController: NavController){
                     IconButton(onClick = { navController.navigate("favorito") }) {
                         Icon(
                             imageVector = Icons.Filled.Favorite,
-                            modifier = Modifier
-                                .size(35.dp),
+                            modifier = Modifier.size(35.dp),
                             contentDescription = "Favorito"
                         )
                     }
@@ -118,11 +111,9 @@ fun Perfil(navController: NavController){
                 .fillMaxHeight()
                 .background(Color.White)
                 .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-        )
-
-        {
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Text(
                 text = "Mi Perfil",
                 fontSize = 35.sp,
@@ -141,22 +132,15 @@ fun Perfil(navController: NavController){
                     .clip(CircleShape) // Hacer que la imagen sea circular
                     .background(Color.LightGray)
                     .border(2.dp, Color.Gray, CircleShape) // Borde alrededor de la imagen
-
             ) {
-                Image(
-                    painter = rememberAsyncImagePainter(profileImageUrl),
-                    contentDescription = "Foto de perfil",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
+                // Aquí puedes añadir una imagen de perfil usando Coil o cualquier otra biblioteca de imágenes
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
             OutlinedTextField(
-                value = name,
-                onValueChange = { /* No es necesario hacer nada ya que es de solo lectura */ },
+                value = nombreCompleto,
+                onValueChange = { if (isEditing) nombreCompleto = it },
                 label = { Text(text = "Nombre") },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
@@ -166,12 +150,13 @@ fun Perfil(navController: NavController){
                     )
                 },
                 modifier = Modifier.padding(16.dp),
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(20.dp),
+                enabled = isEditing
             )
 
             OutlinedTextField(
-                value = email,
-                onValueChange = { /* No es necesario hacer nada ya que es de solo lectura */ },
+                value = correo,
+                onValueChange = { if (isEditing) correo = it },
                 label = { Text("Gmail") },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
@@ -180,14 +165,13 @@ fun Perfil(navController: NavController){
                 modifier = Modifier
                     .offset(y = (-20).dp)
                     .padding(16.dp),
-                shape = RoundedCornerShape(20.dp)
-
-
+                shape = RoundedCornerShape(20.dp),
+                enabled = isEditing
             )
 
             OutlinedTextField(
-                value = phoneNumber,
-                onValueChange = { /* No es necesario hacer nada ya que es de solo lectura */ },
+                value = numeroTelefono,
+                onValueChange = { if (isEditing) numeroTelefono = it },
                 label = { Text("Teléfono") },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
@@ -196,40 +180,45 @@ fun Perfil(navController: NavController){
                 modifier = Modifier
                     .offset(y = (-40).dp)
                     .padding(16.dp),
-                shape = RoundedCornerShape(20.dp)
-            )
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { /* No es necesario hacer nada ya que es de solo lectura */ },
-                label = { Text("Contraseña") },
-                textStyle = TextStyle(color = Color.Black),
-                leadingIcon = {
-                    Icon(imageVector = Icons.Filled.Lock, contentDescription = "Contraseña")
-                },
-                modifier = Modifier
-                    .offset(y = (-60).dp)
-                    .padding(16.dp),
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(20.dp),
+                enabled = isEditing
             )
 
             Box(
                 modifier = Modifier.offset(y = (-50).dp)
-
             ) {
-                Button(
-                    onClick =  { navController.navigate("edit_profile")  },
-                    colors = ButtonDefaults.buttonColors(
-                        Color(10, 191, 4),
-                        contentColor = Color.Black
-                    )
-                )
-                {
-                    Text("Editar perfil", color = Color.Black)
+                if (isEditing) {
+                    Button(
+                        onClick = {
+                            val updatedUser = user?.copy(
+                                nombreCompleto = nombreCompleto,
+                                correo = correo,
+                                numeroTelefono = numeroTelefono
+                            )
+                            if (updatedUser != null) {
+                                viewModel.upgradeUser(updatedUser)
+                            }
+                            isEditing = false
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            Color(10, 191, 4),
+                            contentColor = Color.Black
+                        )
+                    ) {
+                        Text("Guardar cambios", color = Color.Black)
+                    }
+                } else {
+                    Button(
+                        onClick = { isEditing = true },
+                        colors = ButtonDefaults.buttonColors(
+                            Color(10, 191, 4),
+                            contentColor = Color.Black
+                        )
+                    ) {
+                        Text("Editar perfil", color = Color.Black)
+                    }
                 }
             }
-            // Aquí puedes agregar cualquier otro contenido que desees mostrar.
         }
     }
-
 }
