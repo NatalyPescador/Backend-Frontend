@@ -1,6 +1,6 @@
 package com.GanApp.viewsganapp.viewmodels
+
 import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.GanApp.viewsganapp.apiService.UserRegisterApiService
 import com.GanApp.viewsganapp.models.UserDto
@@ -20,11 +20,12 @@ class UserProfileViewModel : ViewModel() {
     private val _user = MutableStateFlow<UserDto?>(null)
     val user: StateFlow<UserDto?> get() = _user
 
-    var loading = mutableStateOf(false)
+    private val _loading = MutableStateFlow(true)
+    val loading: StateFlow<Boolean> get() = _loading
 
     fun fetchUserData(userId: Long) {
         viewModelScope.launch {
-            loading.value = true
+            _loading.value = true
             val service = RetrofitInstance.apiService
 
             val call = service.getUser(userId)
@@ -35,19 +36,19 @@ class UserProfileViewModel : ViewModel() {
                     } else {
                         println("fetchUserData Error en la respuesta: ${response.errorBody()?.string()}")
                     }
-                    loading.value = false
+                    _loading.value = false
                 }
 
                 override fun onFailure(call: Call<UserDto>, t: Throwable) {
                     println("fetchUserData Error de red o conversión: ${t.localizedMessage}")
-                    loading.value = false
+                    _loading.value = false
                 }
             })
         }
     }
 
     fun uploadUserData(updatedUser: UserDto) {
-        loading.value = true
+        _loading.value = true
         val gson = Gson()
         val userJson = gson.toJson(updatedUser)
         val userRequestBody = userJson.toRequestBody("application/json".toMediaTypeOrNull())
@@ -62,17 +63,18 @@ class UserProfileViewModel : ViewModel() {
                 } else {
                     println("uploadUserData Error en la respuesta: ${response.errorBody()?.string()}")
                 }
-                loading.value = false
+                _loading.value = false
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 println("uploadUserData Error de red o conversión: ${t.localizedMessage}")
-                loading.value = false
+                _loading.value = false
             }
         })
     }
+
     fun upgradeUser(user: UserDto) {
-        loading.value = true
+        _loading.value = true
         val service = RetrofitInstance.apiService
         val call = service.upgradeUser(user)
         call.enqueue(object : Callback<Void> {
@@ -82,15 +84,13 @@ class UserProfileViewModel : ViewModel() {
                 } else {
                     println("upgrade Error en la respuesta: ${response.errorBody()?.string()}")
                 }
-                loading.value = false
+                _loading.value = false
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 println("upgrade Error de red o conversión: ${t.localizedMessage}")
-                loading.value = false
+                _loading.value = false
             }
         })
     }
 }
-
-

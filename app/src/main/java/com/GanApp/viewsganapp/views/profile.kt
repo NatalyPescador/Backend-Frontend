@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -62,16 +63,23 @@ import androidx.compose.material3.Icon as Icon
 @Composable
 fun Perfil(navController: NavHostController, viewModel: UserProfileViewModel) {
     val user by viewModel.user.collectAsState()
-    val loading by viewModel.loading
+    val loading by viewModel.loading.collectAsState()
 
-    var isEditing by remember { mutableStateOf(true) }
-    var nombreCompleto by remember { mutableStateOf(user?.nombreCompleto ?: "") }
-    var correo by remember { mutableStateOf(user?.correo ?: "") }
-    var numeroTelefono by remember { mutableStateOf(user?.numeroTelefono ?: "") }
+    var isEditing by remember { mutableStateOf(false) }
+    var nombreCompleto by remember { mutableStateOf("") }
+    var correo by remember { mutableStateOf("") }
+    var numeroTelefono by remember { mutableStateOf("") }
 
-    // Inicializa la carga de datos del usuario
     LaunchedEffect(Unit) {
-        viewModel.fetchUserData(3L) // Aquí puedes pasar el ID de usuario que necesites
+        viewModel.fetchUserData(3L)
+    }
+
+    LaunchedEffect(user) {
+        user?.let {
+            nombreCompleto = it.nombreCompleto
+            correo = it.correo
+            numeroTelefono = it.numeroTelefono
+        }
     }
 
     Scaffold(
@@ -97,125 +105,131 @@ fun Perfil(navController: NavHostController, viewModel: UserProfileViewModel) {
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(152, 255, 150), // Cambia este color según tus necesidades
-                    titleContentColor = Color.White, // Color del título
-                    navigationIconContentColor = Color.Black, // Color del icono de navegación
-                    actionIconContentColor = Color.Red // Color de los iconos de acción
+                    containerColor = Color(152, 255, 150),
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.Black,
+                    actionIconContentColor = Color.Red
                 )
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxHeight()
-                .background(Color.White)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Mi Perfil",
-                fontSize = 35.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .wrapContentWidth(Alignment.CenterHorizontally),
-                color = Color.Black // Cambia este color según tus necesidades
-            )
-
-            // Imagen de perfil redonda con clickable
-            Box(
-                modifier = Modifier
-                    .size(150.dp) // Tamaño del contenedor
-                    .clip(CircleShape) // Hacer que la imagen sea circular
-                    .background(Color.LightGray)
-                    .border(2.dp, Color.Gray, CircleShape) // Borde alrededor de la imagen
-            ) {
-                // Aquí puedes añadir una imagen de perfil usando Coil o cualquier otra biblioteca de imágenes
+        if (loading) {
+            // Mostrar un indicador de carga mientras se cargan los datos
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = nombreCompleto,
-                onValueChange = { if (isEditing) nombreCompleto = it },
-                label = { Text(text = "Nombre") },
-                textStyle = TextStyle(color = Color.Black),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Person,
-                        contentDescription = "Nombre"
-                    )
-                },
-                modifier = Modifier.padding(16.dp),
-                shape = RoundedCornerShape(20.dp),
-                enabled = isEditing
-            )
-
-            OutlinedTextField(
-                value = correo,
-                onValueChange = { if (isEditing) correo = it },
-                label = { Text("Gmail") },
-                textStyle = TextStyle(color = Color.Black),
-                leadingIcon = {
-                    Icon(imageVector = Icons.Filled.Email, contentDescription = "Gmail")
-                },
+        } else {
+            Column(
                 modifier = Modifier
-                    .offset(y = (-20).dp)
-                    .padding(16.dp),
-                shape = RoundedCornerShape(20.dp),
-                enabled = isEditing
-            )
-
-            OutlinedTextField(
-                value = numeroTelefono,
-                onValueChange = { if (isEditing) numeroTelefono = it },
-                label = { Text("Teléfono") },
-                textStyle = TextStyle(color = Color.Black),
-                leadingIcon = {
-                    Icon(imageVector = Icons.Filled.Phone, contentDescription = "Telefono")
-                },
-                modifier = Modifier
-                    .offset(y = (-40).dp)
-                    .padding(16.dp),
-                shape = RoundedCornerShape(20.dp),
-                enabled = isEditing
-            )
-
-            Box(
-                modifier = Modifier.offset(y = (-50).dp)
+                    .padding(innerPadding)
+                    .fillMaxHeight()
+                    .background(Color.White)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                if (isEditing) {
-                    Button(
-                        onClick = {
-                            val updatedUser = user?.copy(
-                                nombreCompleto = nombreCompleto,
-                                correo = correo,
-                                numeroTelefono = numeroTelefono
+                Text(
+                    text = "Mi Perfil",
+                    fontSize = 35.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.CenterHorizontally),
+                    color = Color.Black
+                )
+
+                Box(
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(CircleShape)
+                        .background(Color.LightGray)
+                        .border(2.dp, Color.Gray, CircleShape)
+                ) {
+                    // Aquí puedes añadir una imagen de perfil usando Coil o cualquier otra biblioteca de imágenes
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    value = nombreCompleto,
+                    onValueChange = { if (isEditing) nombreCompleto = it },
+                    label = { Text(text = "Nombre") },
+                    textStyle = TextStyle(color = Color.Black),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Person,
+                            contentDescription = "Nombre"
+                        )
+                    },
+                    modifier = Modifier.padding(16.dp),
+                    shape = RoundedCornerShape(20.dp),
+                    enabled = isEditing
+                )
+
+                OutlinedTextField(
+                    value = correo,
+                    onValueChange = { if (isEditing) correo = it },
+                    label = { Text("Gmail") },
+                    textStyle = TextStyle(color = Color.Black),
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Filled.Email, contentDescription = "Gmail")
+                    },
+                    modifier = Modifier
+                        .offset(y = (-20).dp)
+                        .padding(16.dp),
+                    shape = RoundedCornerShape(20.dp),
+                    enabled = isEditing
+                )
+
+                OutlinedTextField(
+                    value = numeroTelefono,
+                    onValueChange = { if (isEditing) numeroTelefono = it },
+                    label = { Text("Teléfono") },
+                    textStyle = TextStyle(color = Color.Black),
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Filled.Phone, contentDescription = "Telefono")
+                    },
+                    modifier = Modifier
+                        .offset(y = (-40).dp)
+                        .padding(16.dp),
+                    shape = RoundedCornerShape(20.dp),
+                    enabled = isEditing
+                )
+
+                Box(
+                    modifier = Modifier.offset(y = (-50).dp)
+                ) {
+                    if (isEditing) {
+                        Button(
+                            onClick = {
+                                val updatedUser = user?.copy(
+                                    nombreCompleto = nombreCompleto,
+                                    correo = correo,
+                                    numeroTelefono = numeroTelefono
+                                )
+                                if (updatedUser != null) {
+                                    viewModel.upgradeUser(updatedUser)
+                                }
+                                isEditing = false
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                Color(10, 191, 4),
+                                contentColor = Color.Black
                             )
-                            if (updatedUser != null) {
-                                viewModel.upgradeUser(updatedUser)
-                            }
-                            isEditing = false
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            Color(10, 191, 4),
-                            contentColor = Color.Black
-                        )
-                    ) {
-                        Text("Guardar cambios", color = Color.Black)
-                    }
-                } else {
-                    Button(
-                        onClick = { isEditing = true },
-                        colors = ButtonDefaults.buttonColors(
-                            Color(10, 191, 4),
-                            contentColor = Color.Black
-                        )
-                    ) {
-                        Text("Editar perfil", color = Color.Black)
+                        ) {
+                            Text("Guardar cambios", color = Color.Black)
+                        }
+                    } else {
+                        Button(
+                            onClick = { isEditing = true },
+                            colors = ButtonDefaults.buttonColors(
+                                Color(10, 191, 4),
+                                contentColor = Color.Black
+                            )
+                        ) {
+                            Text("Editar perfil", color = Color.Black)
+                        }
                     }
                 }
             }
