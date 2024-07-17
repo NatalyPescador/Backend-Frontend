@@ -7,13 +7,13 @@ data class MessageDto(
     @SerializedName("chatId")
     val chatId: Long,
 
+    @SerializedName("message")
+    val message: String,
+
     @SerializedName("senderId")
     val senderId: Long,
 
-    @SerializedName("receiverId")
-    val receiverId: Long,
-
-    @SerializedName("message")
-    val message: String,
+    @SerializedName("status")
+    val status: String,
 
 )

@@ -3,6 +3,7 @@ package com.GanApp.viewsganapp.views
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -213,79 +214,72 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
                 .padding(16.dp)
                 .fillMaxWidth()
                 .offset(y = 20.dp),
-
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center // Centra las imágenes en el Row
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.fc_logo),
-                contentDescription = "Logo de Facebook",
-                modifier = Modifier
-                    .clickable {
-                        navController.navigate("facebook")
-                    }
-                    .height(70.dp)
-                    .width(70.dp)
-                    .offset(x = 22.dp)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.gmail_logo),
-                contentDescription = "Logo Gmail",
-                modifier = Modifier
-                    .clickable {
-                        navController.navigate("gmail")
-                    }
-                    .height(55.dp)
-                    .offset(x = 135.dp)
-                    .width(55.dp)
-            )
-        }
-        Box(modifier = Modifier.offset(y = (-10).dp)
-        ) {
-            Row {
-                Text(text = "Continuar con", modifier = Modifier
-                    .clickable {
-                        navController.navigate("facebook")
-                    }
-                    .offset(x = (-38).dp))//Facebook
-                Text(text = "Continuar con",modifier = Modifier
-                    .clickable {
-                        navController.navigate("gmail")
-                    }.offset(x = 30.dp))//Gmail
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(
+                    painter = painterResource(id = R.drawable.fc_logo),
+                    contentDescription = "Logo de Facebook",
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate("facebook")
+                        }
+                        .height(80.dp)
+                        .width(80.dp)
+                )
+                Spacer(modifier = Modifier.height(2.dp)) // Espacio entre imagen y texto
+                Text(text = "Continuar con", textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate("facebook")
+                        })
+                Text(text = "Facebook", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate("facebook")
+                        })
+            }
+            Spacer(modifier = Modifier.width(40.dp)) // Espacio entre las columnas
+            Column(horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.offset(y = 10.dp)) {
+                Image(
+                    painter = painterResource(id = R.drawable.gmail_logo),
+                    contentDescription = "Logo Gmail",
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate("gmail")
+                        }
+                        .height(60.dp)
+                        .width(60.dp)
+                        .offset(y = (-8).dp)
+                )
+                Spacer(modifier = Modifier.height(5.dp)) // Espacio entre imagen y texto
+                Text(text = "Continuar con", textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate("gmail")
+                        })
+                Text(text = "Gmail", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate("gmail")
+                        })
             }
         }
 
-        Box(modifier = Modifier.offset(y = (-15).dp)){
-            Row {
-                Text(text = "Facebook", modifier = Modifier
-                    .clickable {
-                        navController.navigate("facebook")
-                    }
-                    .offset(x = (-70).dp))
-                Text(text = "Gmail", modifier = Modifier
-                    .clickable {
-                        navController.navigate("gmail")
-                    }.offset(x = (45).dp))
-            }
+        Spacer(modifier = Modifier.height(16.dp))
+
+        repeat(3) {
+            Text(
+                text = "Regístrate",
+                color = Color.White,
+                fontSize = 40.sp,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
         }
-
-        Text(
-            text = "Registrate", color = Color.White,
-            fontSize = 40.sp,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-
-        )
-
-        Text(
-            text = "Registrate", color = Color.White,
-            fontSize = 40.sp,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-        )
-
     }
 }
-
 
 
 

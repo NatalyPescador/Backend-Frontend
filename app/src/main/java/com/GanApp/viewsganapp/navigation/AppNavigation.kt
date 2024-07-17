@@ -16,14 +16,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.GanApp.viewsganapp.views.CatalogoPrincipal
+import androidx.navigation.navArgument
+import com.GanApp.viewsganapp.components.ChatMessage
 import com.GanApp.viewsganapp.views.ForgotPasswordData
 import com.GanApp.viewsganapp.views.LogInData
 import com.GanApp.viewsganapp.views.ProductData
 import com.GanApp.viewsganapp.views.ResetPasswordData
 import com.GanApp.viewsganapp.views.ReviewData
 import com.GanApp.viewsganapp.views.UserData
+import com.GanApp.viewsganapp.views.VerDetalle
 
 sealed class AppScreens(val route: String) {
     object loginUser : AppScreens("loginUser_screens")
@@ -37,11 +42,13 @@ sealed class AppScreens(val route: String) {
     object profile : AppScreens ("Profile_screens")
     object reviews : AppScreens ("reviews")
     object catalogo : AppScreens("catalogo")
-    object detalleProd : AppScreens("detalleProd")
+    object detalleProd : AppScreens("detalleProd/{productId}")
     object editProfile : AppScreens ("edit_profile")
     object favorite: AppScreens ("favorito")
     object CreateChatView : AppScreens("CreateChatView")
     object ChatView : AppScreens("ChatView")
+    object ChatMessages : AppScreens("chat_message/{chatId}")
+    object menuDetalleProd : AppScreens("menuDetalleProd/{productId}")
     companion object {
         fun editProfile(any: Any) {
 
@@ -114,6 +121,7 @@ fun AppScreens(navController: NavController) {
                     var imagenes by remember { mutableStateOf("") }
                 }
             }
+
             composable(AppScreens.homePage.route) {
                 @Composable
                 fun HomePage() {
@@ -124,74 +132,45 @@ fun AppScreens(navController: NavController) {
                         mutableIntStateOf(0)
                     }
                 }
-
-                composable(AppScreens.catalogo.route){
-                    @Composable
-                    fun CatalogoPrincipal(){}
-                }
-
-                composable(AppScreens.detalleProd.route){
-                    @Composable
-                    fun DetalleProducto(){}
-                }
-
+            }
+        composable(AppScreens.catalogo.route) {
+            CatalogoPrincipal(navController = navController)
             }
 
-            composable(AppScreens.profile.route) {
-                 @Composable
-                 fun Perfil() {}
-            }
+        composable(AppScreens.detalleProd.route) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
+            VerDetalle(navController = navController, productId = productId)
+        }
 
-            composable(AppScreens.reviews.route) {
-                 @Composable
-                 fun PublishReview(
-                     navController: NavController,
-                     onSubmit: (ReviewData) -> Unit
-                 ) {
-                     var resena by remember {
-                         mutableStateOf("")
-                     }
-                 }
-            }
+        composable(AppScreens.menuDetalleProd.route){
+            @Composable
+            fun menuDetalleProd(){}
+        }
 
-            composable(AppScreens.editProfile.route) {
-                @Composable
-                fun EditarPerfil(navController: NavController) {
+        composable(AppScreens.profile.route) {
+            @Composable
+            fun Perfil() {}
+        }
 
-                    // Aquí definimos los datos del perfil (simulados)
-                    var name by remember { mutableStateOf("Nombre de Usuario") }
-                    var email by remember { mutableStateOf("usuario@ejemplo.com") }
-                    var phoneNumber by remember { mutableStateOf("+123 456 789") }
-                    var password by remember { mutableStateOf("********") }
-                    var birthDate by remember { mutableStateOf("01/01/1990") }
+        composable(AppScreens.ChatView.route){
+            @Composable
+            fun ShowChats(navController: NavController){}
+        }
 
-                    // Recordatorio del estado de la URI de la imagen seleccionada
-                    var imageUri by remember { mutableStateOf<Uri?>(null) }
+        composable(AppScreens.favorite.route){
+            @Composable
+            fun Favoritos(navController: NavController){
 
-                    // ActivityResultLauncher para seleccionar la imagen de la galería
-                    val launcher = rememberLauncherForActivityResult(
-                        contract = ActivityResultContracts.GetContent()
-                    ) { uri: Uri? ->
-                        imageUri = uri
-                    }
-                }
-
-            }
-
-            composable(AppScreens.favorite.route){
-                fun Favoritos(navController: NavController){
-
-                }
-            }
-
-            composable(AppScreens.CreateChatView.route){
-                @Composable
-                fun CreateChat(navController: NavHostController){}
-            }
-
-            composable(AppScreens.ChatView.route){
-                @Composable
-                fun ShowChats(navController: NavController){}
             }
         }
+
+            composable(
+                route = AppScreens.ChatMessages.route,
+                arguments = listOf(navArgument("chatId") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val chatId = backStackEntry.arguments?.getLong("chatId") ?: 0L
+                ChatMessage(navController = navController, chatId = chatId)
+            }
+
     }
+}

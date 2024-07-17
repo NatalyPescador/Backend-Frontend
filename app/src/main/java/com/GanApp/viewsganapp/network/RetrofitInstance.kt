@@ -6,18 +6,25 @@ import com.GanApp.viewsganapp.apiService.ProductRegisterApiService
 import com.GanApp.viewsganapp.apiService.ReviewApiService
 import com.GanApp.viewsganapp.apiService.TypeServiceApiService
 import com.GanApp.viewsganapp.apiService.UserRegisterApiService
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDateTime
 
 object RetrofitInstance {
 
-    private const val BASE_URL = "http://10.175.144.76:8080/GanApp/" // Reemplaza esto con tu URL base
+    const val BASE_URL = "http://10.175.145.214:8080/GanApp/" // Reemplaza esto con tu URL base
+
+    private val gson: Gson = GsonBuilder()
+        .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
+        .create()
 
     // Lazy initialization del Retrofit instance
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
 
@@ -43,8 +50,5 @@ object RetrofitInstance {
 
     val apiServiceChats: ChatApiService by lazy {
         retrofit.create(ChatApiService::class.java)
-    }
-
-
-
+        }
 }
