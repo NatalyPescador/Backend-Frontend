@@ -1,5 +1,6 @@
 package com.GanApp.viewsganapp.views
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -35,6 +36,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,10 +49,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.GanApp.viewsganapp.models.ReviewEntity
+import com.GanApp.viewsganapp.viewModels.ButtonCreateChatViewModel
 import com.GanApp.viewsganapp.viewModels.ProductViewModel
 import com.GanApp.viewsganapp.viewModels.ReviewViewModel
 import kotlinx.coroutines.delay
-
+import kotlinx.coroutines.launch
 
 
 var showErrorReview by mutableStateOf(false)
@@ -62,7 +65,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
     productViewModel.getProductById(productId)
     val selectedProduct by remember { productViewModel.selectedProduct }
     val filename = selectedProduct?.imagen?.substringAfterLast('\\') ?: ""
-    val imageUrl = "http://10.175.144.39:8080/GanApp/uploads/$filename"
+    val imageUrl = "http://10.175.145.214:8080/GanApp/uploads/$filename"
 
     // Variables de reseña
     val reviewViewModel: ReviewViewModel = viewModel()
@@ -72,6 +75,10 @@ fun VerDetalle(navController: NavController, productId: Long) {
 
     // Variables de ventana emergente
     var showDescription by remember { mutableStateOf(false) }
+
+    //Variables de contactar al vendedor
+    val buttonCreateChatViewModel: ButtonCreateChatViewModel = viewModel()
+    val coroutineScope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
@@ -321,7 +328,16 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 .padding(16.dp)
         ) {
             Button(
-                onClick = { /* Handle contact button click */ },
+                onClick = {
+                    coroutineScope.launch {
+                        try {
+                            buttonCreateChatViewModel.createOrFetchChat(productId = productId, userId = 15L, receiverId = 8L)
+                            Log.d("chatView", "Botón presionado para crear el chat")
+                        } catch (e: Exception) {
+                            Log.e("chatView", "Error al crear el chat: ${e.message}", e)
+                        }
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(Color(10, 191, 4)),
                 modifier = Modifier
                     .align(Alignment.Center)
