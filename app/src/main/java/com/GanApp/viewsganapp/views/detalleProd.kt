@@ -70,7 +70,6 @@ fun VerDetalle(navController: NavController) {
                 contentDescription = null,
                 modifier = Modifier
                     .offset(y = 35.dp)
-
                     .width(300.dp)
                     .height(350.dp)
             )
