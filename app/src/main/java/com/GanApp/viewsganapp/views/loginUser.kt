@@ -180,8 +180,8 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
                         .clickable {
                             navController.navigate("facebook")
                         }
-                        .height(70.dp)
-                        .width(70.dp)
+                        .height(80.dp)
+                        .width(80.dp)
                 )
                 Spacer(modifier = Modifier.height(2.dp)) // Espacio entre imagen y texto
                 Text(text = "Continuar con", textAlign = TextAlign.Center,
@@ -196,7 +196,8 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
                     })
             }
             Spacer(modifier = Modifier.width(40.dp)) // Espacio entre las columnas
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.offset(y = 10.dp)) {
                 Image(
                     painter = painterResource(id = R.drawable.gmail_logo),
                     contentDescription = "Logo Gmail",
@@ -204,19 +205,20 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
                         .clickable {
                             navController.navigate("gmail")
                         }
-                        .height(55.dp)
-                        .width(55.dp)
+                        .height(60.dp)
+                        .width(60.dp)
+                        .offset(y = (-8).dp)
                 )
-                Spacer(modifier = Modifier.height(8.dp)) // Espacio entre imagen y texto
+                Spacer(modifier = Modifier.height(5.dp)) // Espacio entre imagen y texto
                 Text(text = "Continuar con", textAlign = TextAlign.Center,
                     modifier = Modifier
                     .clickable {
-                        navController.navigate("facebook")
+                        navController.navigate("gmail")
                     })
                 Text(text = "Gmail", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate("facebook")
+                            navController.navigate("gmail")
                         })
             }
         }

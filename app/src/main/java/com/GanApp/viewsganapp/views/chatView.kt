@@ -2,27 +2,15 @@ package com.GanApp.viewsganapp.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,64 +25,71 @@ import com.GanApp.viewsganapp.components.ChatItem
 import com.GanApp.viewsganapp.viewModels.ChatViewModel
 
 @Composable
-fun ShowChats(navController: NavHostController, userId: Long, chatViewModel: ChatViewModel = viewModel()){
-
+fun ShowChats(navController: NavHostController, userId: Long, chatViewModel: ChatViewModel = viewModel()) {
     val chats by chatViewModel.chats.collectAsState()
-    val snackbarHostState = remember {SnackbarHostState()}
+    val snackbarHostState = remember { SnackbarHostState() }
     val snackbarMessage by chatViewModel.snackbarMessage.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(userId){
+    LaunchedEffect(userId) {
         chatViewModel.getChatsByUserId(userId)
     }
 
-    LaunchedEffect(snackbarMessage){
+    LaunchedEffect(snackbarMessage) {
         snackbarMessage?.let {
             snackbarHostState.showSnackbar(it)
             chatViewModel._snackbarMessage.value = null
         }
     }
 
-    Scaffold (
+    Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
-        Column (
+        Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .background(color = Color.White)
-                .padding(16.dp)
+                .fillMaxSize() // Ocupa todo el tamaño disponible
                 .verticalScroll(rememberScrollState())
-                .fillMaxSize(), // Esto hará que la Column ocupe todo el tamaño disponible
+                .padding(horizontal = 16.dp, vertical = 8.dp), // Ajustes de padding
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
-        ){
+        ) {
+            // Encabezado con logo
             Row(
+                verticalAlignment = Alignment.Top, // Alineación superior
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(start = 16.dp) // Más espacio arriba
                     .fillMaxWidth()
+                    .offset(y= (-20).dp)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.logo),
                     contentDescription = "Logo",
-                    modifier = Modifier.offset(y = 35.dp)
+                    modifier = Modifier
+                        .size(140.dp) // Tamaño del logo más grande
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "TUS CHATS",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    modifier = Modifier.align(Alignment.CenterVertically) // Centrar verticalmente el texto
                 )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = "TUS CHATS",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
-            chats.forEach { chat ->
-                ChatItem(chat = chat)
-                Spacer(modifier = Modifier.height(8.dp))
+            // Lista de chats
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                chats.forEach { chat ->
+                    ChatItem(chat = chat, navController = navController)
+                }
             }
-
         }
     }
 }

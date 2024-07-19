@@ -1,31 +1,32 @@
 package com.GanApp.viewsganapp
 
+//import com.GanApp.viewsganapp.views.DetalleProducto
+import EditarPerfil
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.GanApp.viewsganapp.models.ReviewEntity
+import androidx.navigation.navArgument
+import com.GanApp.viewsganapp.components.ChatMessage
+import com.GanApp.viewsganapp.components.CreateChat
 import com.GanApp.viewsganapp.navigation.AppScreens
-import com.GanApp.viewsganapp.navigation.AppScreens.detalleProd
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
-import com.GanApp.viewsganapp.views.CreateChat
-import com.GanApp.viewsganapp.views.EditarPerfil
-//import com.GanApp.viewsganapp.views.DetalleProducto
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Favoritos
-import com.GanApp.viewsganapp.views.Gmail
 import com.GanApp.viewsganapp.views.ForgotPassword
+import com.GanApp.viewsganapp.views.Gmail
 import com.GanApp.viewsganapp.views.HomePage
 import com.GanApp.viewsganapp.views.LogIn
+import com.GanApp.viewsganapp.views.MostrarMenuDetalleProd
 import com.GanApp.viewsganapp.views.Perfil
 import com.GanApp.viewsganapp.views.ProductRegister
-import com.GanApp.viewsganapp.views.PublishReview
 import com.GanApp.viewsganapp.views.Register
 import com.GanApp.viewsganapp.views.ResetPassword
 import com.GanApp.viewsganapp.views.ShowChats
@@ -34,13 +35,10 @@ import com.GanApp.viewsganapp.views.errorMessageForgotPassword
 import com.GanApp.viewsganapp.views.errorMessageLogin
 import com.GanApp.viewsganapp.views.errorMessageRegister
 import com.GanApp.viewsganapp.views.errorMessageResetPassword
-import com.GanApp.viewsganapp.views.errorMessageReview
-import com.GanApp.viewsganapp.views.menuDetalleProd
 import com.GanApp.viewsganapp.views.showErrorForgotPassword
 import com.GanApp.viewsganapp.views.showErrorLogin
 import com.GanApp.viewsganapp.views.showErrorRegister
 import com.GanApp.viewsganapp.views.showErrorResetPassword
-import com.GanApp.viewsganapp.views.showErrorReview
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -56,7 +54,7 @@ class MainActivity : ComponentActivity() {
             ViewsGanAppTheme {  // Asume que este es tu tema de Compose
                 NavHost(
                     navController = navController,
-                    startDestination = AppScreens.productRegister.route
+                    startDestination = AppScreens.homePage.route
                 ) {
                     composable(AppScreens.viewReister.route) {
                         Register(navController = navController) { userData ->
@@ -222,47 +220,14 @@ class MainActivity : ComponentActivity() {
                         VerDetalle(navController = navController, productId = productId)
                     }
 
-                    composable(AppScreens.menuDetalleProd.route){
-                        menuDetalleProd(navController = navController)
+                    composable(AppScreens.menuDetalleProd.route){ backStackEntry ->
+                        val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
+                        MostrarMenuDetalleProd(navController = navController, productId = productId)
                     }
 
-
-                    composable(AppScreens.reviews.route) {
-                        PublishReview(navController = navController) { reviewData ->
-                            val call =
-                                RetrofitInstance.apiServiceReviewApiService.publishReview(reviewData)
-                            call.enqueue(object : Callback<Void> {
-                                override fun onResponse(
-                                    call: Call<Void>,
-                                    response: Response<Void>
-                                ) {
-                                    if (response.isSuccessful) {
-                                        Log.d("API Call", "Reseña publicada con éxito")
-                                    } else {
-                                        val errorBody = response.errorBody()?.string()
-                                        Log.d("API Call", "Response not successful: $errorBody")
-                                        if (!errorBody.isNullOrEmpty()) {
-                                            try {
-                                                val json = JSONObject(errorBody)
-                                                errorMessageReview = json.getString("errorMessage")
-                                                showErrorReview = true
-                                            } catch (e: JSONException) {
-                                                Log.e("API Call", "Error parsing JSON", e)
-                                            }
-                                        }
-                                    }
-                                }
-
-                                override fun onFailure(call: Call<Void>, t: Throwable) {
-                                    Log.d("API Call", "Failure: ${t.message}")
-                                }
-                            })
-
-                        }
-                    }
-
-                    composable(AppScreens.editProfile.route){
-                        EditarPerfil(navController = navController)
+                    composable(AppScreens.editProfile.route){backStackEntry ->
+                        val userId = backStackEntry.arguments?.getString("userId")?.toLong() ?: 0L
+                        EditarPerfil(navController = navController, userId = userId)
                     }
 
                     composable(AppScreens.favorite.route){
@@ -273,8 +238,15 @@ class MainActivity : ComponentActivity() {
                         CreateChat(navController = navController)
                     }
                     composable(AppScreens.ChatView.route){
-                        val userId = 15L
+                        val userId = 8L
                         ShowChats(navController = navController, userId = userId)
+                    }
+                    composable(
+                        route = AppScreens.ChatMessages.route,
+                        arguments = listOf(navArgument("chatId") { type = NavType.LongType })
+                    ) { backStackEntry ->
+                        val chatId = backStackEntry.arguments?.getLong("chatId") ?: 0L
+                        ChatMessage(navController = navController, chatId = chatId)
                     }
                 }
             }

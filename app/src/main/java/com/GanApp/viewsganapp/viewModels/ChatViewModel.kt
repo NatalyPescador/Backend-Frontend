@@ -26,7 +26,7 @@ class ChatViewModel : ViewModel() {
                     _snackbarMessage.value = "Error al obtener los chats: ${response.errorBody()?.string()}"
                 }
             }catch (e: Exception){
-                Log.d("ChatViewModel", "Excepción al obtener los chats: ${e.message}", e)
+                Log.d("ChatViewModel", "ExcepciónView al obtener los chats: ${e.message}", e)
                 _snackbarMessage.value = "Excepción al obtener los chats: ${e.message}"
             }
         }

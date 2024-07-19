@@ -1,9 +1,6 @@
 package com.GanApp.viewsganapp.navigation
 
 import android.annotation.SuppressLint
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -16,14 +13,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.GanApp.viewsganapp.components.ChatMessage
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.views.ForgotPasswordData
 import com.GanApp.viewsganapp.views.LogInData
 import com.GanApp.viewsganapp.views.ProductData
 import com.GanApp.viewsganapp.views.ResetPasswordData
-import com.GanApp.viewsganapp.views.ReviewData
 import com.GanApp.viewsganapp.views.UserData
 import com.GanApp.viewsganapp.views.VerDetalle
 
@@ -44,7 +43,13 @@ sealed class AppScreens(val route: String) {
     object favorite: AppScreens ("favorito")
     object CreateChatView : AppScreens("CreateChatView")
     object ChatView : AppScreens("ChatView")
-    object menuDetalleProd : AppScreens("menuDetalleProd")
+    object ChatMessages : AppScreens("chat_message/{chatId}")
+    object menuDetalleProd : AppScreens("menuDetalleProd/{productId}")
+    companion object {
+        fun editProfile(any: Any) {
+
+        }
+    }
 
 }
 
@@ -133,21 +138,35 @@ fun AppScreens(navController: NavController) {
             VerDetalle(navController = navController, productId = productId)
         }
 
-            composable(AppScreens.menuDetalleProd.route){
-                @Composable
-                fun menuDetalleProd(){}
-            }
-
-            composable(AppScreens.profile.route) {
-                @Composable
-                fun Perfil() {}
-            }
-
-            composable(AppScreens.ChatView.route){
-                @Composable
-                fun ShowChats(navController: NavController){}
-            }
-
-
+        composable(AppScreens.menuDetalleProd.route){
+            @Composable
+            fun menuDetalleProd(){}
         }
+
+        composable(AppScreens.profile.route) {
+            @Composable
+            fun Perfil() {}
+        }
+
+        composable(AppScreens.ChatView.route){
+            @Composable
+            fun ShowChats(navController: NavController){}
+        }
+
+        composable(AppScreens.favorite.route){
+            @Composable
+            fun Favoritos(navController: NavController){
+
+            }
+        }
+
+            composable(
+                route = AppScreens.ChatMessages.route,
+                arguments = listOf(navArgument("chatId") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val chatId = backStackEntry.arguments?.getLong("chatId") ?: 0L
+                ChatMessage(navController = navController, chatId = chatId)
+            }
+
     }
+}
