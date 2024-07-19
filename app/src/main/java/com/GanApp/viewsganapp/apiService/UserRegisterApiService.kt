@@ -18,35 +18,35 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface UserRegisterApiService {
-    @POST("user/register")
+    @POST("register")
     fun createUser(@Body userData: UserData): Call<Void>
 
-    @POST("user/login")
+    @POST("login")
     fun logIn(@Body logInData: LogInData): Call<Void>
 
-    @POST("user/forgot-password")
+    @POST("forgot-password")
     fun forgotPassword(@Body forgotPasswordData: ForgotPasswordData): Call<Void>
 
-    @POST("user/reset-password")
+    @POST("reset-password")
     fun resetPassword(@Body resetPasswordData: ResetPasswordData): Call<Void>
 
     @GET("user/findById")
     fun getUser(@Query("id") userId: Long): Call<UserDto>
 
     @Multipart
-    @POST("user/create-with-image")
+    @POST("create-with-image")
     fun createUserWithImage(
         @Part image: MultipartBody.Part,
         @Part("user") user: RequestBody
     ): Call<String>
 
-    @POST("user/create")
+    @POST("create")
     fun createUser(@Body user: RequestBody): Call<String>
 
     @PUT("user/{id}")
     fun updateUser(@Path("id") userId: Long, @Body user: RequestBody): Call<Void>
 
-    @POST("user/upgradeUser")
+    @POST("upgradeUser")
     fun upgradeUser(@Body user:UserDto) : Call<Void>
 
 

@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 
 object RetrofitInstance {
 
-    const val BASE_URL = "http://192.168.1.13:8080/GanApp/" // Reemplaza esto con tu URL base
+    const val BASE_URL = "https://w9rrr6mq-8080.use2.devtunnels.ms/GanApp/" // Reemplaza esto con tu URL base
 
     private val gson: Gson = GsonBuilder()
         .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())

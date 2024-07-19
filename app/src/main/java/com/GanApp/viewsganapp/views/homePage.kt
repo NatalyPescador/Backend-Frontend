@@ -76,6 +76,12 @@ fun HomePage(navController: NavHostController) {
 
     val items = listOf(
         DrawerItem(
+            title = "Login",
+            selectedIcon = Icons.Filled.Person,
+            unselectedIcon = Icons.Outlined.Person,
+            route = "loginUser_screens"
+        ),
+        DrawerItem(
             title = "Perfil",
             selectedIcon = Icons.Filled.Person,
             unselectedIcon = Icons.Outlined.Person,
@@ -106,29 +112,12 @@ fun HomePage(navController: NavHostController) {
             route = "productRegister"
         ),
         DrawerItem(
-            title = "CreateChat",
-            selectedIcon = Icons.Filled.Create,
-            unselectedIcon = Icons.Outlined.Create,
-            route = "CreateChatView"
-        ),
-        DrawerItem(
             title = "ShowChats",
             selectedIcon = Icons.Filled.Create,
             unselectedIcon = Icons.Outlined.Create,
             route = "ChatView"
         ),
-        DrawerItem(
-            title = "Detalle Producto",
-            selectedIcon = Icons.Filled.Create,
-            unselectedIcon = Icons.Outlined.Create,
-            route = "menuDetalleProd"
-        ),
-        DrawerItem(
-            title = "ShowMessages",
-            selectedIcon = Icons.Filled.Create,
-            unselectedIcon = Icons.Outlined.Create,
-            route = "ChatMessages"
-        )
+
     )
 
     Box {
