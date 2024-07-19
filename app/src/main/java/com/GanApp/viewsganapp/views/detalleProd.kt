@@ -4,16 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -22,24 +13,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -66,7 +41,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
     productViewModel.getProductById(productId)
     val selectedProduct by remember { productViewModel.selectedProduct }
     val filename = selectedProduct?.imagen?.substringAfterLast('\\') ?: ""
-    val imageUrl = "https://w9rrr6mq-8080.use2.devtunnels.ms/GanApp/uploads/$filename"
+    val imageUrl = "http://192.168.1.79:8080/GanApp/uploads/$filename"
 
     // Variables de reseña
     val reviewViewModel: ReviewViewModel = viewModel()
@@ -77,18 +52,18 @@ fun VerDetalle(navController: NavController, productId: Long) {
     // Variables de ventana emergente
     var showDescription by remember { mutableStateOf(false) }
 
-    //Variables de contactar al vendedor
+    // Variables de contactar al vendedor
     val buttonCreateChatViewModel: ButtonCreateChatViewModel = viewModel()
     val coroutineScope = rememberCoroutineScope()
     val chatId by buttonCreateChatViewModel.chatId.collectAsState()
 
-    LaunchedEffect(chatId){
-        chatId?.let{
+    LaunchedEffect(chatId) {
+        chatId?.let {
             navController.navigate("chat_message/$it")
         }
     }
 
-    DisposableEffect(Unit){
+    DisposableEffect(Unit) {
         onDispose {
             buttonCreateChatViewModel.reserDate()
         }
@@ -106,12 +81,11 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 .padding(bottom = 70.dp) // Espacio para el botón fijo
         ) {
 
-
             Row(
                 modifier = Modifier
                     .padding(16.dp)
-                    //.fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ) {
                 Image(
                     painter = rememberAsyncImagePainter(model = imageUrl),
@@ -119,7 +93,6 @@ fun VerDetalle(navController: NavController, productId: Long) {
                     modifier = Modifier
                         .width(300.dp)
                         .height(350.dp)
-
                 )
             }
 
@@ -151,29 +124,33 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.5f))
+                        //.background(Color.Black.copy(alpha = 0.5f))
                         .clickable(onClick = { showDescription = false })
                 ) {
-                    Card(
+                    Box(
                         modifier = Modifier
-                            .align(Alignment.Center)
-                            .offset(y = (-50).dp) // Ajustar esta línea para mover la tarjeta hacia arriba
-                            .padding(16.dp)
-                            .clickable(onClick = {}) // Para evitar el cierre de la tarjeta al hacer clic en ella
+                            .fillMaxSize()
+                            .clickable(onClick = { /* Evitar el cierre de la tarjeta al hacer clic en el fondo */ }),
+                        contentAlignment = Alignment.Center // Centrar contenido en el Box
                     ) {
-                        Box(
+                        Card(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .align(Alignment.Center)
+                                .offset(y = (-50).dp) // Ajustar esta línea para mover la tarjeta hacia arriba
                                 .padding(16.dp)
+                                .clickable(onClick = {}) // Para evitar el cierre de la tarjeta al hacer clic en ella
                         ) {
-                            Column {
-                                Box(
-                                    modifier = Modifier.fillMaxWidth()
+                            Column(
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .fillMaxWidth()
+
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.End
                                 ) {
-                                    IconButton(
-                                        onClick = { showDescription = false },
-                                        modifier = Modifier.align(Alignment.TopEnd)
-                                    ) {
+                                    IconButton(onClick = { showDescription = false }) {
                                         Icon(
                                             imageVector = Icons.Default.Close,
                                             contentDescription = "Cerrar"
@@ -256,7 +233,8 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 fontSize = 20.sp,
                 modifier = Modifier
                     .padding(bottom = 16.dp)
-                    .offset(y = 20.dp)
+                    .offset(y = 20.dp),
+                color = Color.Black
             )
 
             OutlinedTextField(
@@ -323,6 +301,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 }
             }
         }
+
 
         // Botón fijo en la parte inferior
         Box(
