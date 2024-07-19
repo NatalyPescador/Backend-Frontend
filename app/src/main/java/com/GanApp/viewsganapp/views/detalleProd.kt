@@ -29,10 +29,13 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -65,7 +68,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
     productViewModel.getProductById(productId)
     val selectedProduct by remember { productViewModel.selectedProduct }
     val filename = selectedProduct?.imagen?.substringAfterLast('\\') ?: ""
-    val imageUrl = "http://10.175.145.214:8080/GanApp/uploads/$filename"
+    val imageUrl = "http://192.168.1.13:8080/GanApp/uploads/$filename"
 
     // Variables de reseña
     val reviewViewModel: ReviewViewModel = viewModel()
@@ -79,6 +82,21 @@ fun VerDetalle(navController: NavController, productId: Long) {
     //Variables de contactar al vendedor
     val buttonCreateChatViewModel: ButtonCreateChatViewModel = viewModel()
     val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarMessage by buttonCreateChatViewModel.snackbarMessage.collectAsState()
+    val chatId by buttonCreateChatViewModel.chatId.collectAsState()
+
+    LaunchedEffect(chatId){
+        chatId?.let{
+            navController.navigate("chat_message/$it")
+        }
+    }
+
+    DisposableEffect(Unit){
+        onDispose {
+            buttonCreateChatViewModel.reserDate()
+        }
+    }
 
     Box(
         modifier = Modifier
