@@ -45,6 +45,11 @@ sealed class AppScreens(val route: String) {
     object ChatView : AppScreens("ChatView")
     object ChatMessages : AppScreens("chat_message/{chatId}")
     object menuDetalleProd : AppScreens("menuDetalleProd/{productId}")
+    companion object {
+        fun editProfile(any: Any) {
+
+        }
+    }
 
 }
 

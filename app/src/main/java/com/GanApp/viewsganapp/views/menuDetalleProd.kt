@@ -213,19 +213,9 @@ fun MostrarMenuDetalleProd(navController: NavHostController, productId: Long) {
                 ) {
                     VerDetalle(navController = navController, productId)
                 }
-
-                /**Column(
-//                    modifier = Modifier
-//                        .offset(y = 800.dp)
-                ) {
-                    Reviews(reviews = selectedReview)
-                }**/
-
             }
         }
     }
-
-    // to define navigation drawer here
 }
 
 data class DrawerItemDetalleProd(

@@ -1,5 +1,3 @@
-package com.GanApp.viewsganapp.views
-
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,35 +21,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.GanApp.viewsganapp.R
+import com.GanApp.viewsganapp.models.UserDto
+import com.GanApp.viewsganapp.viewmodels.UserProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditarPerfil(navController: NavController){
+fun EditarPerfil(navController: NavController, userId: Long) {
+    val viewModel: UserProfileViewModel = viewModel()
+    val user by viewModel.user.collectAsState()
 
-    // Aquí definimos los datos del perfil (simulados)
-    var name by remember { mutableStateOf("Nombre de Usuario") }
-    var email by remember { mutableStateOf("usuario@ejemplo.com") }
-    var phoneNumber by remember { mutableStateOf("+123 456 789") }
+    LaunchedEffect(userId) {
+        viewModel.fetchUserData(userId)
+    }
+
+    var name by remember { mutableStateOf(user?.nombreCompleto ?: "Nombre de Usuario") }
+    var email by remember { mutableStateOf(user?.correo ?: "usuario@ejemplo.com") }
+    var phoneNumber by remember { mutableStateOf(user?.numeroTelefono ?: "+123 456 789") }
     var password by remember { mutableStateOf("Hola") }
     var birthDate by remember { mutableStateOf("01/01/1990") }
-
-    // Estado para mostrar u ocultar la contraseña
     var passwordVisible by remember { mutableStateOf(false) }
-
-    // Recordatorio del estado de la URI de la imagen seleccionada
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
-    // ActivityResultLauncher para seleccionar la imagen de la galería
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -72,10 +71,10 @@ fun EditarPerfil(navController: NavController){
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(152, 255, 150), // Cambia este color según tus necesidades
-                    titleContentColor = Color.White, // Color del título
-                    navigationIconContentColor = Color.Black, // Color del icono de navegación
-                    actionIconContentColor = Color.Red // Color de los iconos de acción
+                    containerColor = Color(152, 255, 150),
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.Black,
+                    actionIconContentColor = Color.Red
                 )
             )
         }
@@ -97,20 +96,18 @@ fun EditarPerfil(navController: NavController){
                     .padding(16.dp)
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.CenterHorizontally),
-                color = Color.Black // Cambia este color según tus necesidades
+                color = Color.Black
             )
 
-            // Imagen de perfil redonda con clickable
             Box(
                 modifier = Modifier
-                    .size(150.dp) // Tamaño del contenedor
-                    .clip(CircleShape) // Hacer que la imagen sea circular
+                    .size(150.dp)
+                    .clip(CircleShape)
                     .background(Color.LightGray)
-                    .border(2.dp, Color.Gray, CircleShape) // Borde alrededor de la imagen
-                    .clickable { launcher.launch("image/*") } // Abre la galería para seleccionar una imagen
+                    .border(2.dp, Color.Gray, CircleShape)
+                    .clickable { launcher.launch("image/*") }
             ) {
                 if (imageUri == null) {
-                    // Mostrar el ícono de "más" si no hay imagen seleccionada
                     Icon(
                         imageVector = Icons.Filled.Add,
                         contentDescription = "Agregar Imagen",
@@ -119,7 +116,6 @@ fun EditarPerfil(navController: NavController){
                             .size(100.dp)
                     )
                 } else {
-                    // Mostrar la imagen seleccionada
                     Image(
                         painter = rememberAsyncImagePainter(imageUri),
                         contentDescription = "Foto de perfil",
@@ -183,13 +179,11 @@ fun EditarPerfil(navController: NavController){
                     Icon(imageVector = Icons.Filled.Lock, contentDescription = "Contraseña")
                 },
                 trailingIcon = {
-                    Row {
-                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                            Icon(
-                                imageVector = if (passwordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
-                                contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
-                            )
-                        }
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(
+                            imageVector = if (passwordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                            contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
+                        )
                     }
                 },
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -199,14 +193,21 @@ fun EditarPerfil(navController: NavController){
                 shape = RoundedCornerShape(20.dp)
             )
 
-
             Spacer(modifier = Modifier.height(16.dp))
 
             Box(
                 modifier = Modifier.offset(y = (-50).dp)
             ) {
                 Button(
-                    onClick = { /* Aquí puedes manejar la acción de guardar cambios */ },
+                    onClick = {
+                        val upgradeUser = UserDto(
+                            userId = userId,
+                            nombreCompleto = name,
+                            correo = email,
+                            numeroTelefono = phoneNumber
+                        )
+                        viewModel.upgradeUser(upgradeUser)
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(10, 191, 4),
                         contentColor = Color.Black
