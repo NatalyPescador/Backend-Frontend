@@ -41,7 +41,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
     productViewModel.getProductById(productId)
     val selectedProduct by remember { productViewModel.selectedProduct }
     val filename = selectedProduct?.imagen?.substringAfterLast('\\') ?: ""
-    val imageUrl = "http://192.168.1.79:8080/GanApp/uploads/$filename"
+    val imageUrl = "https://w9rrr6mq-8080.use2.devtunnels.ms/GanApp/uploads/$filename"
 
     // Variables de reseña
     val reviewViewModel: ReviewViewModel = viewModel()
