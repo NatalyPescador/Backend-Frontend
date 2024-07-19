@@ -82,8 +82,6 @@ fun VerDetalle(navController: NavController, productId: Long) {
     //Variables de contactar al vendedor
     val buttonCreateChatViewModel: ButtonCreateChatViewModel = viewModel()
     val coroutineScope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
-    val snackbarMessage by buttonCreateChatViewModel.snackbarMessage.collectAsState()
     val chatId by buttonCreateChatViewModel.chatId.collectAsState()
 
     LaunchedEffect(chatId){
