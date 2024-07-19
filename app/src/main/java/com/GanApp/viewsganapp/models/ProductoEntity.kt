@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class ProductoEntity(
 
         @SerializedName("productoId")
-        val prodcutoId: Long,
+        val productoId: Long,
 
         @SerializedName("nombre")
         val nombre: String? = null,
@@ -15,6 +15,27 @@ data class ProductoEntity(
 
         @SerializedName("descripcion")
         val descripcion: String? = null,
+
+        @SerializedName("raza")
+        val raza: String? = null,
+
+        @SerializedName("sexo")
+        val sexo: String? = null,
+
+        @SerializedName("uom")
+        val uom: String? = null,
+
+        @SerializedName("edad")
+        val edad: String? = null,
+
+        @SerializedName("cantidad")
+        val cantidad: String? = null,
+
+        @SerializedName("departamento")
+        val departamento: String? = null,
+
+        @SerializedName("municipio")
+        val municipio: String? = null,
 
         @SerializedName("imagen")
         val imagen: String? = null,
@@ -28,4 +49,4 @@ data class ProductoEntity(
         @SerializedName("usuarioId")
         val usuarioId: Long,
 
-)
+        )

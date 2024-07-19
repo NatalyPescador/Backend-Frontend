@@ -36,13 +36,15 @@ class ProductViewModel : ViewModel() {
     private val typeServiceApiService = RetrofitInstance.apiServiceTypeService
     private val _products = mutableStateListOf<ProductoEntity>()
     val products: List<ProductoEntity> get() = _products
+    private val _product = mutableStateOf<ProductoEntity?>(null)
+    val product: ProductoEntity? get() = _product.value
+    var selectedProduct = mutableStateOf<ProductoEntity?>(null)
 
-    init{
+    init {
         fetchTiposServicio()
         getProducts()
     }
 
-    // Observar cambios en selectedTipoServicioId y cargar categorías correspondientes
     init {
         selectedTipoServicioId.value?.let {
             fetchCategoriasByTipoServicio(it)
@@ -67,37 +69,37 @@ class ProductViewModel : ViewModel() {
         }
     }
 
-    private fun fetchTiposServicio(){
+    private fun fetchTiposServicio() {
         viewModelScope.launch {
             loading.value = true
             try {
                 val response = typeServiceApiService.listarTiposServicios()
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     tiposServicio.value = response.body() ?: emptyList()
                 } else {
                     println("Error en la respuesta: ${response.errorBody()?.string()}")
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 println("Excepción capturada: ${e.localizedMessage}")
-            }finally {
+            } finally {
                 loading.value = false
             }
         }
     }
 
-    private fun fetchCategorias(){
+    private fun fetchCategorias() {
         viewModelScope.launch {
             loading.value = true
             try {
                 val response = categoryApiService.listarCategorias()
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     categorias.value = response.body() ?: emptyList()
                 } else {
                     println("Error en la respuesta: ${response.errorBody()?.string()}")
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 println("Excepción capturada: ${e.localizedMessage}")
-            }finally {
+            } finally {
                 loading.value = false
             }
         }
@@ -108,11 +110,9 @@ class ProductViewModel : ViewModel() {
             val response = try {
                 RetrofitInstance.apiServiceProduct.getProductList()
             } catch (e: IOException) {
-                // Handle network error
                 println("Network error: ${e.localizedMessage}")
                 return@launch
             } catch (e: HttpException) {
-                // Handle API error
                 println("API error: ${e.localizedMessage}")
                 return@launch
             }
@@ -124,16 +124,38 @@ class ProductViewModel : ViewModel() {
         }
     }
 
+    fun getProductById(productId: Long) {
+        viewModelScope.launch {
+            loading.value = true
+            try {
+                val response = RetrofitInstance.apiServiceProduct.getProductById(productId)
+                if (response.isSuccessful) {
+                    selectedProduct.value = response.body()
+                } else {
+                    println("Error en la respuesta: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                println("Excepción capturada: ${e.localizedMessage}")
+            } finally {
+                loading.value = false
+            }
+        }
+    }
+
+    fun clearSelectedProduct() {
+        _product.value = null
+    }
+
     fun uploadProductData(context: Context, imageUri: Uri, productData: ProductData) {
         val gson = Gson()
         val productJson = gson.toJson(productData)
         val productRequestBody = productJson.toRequestBody("application/json".toMediaTypeOrNull())
 
-        val file = File(FileUtils.getPath(context, imageUri)) // Necesitas implementar FileUtils.getPath o similar
+        val file = File(FileUtils.getPath(context, imageUri))
         val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
-        val service = RetrofitInstance.apiServiceProduct // Asegúrate de que tu RetrofitInstance tenga el servicio configurado
+        val service = RetrofitInstance.apiServiceProduct
         val call = service.createProduct(body, productRequestBody)
         call.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
