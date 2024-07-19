@@ -11,13 +11,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.GanApp.viewsganapp.components.ChatMessage
-import com.GanApp.viewsganapp.models.ReviewEntity
 import com.GanApp.viewsganapp.navigation.AppScreens
-import com.GanApp.viewsganapp.navigation.AppScreens.detalleProd
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.components.CreateChat
+import com.GanApp.viewsganapp.models.LoginDto
 import com.GanApp.viewsganapp.views.EditarPerfil
 //import com.GanApp.viewsganapp.views.DetalleProducto
 import com.GanApp.viewsganapp.views.Facebook
@@ -36,13 +35,12 @@ import com.GanApp.viewsganapp.views.errorMessageForgotPassword
 import com.GanApp.viewsganapp.views.errorMessageLogin
 import com.GanApp.viewsganapp.views.errorMessageRegister
 import com.GanApp.viewsganapp.views.errorMessageResetPassword
-import com.GanApp.viewsganapp.views.errorMessageReview
 import com.GanApp.viewsganapp.views.menuDetalleProd
+import com.GanApp.viewsganapp.views.saveLoginData
 import com.GanApp.viewsganapp.views.showErrorForgotPassword
 import com.GanApp.viewsganapp.views.showErrorLogin
 import com.GanApp.viewsganapp.views.showErrorRegister
 import com.GanApp.viewsganapp.views.showErrorResetPassword
-import com.GanApp.viewsganapp.views.showErrorReview
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -55,7 +53,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            ViewsGanAppTheme {  // Asume que este es tu tema de Compose
+            ViewsGanAppTheme {
                 NavHost(
                     navController = navController,
                     startDestination = AppScreens.homePage.route
@@ -73,8 +71,7 @@ class MainActivity : ComponentActivity() {
                                         if (!errorBody.isNullOrEmpty()) {
                                             try {
                                                 val json = JSONObject(errorBody)
-                                                errorMessageRegister =
-                                                    json.getString("errorMessage")
+                                                errorMessageRegister = json.getString("errorMessage")
                                                 showErrorRegister = true
                                             } catch (e: JSONException) {
                                                 Log.e("API Call", "Error parsing JSON", e)
@@ -91,15 +88,17 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable(AppScreens.loginUser.route) {
-                        LogIn(navController = navController) { logInData ->
+                        LogIn(navController = navController, context = this@MainActivity) { logInData ->
                             val call = RetrofitInstance.apiService.logIn(logInData)
-                            call.enqueue(object : Callback<Void> {
-                                override fun onResponse(
-                                    call: Call<Void>,
-                                    response: Response<Void>
-                                ) {
+                            call.enqueue(object : Callback<LoginDto> {
+                                override fun onResponse(call: Call<LoginDto>, response: Response<LoginDto>) {
                                     if (response.isSuccessful) {
-                                        Log.d("API Call", "Inicio de sesión exitoso")
+                                        val loginResponse = response.body()
+                                        if (loginResponse != null) {
+                                            saveLoginData(this@MainActivity, loginResponse)
+                                            Log.d("API Call", "Inicio de sesión exitoso")
+                                            navController.navigate("homePage")
+                                        }
                                     } else {
                                         val errorBody = response.errorBody()?.string()
                                         Log.d("API Call", "Response not successful: $errorBody")
@@ -115,7 +114,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
 
-                                override fun onFailure(call: Call<Void>, t: Throwable) {
+                                override fun onFailure(call: Call<LoginDto>, t: Throwable) {
                                     Log.d("API Call", "Failure: ${t.message}")
                                 }
                             })
@@ -134,10 +133,7 @@ class MainActivity : ComponentActivity() {
                         ForgotPassword(navController = navController) { forgotPasswordData ->
                             val call = RetrofitInstance.apiService.forgotPassword(forgotPasswordData)
                             call.enqueue(object : Callback<Void> {
-                                override fun onResponse(
-                                    call: Call<Void>,
-                                    response: Response<Void>
-                                ) {
+                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                     if (response.isSuccessful) {
                                         Log.d("API Call", "Correo enviado")
                                         navController.navigate("resetPassword")
@@ -147,8 +143,7 @@ class MainActivity : ComponentActivity() {
                                         if (!errorBody.isNullOrEmpty()) {
                                             try {
                                                 val json = JSONObject(errorBody)
-                                                errorMessageForgotPassword =
-                                                    json.getString("errorMessage")
+                                                errorMessageForgotPassword = json.getString("errorMessage")
                                                 showErrorForgotPassword = true
                                             } catch (e: JSONException) {
                                                 Log.e("API Call", "Error parsing JSON", e)
@@ -168,10 +163,7 @@ class MainActivity : ComponentActivity() {
                         ResetPassword(navController = navController) { resetPasswordData ->
                             val call = RetrofitInstance.apiService.resetPassword(resetPasswordData)
                             call.enqueue(object : Callback<Void> {
-                                override fun onResponse(
-                                    call: Call<Void>,
-                                    response: Response<Void>
-                                ) {
+                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
                                     if (response.isSuccessful) {
                                         Log.d("API Call", "Contraseña restablecida con éxito")
                                         navController.navigate("loginUser_screens")
@@ -181,8 +173,7 @@ class MainActivity : ComponentActivity() {
                                         if (!errorBody.isNullOrEmpty()) {
                                             try {
                                                 val json = JSONObject(errorBody)
-                                                errorMessageResetPassword =
-                                                    json.getString("errorMessage")
+                                                errorMessageResetPassword = json.getString("errorMessage")
                                                 showErrorResetPassword = true
                                             } catch (e: JSONException) {
                                                 Log.e("API Call", "Error parsing JSON", e)
@@ -190,6 +181,7 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
                                 }
+
                                 override fun onFailure(call: Call<Void>, t: Throwable) {
                                     Log.d("API Call", "Failure: ${t.message}")
                                 }
@@ -255,6 +247,5 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 
 

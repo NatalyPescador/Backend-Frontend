@@ -128,7 +128,14 @@ fun HomePage(navController: NavHostController) {
             selectedIcon = Icons.Filled.Create,
             unselectedIcon = Icons.Outlined.Create,
             route = "ChatMessages"
+        ),
+        DrawerItem(
+            title = "Login",
+            selectedIcon = Icons.Filled.Create,
+            unselectedIcon = Icons.Outlined.Create,
+            route = "loginUser_screens"
         )
+
     )
 
     Box {

@@ -87,6 +87,9 @@ dependencies {
     // SplashScreen
     implementation("androidx.core:core-splashscreen:1.0.1")
 
+    //Decodificacion del token
+    implementation ("com.auth0.android:jwtdecode:2.0.0")
+
     // Testing dependencies
 //    testImplementation("junit:junit:4.13.2")
 //    androidTestImplementation("androidx.test.ext:junit:1.1.5")
