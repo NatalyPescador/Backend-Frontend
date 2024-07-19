@@ -214,12 +214,12 @@ fun MostrarMenuDetalleProd(navController: NavHostController, productId: Long) {
                     VerDetalle(navController = navController, productId)
                 }
 
-                Column(
+                /**Column(
 //                    modifier = Modifier
 //                        .offset(y = 800.dp)
                 ) {
                     Reviews(reviews = selectedReview)
-                }
+                }**/
 
             }
         }
