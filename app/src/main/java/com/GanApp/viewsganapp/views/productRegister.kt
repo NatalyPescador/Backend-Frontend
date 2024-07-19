@@ -67,7 +67,6 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
     var nombre by remember { mutableStateOf("") }
     var precio by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
-    //var imagen by remember { mutableStateOf("") }
     var selectedCategoria by remember { mutableStateOf<CategoriaEntity?>(null) }
     var selectedTipoServicio by remember { mutableStateOf<TipoServicioEntity?>(null) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -78,7 +77,6 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
         imageUri = uri
     }
 
-    // Observa cambios en selectedTipoServicio y carga las categorías relacionadas
     LaunchedEffect(selectedTipoServicio) {
         selectedTipoServicio?.tipoServicioId?.let {
             viewModel.fetchCategoriasByTipoServicio(it)
@@ -99,14 +97,10 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(
-                        152,
-                        255,
-                        150
-                    ), // Cambia este color según tus necesidades
-                    titleContentColor = Color.White, // Color del título
-                    navigationIconContentColor = Color.Black, // Color del icono de navegación
-                    actionIconContentColor = Color.Red // Color de los iconos de acción
+                    containerColor = Color(152, 255, 150),
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.Black,
+                    actionIconContentColor = Color.Red
                 )
             )
         }
@@ -119,9 +113,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
-        )
-
-        {
+        ) {
             Row(
                 modifier = Modifier
                     .padding(16.dp)
@@ -138,12 +130,8 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 fontSize = 38.sp,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
-                modifier = Modifier
-                    //.padding(bottom = 16.dp)
-                    .offset(y = (-35).dp)
-
+                modifier = Modifier.offset(y = (-35).dp)
             )
-
 
             OutlinedTextField(
                 value = nombre,
@@ -154,9 +142,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 label = { Text("Nombre producto", color=Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
-                    // Cargar el recurso de la imagen PNG como un pintor
                     val painter = painterResource(id = R.drawable.nombre_producto_icn)
-                    // Utilizar el pintor en el Icon
                     Icon(
                         painter = painter, contentDescription = "Nombre",
                         modifier = Modifier.size(24.dp)
@@ -164,16 +150,12 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.offset(y = (-5).dp)
-
             )
 
             OutlinedTextField(
                 value = precio,
                 onValueChange = {
-                    // Filtrar el texto para permitir solo números y puntos decimales
-                    val filteredText = it.filter { char ->
-                        char.isDigit() || char == '.'
-                    }
+                    val filteredText = it.filter { char -> char.isDigit() || char == '.' }
                     precio = filteredText
                 },
                 label = { Text("Precio", color=Color.Black) },
@@ -187,13 +169,10 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.offset(y = (-5).dp),
-                // Configuración del teclado para permitir solo números y puntos decimales
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                // Filtrar la entrada para permitir solo números y puntos decimales
                 keyboardActions = KeyboardActions.Default,
-                singleLine = true,
-
-                )
+                singleLine = true
+            )
 
             OutlinedTextField(
                 value = descripcion,
@@ -201,7 +180,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                     val filteredText = it.replace("\n", "")
                     descripcion = filteredText
                 },
-                label = { Text("Descripcion", color=Color.Black) },
+                label = { Text("Descripción", color=Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     val painter = painterResource(id = R.drawable.descripcion_icn)
@@ -212,7 +191,6 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.offset(y = (-5).dp)
-
             )
 
             TipoServicioDropdown(
@@ -223,7 +201,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 }
             )
 
-            if (selectedTipoServicio != null) { // Mostrar solo si hay un tipo de servicio seleccionado
+            if (selectedTipoServicio != null) {
                 CategoriaDropdown(
                     categorias = viewModel.categorias.value,
                     selectedCategoria = selectedCategoria,
@@ -231,17 +209,13 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                         selectedCategoria = categoria
                     }
                 )
-
             }
 
-
-            Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
+            Spacer(modifier = Modifier.height(5.dp))
 
             Button(
                 onClick = { imagePickerLauncher.launch("image/*") },
-                colors = ButtonDefaults.buttonColors(
-                    Color(10, 191, 4)
-                )
+                colors = ButtonDefaults.buttonColors(Color(10, 191, 4))
             ) {
                 Text("Seleccionar Imagen")
             }
@@ -254,46 +228,36 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                 )
             }
 
-            Box(
-                modifier = Modifier.offset(y = 20.dp)
-
-            ) {
+            Box(modifier = Modifier.offset(y = 20.dp)) {
                 Button(
-
-                onClick = {
-                    imageUri?.let { uri ->
-                        viewModel.uploadProductData(
-                            context,
-                            uri,
-                            ProductData(
-                                nombre = nombre,  // Asegúrate de que 'nombre' está definido en tu estado composable
-                                precio = precio,  // Asegúrate de que 'precio' está definido en tu estado composable
-                                descripcion = descripcion,  // Asegúrate de que 'descripcion' está definido en tu estado composable
-                                imagen = uri.toString(),
-                                tipoServicioId = selectedTipoServicio?.tipoServicioId ?: 0,
-                                categoriaId = selectedCategoria?.categoriaId ?: 0,
-                                usuarioId = 8  // Ejemplo de usuario ID
+                    onClick = {
+                        imageUri?.let { uri ->
+                            viewModel.uploadProductData(
+                                context,
+                                uri,
+                                ProductData(
+                                    nombre = nombre,
+                                    precio = precio,
+                                    descripcion = descripcion,
+                                    imagen = uri.toString(),
+                                    tipoServicioId = selectedTipoServicio?.tipoServicioId ?: 0,
+                                    categoriaId = selectedCategoria?.categoriaId ?: 0,
+                                    usuarioId = 8
+                                )
                             )
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(Color(10, 191, 4), contentColor = Color.Black)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.promocion_icn),
+                            contentDescription = "Descripción del icono",
+                            modifier = Modifier.size(24.dp)
                         )
+                        Text("Publicar", color = Color.Black, modifier = Modifier.padding(start = 8.dp))
                     }
-                },
-                colors = ButtonDefaults.buttonColors(
-                    Color(10, 191, 4),
-                    contentColor = Color.Black
-                )
-            )
-            {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    // Utiliza el ícono PNG convertido en vector drawable
-                    Icon(
-                        painter = painterResource(id = R.drawable.promocion_icn),
-                        contentDescription = "Descripción del icono",
-                        modifier = Modifier.size(24.dp) // Tamaño del ícono
-                    )
-                    Text("Publicar", color = Color.Black, modifier = Modifier.padding(start = 8.dp))
                 }
-            }
-
             }
 
             Spacer(modifier = Modifier.height(30.dp))

@@ -18,12 +18,14 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.views.ForgotPasswordData
 import com.GanApp.viewsganapp.views.LogInData
 import com.GanApp.viewsganapp.views.ProductData
 import com.GanApp.viewsganapp.views.ResetPasswordData
 import com.GanApp.viewsganapp.views.ReviewData
 import com.GanApp.viewsganapp.views.UserData
+import com.GanApp.viewsganapp.views.VerDetalle
 
 sealed class AppScreens(val route: String) {
     object loginUser : AppScreens("loginUser_screens")
@@ -37,7 +39,7 @@ sealed class AppScreens(val route: String) {
     object profile : AppScreens ("Profile_screens")
     object reviews : AppScreens ("reviews")
     object catalogo : AppScreens("catalogo")
-    object detalleProd : AppScreens("detalleProd")
+    object detalleProd : AppScreens("detalleProd/{productId}")
     object editProfile : AppScreens ("edit_profile")
     object favorite: AppScreens ("favorito")
     object CreateChatView : AppScreens("CreateChatView")
@@ -122,15 +124,14 @@ fun AppScreens(navController: NavController) {
                     }
                 }
             }
-            composable(AppScreens.catalogo.route){
-                @Composable
-                fun CatalogoPrincipal(){}
+        composable(AppScreens.catalogo.route) {
+            CatalogoPrincipal(navController = navController)
             }
 
-            composable(AppScreens.detalleProd.route){
-                @Composable
-                fun DetalleProducto(){}
-            }
+        composable(AppScreens.detalleProd.route) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
+            VerDetalle(navController = navController, productId = productId)
+        }
 
             composable(AppScreens.menuDetalleProd.route){
                 @Composable

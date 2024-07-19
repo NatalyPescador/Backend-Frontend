@@ -68,11 +68,6 @@ fun menuDetalleProd(navController: NavHostController) {
         mutableIntStateOf(0)
     }
 
-    /*LaunchedEffect(key1 = true) {
-        // Posible inicialización o acciones adicionales
-        navigationState.close()  // Ejemplo de cómo asegurar que el drawer esté cerrado al inicio
-    }*/
-
 
     val items = listOf(
         DrawerItemDetalleProd(
@@ -203,7 +198,7 @@ fun menuDetalleProd(navController: NavHostController) {
                         .padding(innerPadding)
                         .background(color = Color.White) // Cambiar el fondo a blanco
                 ) {
-                    VerDetalle(navController = navController)
+                    VerDetalle(navController = navController, 17)
                 }
 
             }

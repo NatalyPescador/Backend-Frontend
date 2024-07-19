@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
             ViewsGanAppTheme {  // Asume que este es tu tema de Compose
                 NavHost(
                     navController = navController,
-                    startDestination = AppScreens.homePage.route
+                    startDestination = AppScreens.productRegister.route
                 ) {
                     composable(AppScreens.viewReister.route) {
                         Register(navController = navController) { userData ->
@@ -217,9 +217,10 @@ class MainActivity : ComponentActivity() {
 
                     }
 
-                   composable(AppScreens.detalleProd.route){
-                       VerDetalle(navController = navController)
-                   }
+                    composable(AppScreens.detalleProd.route) { backStackEntry ->
+                        val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
+                        VerDetalle(navController = navController, productId = productId)
+                    }
 
                     composable(AppScreens.menuDetalleProd.route){
                         menuDetalleProd(navController = navController)
