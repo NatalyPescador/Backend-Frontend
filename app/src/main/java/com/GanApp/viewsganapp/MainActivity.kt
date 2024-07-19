@@ -1,5 +1,6 @@
 package com.GanApp.viewsganapp
 
+import EditarPerfil
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
@@ -18,7 +19,6 @@ import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.components.CreateChat
-import com.GanApp.viewsganapp.views.EditarPerfil
 //import com.GanApp.viewsganapp.views.DetalleProducto
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Favoritos
@@ -229,8 +229,9 @@ class MainActivity : ComponentActivity() {
                         MostrarMenuDetalleProd(navController = navController, productId = productId)
                     }
 
-                    composable(AppScreens.editProfile.route){
-                        EditarPerfil(navController = navController)
+                    composable(AppScreens.editProfile.route){backStackEntry ->
+                        val userId = backStackEntry.arguments?.getString("userId")?.toLong() ?: 0L
+                        EditarPerfil(navController = navController, userId = userId)
                     }
 
                     composable(AppScreens.favorite.route){

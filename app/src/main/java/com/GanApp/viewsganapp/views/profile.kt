@@ -54,6 +54,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.GanApp.viewsganapp.viewmodels.UserProfileViewModel
@@ -61,7 +62,8 @@ import androidx.compose.material3.Icon as Icon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Perfil(navController: NavHostController, viewModel: UserProfileViewModel) {
+fun Perfil(navController: NavHostController) {
+    val viewModel : UserProfileViewModel = viewModel()
     val user by viewModel.user.collectAsState()
     val loading by viewModel.loading.collectAsState()
 
