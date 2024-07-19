@@ -86,6 +86,7 @@ dependencies {
 
     // SplashScreen
     implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.room:room-ktx:2.6.1")
 
     // Testing dependencies
 //    testImplementation("junit:junit:4.13.2")

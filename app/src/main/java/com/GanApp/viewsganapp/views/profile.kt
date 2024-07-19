@@ -1,16 +1,12 @@
 package com.GanApp.viewsganapp.views
 
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,10 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Lock
@@ -37,11 +30,14 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,33 +48,39 @@ import androidx.navigation.NavController
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import com.GanApp.viewsganapp.R
-import com.GanApp.viewsganapp.apiService.ReviewApiService
+import com.GanApp.viewsganapp.viewmodels.UserProfileViewModel
 import androidx.compose.material3.Icon as Icon
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Perfil(navController: NavController){
+fun Perfil(navController: NavHostController, viewModel: UserProfileViewModel) {
+    val user by viewModel.user.collectAsState()
+    val loading by viewModel.loading.collectAsState()
 
-    // Aquí definimos los datos del perfil (simulados)
-    val name = "Nombre de Usuario"
-    val email = "usuario@ejemplo.com"
-    val phoneNumber = "+123 456 789"
-    val password = "********"
+    var isEditing by remember { mutableStateOf(false) }
+    var nombreCompleto by remember { mutableStateOf("") }
+    var correo by remember { mutableStateOf("") }
+    var numeroTelefono by remember { mutableStateOf("") }
 
-    // URL de la imagen de perfil desde el backend
-    val profileImageUrl = "https://example.com/path/to/profile/image.jpg" // Reemplaza esta URL con la URL real
+    LaunchedEffect(Unit) {
+        viewModel.fetchUserData(3L)
+    }
 
-
+    LaunchedEffect(user) {
+        user?.let {
+            nombreCompleto = it.nombreCompleto
+            correo = it.correo
+            numeroTelefono = it.numeroTelefono
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -97,139 +99,140 @@ fun Perfil(navController: NavController){
                     IconButton(onClick = { navController.navigate("favorito") }) {
                         Icon(
                             imageVector = Icons.Filled.Favorite,
-                            modifier = Modifier
-                                .size(35.dp),
+                            modifier = Modifier.size(35.dp),
                             contentDescription = "Favorito"
                         )
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(152, 255, 150), // Cambia este color según tus necesidades
-                    titleContentColor = Color.White, // Color del título
-                    navigationIconContentColor = Color.Black, // Color del icono de navegación
-                    actionIconContentColor = Color.Red // Color de los iconos de acción
+                    containerColor = Color(152, 255, 150),
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.Black,
+                    actionIconContentColor = Color.Red
                 )
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxHeight()
-                .background(Color.White)
-                .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-        )
-
-        {
-            Text(
-                text = "Mi Perfil",
-                fontSize = 35.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .wrapContentWidth(Alignment.CenterHorizontally),
-                color = Color.Black // Cambia este color según tus necesidades
-            )
-
-            // Imagen de perfil redonda con clickable
-            Box(
-                modifier = Modifier
-                    .size(150.dp) // Tamaño del contenedor
-                    .clip(CircleShape) // Hacer que la imagen sea circular
-                    .background(Color.LightGray)
-                    .border(2.dp, Color.Gray, CircleShape) // Borde alrededor de la imagen
-
-            ) {
-                Image(
-                    painter = rememberAsyncImagePainter(profileImageUrl),
-                    contentDescription = "Foto de perfil",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
+        if (loading) {
+            // Mostrar un indicador de carga mientras se cargan los datos
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-
-            OutlinedTextField(
-                value = name,
-                onValueChange = { /* No es necesario hacer nada ya que es de solo lectura */ },
-                label = { Text(text = "Nombre") },
-                textStyle = TextStyle(color = Color.Black),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Person,
-                        contentDescription = "Nombre"
-                    )
-                },
-                modifier = Modifier.padding(16.dp),
-                shape = RoundedCornerShape(20.dp)
-            )
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = { /* No es necesario hacer nada ya que es de solo lectura */ },
-                label = { Text("Gmail") },
-                textStyle = TextStyle(color = Color.Black),
-                leadingIcon = {
-                    Icon(imageVector = Icons.Filled.Email, contentDescription = "Gmail")
-                },
+        } else {
+            Column(
                 modifier = Modifier
-                    .offset(y = (-20).dp)
-                    .padding(16.dp),
-                shape = RoundedCornerShape(20.dp)
-
-
-            )
-
-            OutlinedTextField(
-                value = phoneNumber,
-                onValueChange = { /* No es necesario hacer nada ya que es de solo lectura */ },
-                label = { Text("Teléfono") },
-                textStyle = TextStyle(color = Color.Black),
-                leadingIcon = {
-                    Icon(imageVector = Icons.Filled.Phone, contentDescription = "Telefono")
-                },
-                modifier = Modifier
-                    .offset(y = (-40).dp)
-                    .padding(16.dp),
-                shape = RoundedCornerShape(20.dp)
-            )
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { /* No es necesario hacer nada ya que es de solo lectura */ },
-                label = { Text("Contraseña") },
-                textStyle = TextStyle(color = Color.Black),
-                leadingIcon = {
-                    Icon(imageVector = Icons.Filled.Lock, contentDescription = "Contraseña")
-                },
-                modifier = Modifier
-                    .offset(y = (-60).dp)
-                    .padding(16.dp),
-                shape = RoundedCornerShape(20.dp)
-            )
-
-            Box(
-                modifier = Modifier.offset(y = (-50).dp)
-
+                    .padding(innerPadding)
+                    .fillMaxHeight()
+                    .background(Color.White)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Button(
-                    onClick =  { navController.navigate("edit_profile")  },
-                    colors = ButtonDefaults.buttonColors(
-                        Color(10, 191, 4),
-                        contentColor = Color.Black
-                    )
+                Text(
+                    text = "Mi Perfil",
+                    fontSize = 35.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.CenterHorizontally),
+                    color = Color.Black
                 )
-                {
-                    Text("Editar perfil", color = Color.Black)
+
+                Box(
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(CircleShape)
+                        .background(Color.LightGray)
+                        .border(2.dp, Color.Gray, CircleShape)
+                ) {
+                    // Aquí puedes añadir una imagen de perfil usando Coil o cualquier otra biblioteca de imágenes
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    value = nombreCompleto,
+                    onValueChange = { if (isEditing) nombreCompleto = it },
+                    label = { Text(text = "Nombre") },
+                    textStyle = TextStyle(color = Color.Black),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Person,
+                            contentDescription = "Nombre"
+                        )
+                    },
+                    modifier = Modifier.padding(16.dp),
+                    shape = RoundedCornerShape(20.dp),
+                    enabled = isEditing
+                )
+
+                OutlinedTextField(
+                    value = correo,
+                    onValueChange = { if (isEditing) correo = it },
+                    label = { Text("Gmail") },
+                    textStyle = TextStyle(color = Color.Black),
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Filled.Email, contentDescription = "Gmail")
+                    },
+                    modifier = Modifier
+                        .offset(y = (-20).dp)
+                        .padding(16.dp),
+                    shape = RoundedCornerShape(20.dp),
+                    enabled = isEditing
+                )
+
+                OutlinedTextField(
+                    value = numeroTelefono,
+                    onValueChange = { if (isEditing) numeroTelefono = it },
+                    label = { Text("Teléfono") },
+                    textStyle = TextStyle(color = Color.Black),
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Filled.Phone, contentDescription = "Telefono")
+                    },
+                    modifier = Modifier
+                        .offset(y = (-40).dp)
+                        .padding(16.dp),
+                    shape = RoundedCornerShape(20.dp),
+                    enabled = isEditing
+                )
+
+                Box(
+                    modifier = Modifier.offset(y = (-50).dp)
+                ) {
+                    if (isEditing) {
+                        Button(
+                            onClick = {
+                                val updatedUser = user?.copy(
+                                    nombreCompleto = nombreCompleto,
+                                    correo = correo,
+                                    numeroTelefono = numeroTelefono
+                                )
+                                if (updatedUser != null) {
+                                    viewModel.upgradeUser(updatedUser)
+                                }
+                                isEditing = false
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                Color(10, 191, 4),
+                                contentColor = Color.Black
+                            )
+                        ) {
+                            Text("Guardar cambios", color = Color.Black)
+                        }
+                    } else {
+                        Button(
+                            onClick = { isEditing = true },
+                            colors = ButtonDefaults.buttonColors(
+                                Color(10, 191, 4),
+                                contentColor = Color.Black
+                            )
+                        ) {
+                            Text("Editar perfil", color = Color.Black)
+                        }
+                    }
                 }
             }
-            // Aquí puedes agregar cualquier otro contenido que desees mostrar.
         }
     }
-
 }
