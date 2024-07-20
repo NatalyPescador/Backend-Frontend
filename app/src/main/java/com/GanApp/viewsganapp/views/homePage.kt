@@ -100,12 +100,6 @@ fun HomePage(navController: NavHostController) {
             route = "favorito"
         ),
         DrawerItem(
-            title = "Reseñas",
-            selectedIcon = Icons.Filled.Star,
-            unselectedIcon = Icons.Outlined.Star,
-            route = "reviews",
-        ),
-        DrawerItem(
             title = "Registrar producto",
             selectedIcon = Icons.Filled.Create,
             unselectedIcon = Icons.Outlined.Create,
