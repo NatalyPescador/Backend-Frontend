@@ -12,7 +12,7 @@ fun saveLoginData(context: Context, loginDto: LoginDto) {
     editor.putString("jwt_token", loginDto.token)
     editor.putString("jwt_expiration_time", loginDto.expirationTime)
     editor.apply()
-    Log.d("saveLoginData", "Token guardado: ${loginDto.token}, Expiración: ${loginDto.expirationTime}")
+    Log.d("saveLoginData", "Token save: ${loginDto.token}, Expiration: ${loginDto.expirationTime}")
 }
 
 fun saveUserData(context: Context, userData: UserLoginDto?) {
@@ -25,7 +25,7 @@ fun saveUserData(context: Context, userData: UserLoginDto?) {
         editor.putString("user_numero_telefono", it.numeroTelefono)
     }
     editor.apply()
-    Log.d("saveUserData", "Datos del usuario guardados: $userData")
+    Log.d("saveUserData", "Data user saved: $userData")
 }
 
 fun getUserData(context: Context): UserLoginDto? {
@@ -41,8 +41,11 @@ fun getUserData(context: Context): UserLoginDto? {
             nombreCompleto = nombreCompleto,
             correo = correo,
             numeroTelefono = numeroTelefono
-        )
+        ).also {
+            Log.d("LoginMethods-getUserData", "Get data for user: $it")
+        }
     } else {
+        Log.d("LoginMethods-getUserData", "Error get data for user login")
         null
     }
 }

@@ -45,7 +45,7 @@ fun CreateChat(navController: NavHostController, buttonCreateChatViewModel: Butt
     LaunchedEffect(snackbarMessage) {
         snackbarMessage?.let {
             snackbarHostState.showSnackbar(it)
-            buttonCreateChatViewModel._snackbarMessage.value = null // Reset message after showing
+            buttonCreateChatViewModel._snackbarMessage.value = null
         }
     }
 
@@ -70,11 +70,10 @@ fun CreateChat(navController: NavHostController, buttonCreateChatViewModel: Butt
                 .background(color = Color.White)
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
-                .fillMaxSize(), // Esto hará que la Column ocupe todo el tamaño disponible
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top // Cambiado a Top para que los elementos comiencen desde la parte superior
+            verticalArrangement = Arrangement.Top
         ) {
-            // SnackbarHost en la parte superior
             SnackbarHost(
                 hostState = snackbarHostState,
                 modifier = Modifier

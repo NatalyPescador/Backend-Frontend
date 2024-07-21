@@ -1,7 +1,6 @@
 package com.GanApp.viewsganapp.views
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,28 +24,31 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
-import com.GanApp.viewsganapp.models.LoginDto
-import com.GanApp.viewsganapp.network.RetrofitInstance
-import com.GanApp.viewsganapp.utils.decodeJWT
-import com.GanApp.viewsganapp.utils.saveUserData
-import kotlinx.coroutines.delay
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-
-var showErrorLogin by mutableStateOf(false)
-var errorMessageLogin by mutableStateOf("")
+import com.GanApp.viewsganapp.models.LogInData
+import com.GanApp.viewsganapp.viewModels.LoginViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun LogIn(navController: NavController, context: Context, param: (Any) -> Unit) {
+fun LogIn(navController: NavController, context: Context, snackbarHostState: SnackbarHostState, onLogin: (LogInData) -> Unit) {
+    val viewModel: LoginViewModel = viewModel()
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var isPasswordIncorrect by remember { mutableStateOf(false) }
-    var isEmailInvalid by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
-    val userRegisterApiService = RetrofitInstance.apiService // Ajusta esto según tu configuración de Retrofit
+    LaunchedEffect(viewModel.snackbarMessage) {
+        viewModel.snackbarMessage.collect { message ->
+            Log.d("LogIn", "Mensaje recibido en LogIn: $message")
+            message?.let {
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(it)
+                    viewModel._snackbarMessage.value = null
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -117,38 +119,10 @@ fun LogIn(navController: NavController, context: Context, param: (Any) -> Unit) 
             modifier = Modifier.offset(y = 20.dp)
         ) {
             Button(
-                onClick = {val loginData = LogInData(correo, password)
+                onClick = {
+                    val loginData = LogInData(correo, password)
                     Log.d("LoginUser", "Intentando iniciar sesión con correo: $correo")
-                    userRegisterApiService.logIn(loginData).enqueue(object : Callback<LoginDto> {
-                        override fun onResponse(call: Call<LoginDto>, response: Response<LoginDto>) {
-                            if (response.isSuccessful) {
-                                val loginResponse = response.body()
-                                if (loginResponse != null) {
-                                    saveLoginData(context, loginResponse)
-                                    Log.d("LoginUser", "Inicio de sesión exitoso. Token: ${loginResponse.token}, Expiración: ${loginResponse.expirationTime}")
-
-                                    // Decodificar el token JWT
-                                    val userData = decodeJWT(loginResponse.token)
-                                    Log.d("LoginUser", "Datos del usuario: $userData")
-
-                                    // Guardar datos del usuario en SharedPreferences si es necesario
-                                    saveUserData(context, userData)
-
-                                    navController.navigate("homePage")
-                                }
-                            } else {
-                                showErrorLogin = true
-                                errorMessageLogin = "Error en el inicio de sesión"
-                                Log.e("LogIn", "Error en el inicio de sesión: ${response.errorBody()?.string()}")
-                            }
-                        }
-
-                        override fun onFailure(call: Call<LoginDto>, t: Throwable) {
-                            showErrorLogin = true
-                            errorMessageLogin = "Error de conexión: ${t.message}"
-                            Log.e("LogIn", "Error de conexión: ${t.message}")
-                        }
-                    })
+                    onLogin(loginData)
                 },
                 colors = ButtonDefaults.buttonColors(
                     Color(10, 191, 4),
@@ -161,27 +135,12 @@ fun LogIn(navController: NavController, context: Context, param: (Any) -> Unit) 
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        LaunchedEffect(showErrorLogin) {
-            if (showErrorLogin) {
-                delay(5000)
-                showErrorLogin = false
-            }
-        }
-
-        if (showErrorLogin) {
-            Box(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    errorMessageLogin,
-                    color = Color.Red,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-            }
-        }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -276,17 +235,3 @@ fun LogIn(navController: NavController, context: Context, param: (Any) -> Unit) 
         }
     }
 }
-
-fun saveLoginData(context: Context, loginDto: LoginDto) {
-    val sharedPreferences: SharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
-    val editor = sharedPreferences.edit()
-    editor.putString("jwt_token", loginDto.token)
-    editor.putString("jwt_expiration_time", loginDto.expirationTime)
-    editor.apply()
-    Log.d("saveLoginData", "Token guardado: ${loginDto.token}, Expiración: ${loginDto.expirationTime}")
-}
-
-data class LogInData(
-    val correo: String,
-    val password: String
-)

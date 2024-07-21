@@ -22,8 +22,8 @@ import androidx.navigation.compose.composable
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import androidx.navigation.navArgument
 import com.GanApp.viewsganapp.components.ChatMessage
+import com.GanApp.viewsganapp.models.LogInData
 import com.GanApp.viewsganapp.views.ForgotPasswordData
-import com.GanApp.viewsganapp.views.LogInData
 import com.GanApp.viewsganapp.views.ProductData
 import com.GanApp.viewsganapp.views.ResetPasswordData
 import com.GanApp.viewsganapp.views.ReviewData

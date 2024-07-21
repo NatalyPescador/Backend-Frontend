@@ -89,6 +89,7 @@ dependencies {
 
     //Decodificacion del token
     implementation ("com.auth0.android:jwtdecode:2.0.0")
+    implementation("androidx.lifecycle:lifecycle-process:2.8.3")
 
     // Testing dependencies
 //    testImplementation("junit:junit:4.13.2")

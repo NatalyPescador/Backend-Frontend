@@ -5,6 +5,16 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,9 +26,10 @@ import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.components.CreateChat
-import com.GanApp.viewsganapp.models.LoginDto
+import com.GanApp.viewsganapp.utils.BackgroundTimer
+import com.GanApp.viewsganapp.utils.TokenManager
+import com.GanApp.viewsganapp.viewModels.LoginViewModel
 import com.GanApp.viewsganapp.views.EditarPerfil
-//import com.GanApp.viewsganapp.views.DetalleProducto
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Favoritos
 import com.GanApp.viewsganapp.views.Gmail
@@ -32,13 +43,10 @@ import com.GanApp.viewsganapp.views.ResetPassword
 import com.GanApp.viewsganapp.views.ShowChats
 import com.GanApp.viewsganapp.views.VerDetalle
 import com.GanApp.viewsganapp.views.errorMessageForgotPassword
-import com.GanApp.viewsganapp.views.errorMessageLogin
 import com.GanApp.viewsganapp.views.errorMessageRegister
 import com.GanApp.viewsganapp.views.errorMessageResetPassword
 import com.GanApp.viewsganapp.views.menuDetalleProd
-import com.GanApp.viewsganapp.views.saveLoginData
 import com.GanApp.viewsganapp.views.showErrorForgotPassword
-import com.GanApp.viewsganapp.views.showErrorLogin
 import com.GanApp.viewsganapp.views.showErrorRegister
 import com.GanApp.viewsganapp.views.showErrorResetPassword
 import org.json.JSONException
@@ -48,204 +56,208 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var navController: NavHostController
+    private lateinit var backgroundTimer: BackgroundTimer
+
     @SuppressLint("ComposableDestinationInComposeScope")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("MainActivity", "onCreate: Resetting token")
+        TokenManager.resetToken(this)
+
+        backgroundTimer = BackgroundTimer(this) {
+            runOnUiThread {
+                navController.navigate(AppScreens.loginUser.route) {
+                    popUpTo(AppScreens.loginUser.route) {
+                        inclusive = true
+                    }
+                }
+            }
+        }
+
+        ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundTimer)
+
         setContent {
-            val navController = rememberNavController()
+            navController = rememberNavController()
+            val snackbarHostState = remember { SnackbarHostState() }
+
             ViewsGanAppTheme {
-                NavHost(
-                    navController = navController,
-                    startDestination = AppScreens.homePage.route
-                ) {
-                    composable(AppScreens.viewReister.route) {
-                        Register(navController = navController) { userData ->
-                            val call = RetrofitInstance.apiService.createUser(userData)
-                            call.enqueue(object : Callback<Void> {
-                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                                    if (response.isSuccessful) {
-                                        Log.d("API Call", "Usuario creado con éxito")
-                                    } else {
-                                        val errorBody = response.errorBody()?.string()
-                                        Log.d("API Call", "Response not successful: $errorBody")
-                                        if (!errorBody.isNullOrEmpty()) {
-                                            try {
-                                                val json = JSONObject(errorBody)
-                                                errorMessageRegister = json.getString("errorMessage")
-                                                showErrorRegister = true
-                                            } catch (e: JSONException) {
-                                                Log.e("API Call", "Error parsing JSON", e)
+                Log.d("MainActivity", "Setting up NavHost")
+                Scaffold(
+                    snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+                ) { padding ->
+                    NavHost(
+                        navController = navController,
+                        startDestination = AppScreens.loginUser.route,
+                        modifier = Modifier.padding(padding)
+                    ) {
+                        composable(AppScreens.viewReister.route) {
+                            Register(navController = navController) { userData ->
+                                val call = RetrofitInstance.apiService.createUser(userData)
+                                call.enqueue(object : Callback<Void> {
+                                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                        if (response.isSuccessful) {
+                                            Log.d("API Call", "Usuario creado con éxito")
+                                        } else {
+                                            val errorBody = response.errorBody()?.string()
+                                            Log.d("API Call", "Response not successful: $errorBody")
+                                            if (!errorBody.isNullOrEmpty()) {
+                                                try {
+                                                    val json = JSONObject(errorBody)
+                                                    errorMessageRegister = json.getString("errorMessage")
+                                                    showErrorRegister = true
+                                                } catch (e: JSONException) {
+                                                    Log.e("API Call", "Error parsing JSON", e)
+                                                }
                                             }
                                         }
                                     }
-                                }
 
-                                override fun onFailure(call: Call<Void>, t: Throwable) {
-                                    Log.d("API Call", "Failure: ${t.message}")
-                                }
-                            })
+                                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                                        Log.d("API Call", "Failure: ${t.message}")
+                                    }
+                                })
+                            }
                         }
-                    }
 
-                    composable(AppScreens.loginUser.route) {
-                        LogIn(navController = navController, context = this@MainActivity) { logInData ->
-                            val call = RetrofitInstance.apiService.logIn(logInData)
-                            call.enqueue(object : Callback<LoginDto> {
-                                override fun onResponse(call: Call<LoginDto>, response: Response<LoginDto>) {
-                                    if (response.isSuccessful) {
-                                        val loginResponse = response.body()
-                                        if (loginResponse != null) {
-                                            saveLoginData(this@MainActivity, loginResponse)
-                                            Log.d("API Call", "Inicio de sesión exitoso")
-                                            navController.navigate("homePage")
-                                        }
-                                    } else {
-                                        val errorBody = response.errorBody()?.string()
-                                        Log.d("API Call", "Response not successful: $errorBody")
-                                        if (!errorBody.isNullOrEmpty()) {
-                                            try {
-                                                val json = JSONObject(errorBody)
-                                                errorMessageLogin = json.getString("errorMessage")
-                                                showErrorLogin = true
-                                            } catch (e: JSONException) {
-                                                Log.e("API Call", "Error parsing JSON", e)
+                        composable(AppScreens.loginUser.route) {
+                            val loginViewModel: LoginViewModel = viewModel()
+                            LogIn(navController = navController, context = this@MainActivity, snackbarHostState = snackbarHostState) { logInData ->
+                                Log.d("MainActivity", "Attempting login")
+                                loginViewModel.login(this@MainActivity, logInData) {
+                                    Log.d("MainActivity", "Login successful, navigating to home")
+                                    navController.navigate(AppScreens.homePage.route) {
+                                        popUpTo(AppScreens.homePage.route) { inclusive = true }
+                                    }
+                                }
+                            }
+                        }git
+
+                        composable(AppScreens.conecctionFacebook.route) {
+                            Facebook(navController = navController)
+                        }
+
+                        composable(AppScreens.conecctionGmail.route) {
+                            Gmail(navController = navController)
+                        }
+
+                        composable(AppScreens.forgotPassword.route) {
+                            ForgotPassword(navController = navController) { forgotPasswordData ->
+                                val call = RetrofitInstance.apiService.forgotPassword(forgotPasswordData)
+                                call.enqueue(object : Callback<Void> {
+                                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                        if (response.isSuccessful) {
+                                            Log.d("API Call", "Correo enviado")
+                                            navController.navigate("resetPassword")
+                                        } else {
+                                            val errorBody = response.errorBody()?.string()
+                                            Log.d("API Call", "Response not successful: $errorBody")
+                                            if (!errorBody.isNullOrEmpty()) {
+                                                try {
+                                                    val json = JSONObject(errorBody)
+                                                    errorMessageForgotPassword = json.getString("errorMessage")
+                                                    showErrorForgotPassword = true
+                                                } catch (e: JSONException) {
+                                                    Log.e("API Call", "Error parsing JSON", e)
+                                                }
                                             }
                                         }
                                     }
-                                }
 
-                                override fun onFailure(call: Call<LoginDto>, t: Throwable) {
-                                    Log.d("API Call", "Failure: ${t.message}")
-                                }
-                            })
+                                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                                        Log.d("API Call", "Failure: ${t.message}")
+                                    }
+                                })
+                            }
                         }
-                    }
 
-                    composable(AppScreens.conecctionFacebook.route) {
-                        Facebook(navController = navController)
-                    }
-
-                    composable(AppScreens.conecctionGmail.route) {
-                        Gmail(navController = navController)
-                    }
-
-                    composable(AppScreens.forgotPassword.route) {
-                        ForgotPassword(navController = navController) { forgotPasswordData ->
-                            val call = RetrofitInstance.apiService.forgotPassword(forgotPasswordData)
-                            call.enqueue(object : Callback<Void> {
-                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                                    if (response.isSuccessful) {
-                                        Log.d("API Call", "Correo enviado")
-                                        navController.navigate("resetPassword")
-                                    } else {
-                                        val errorBody = response.errorBody()?.string()
-                                        Log.d("API Call", "Response not successful: $errorBody")
-                                        if (!errorBody.isNullOrEmpty()) {
-                                            try {
-                                                val json = JSONObject(errorBody)
-                                                errorMessageForgotPassword = json.getString("errorMessage")
-                                                showErrorForgotPassword = true
-                                            } catch (e: JSONException) {
-                                                Log.e("API Call", "Error parsing JSON", e)
+                        composable(AppScreens.resetPassword.route) {
+                            ResetPassword(navController = navController) { resetPasswordData ->
+                                val call = RetrofitInstance.apiService.resetPassword(resetPasswordData)
+                                call.enqueue(object : Callback<Void> {
+                                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                        if (response.isSuccessful) {
+                                            Log.d("API Call", "Contraseña restablecida con éxito")
+                                            navController.navigate("loginUser_screens")
+                                        } else {
+                                            val errorBody = response.errorBody()?.string()
+                                            Log.d("API Call", "Response not successful: $errorBody")
+                                            if (!errorBody.isNullOrEmpty()) {
+                                                try {
+                                                    val json = JSONObject(errorBody)
+                                                    errorMessageResetPassword = json.getString("errorMessage")
+                                                    showErrorResetPassword = true
+                                                } catch (e: JSONException) {
+                                                    Log.e("API Call", "Error parsing JSON", e)
+                                                }
                                             }
                                         }
                                     }
-                                }
 
-                                override fun onFailure(call: Call<Void>, t: Throwable) {
-                                    Log.d("API Call", "Failure: ${t.message}")
-                                }
-                            })
-                        }
-                    }
-
-                    composable(AppScreens.resetPassword.route) {
-                        ResetPassword(navController = navController) { resetPasswordData ->
-                            val call = RetrofitInstance.apiService.resetPassword(resetPasswordData)
-                            call.enqueue(object : Callback<Void> {
-                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                                    if (response.isSuccessful) {
-                                        Log.d("API Call", "Contraseña restablecida con éxito")
-                                        navController.navigate("loginUser_screens")
-                                    } else {
-                                        val errorBody = response.errorBody()?.string()
-                                        Log.d("API Call", "Response not successful: $errorBody")
-                                        if (!errorBody.isNullOrEmpty()) {
-                                            try {
-                                                val json = JSONObject(errorBody)
-                                                errorMessageResetPassword = json.getString("errorMessage")
-                                                showErrorResetPassword = true
-                                            } catch (e: JSONException) {
-                                                Log.e("API Call", "Error parsing JSON", e)
-                                            }
-                                        }
+                                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                                        Log.d("API Call", "Failure: ${t.message}")
                                     }
-                                }
-
-                                override fun onFailure(call: Call<Void>, t: Throwable) {
-                                    Log.d("API Call", "Failure: ${t.message}")
-                                }
-                            })
+                                })
+                            }
                         }
-                    }
 
-                    composable(AppScreens.productRegister.route) {
-                        ProductRegister(navController = navController) {
+                        composable(AppScreens.productRegister.route) {
+                            ProductRegister(navController = navController) {
+
+                            }
 
                         }
 
-                    }
+                        composable(AppScreens.homePage.route) {
+                            HomePage(navController = navController)
 
-                    composable(AppScreens.homePage.route) {
-                        HomePage(navController = navController)
+                        }
 
-                    }
+                        composable(AppScreens.profile.route) {
+                            Perfil(navController = navController)
 
-                    composable(AppScreens.profile.route) {
-                        Perfil(navController = navController)
+                        }
 
-                    }
+                        composable(AppScreens.catalogo.route) {
+                            CatalogoPrincipal(navController = navController)
 
-                    composable(AppScreens.catalogo.route) {
-                        CatalogoPrincipal(navController = navController)
+                        }
 
-                    }
+                        composable(AppScreens.detalleProd.route) { backStackEntry ->
+                            val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
+                            VerDetalle(navController = navController, productId = productId)
+                        }
 
-                    composable(AppScreens.detalleProd.route) { backStackEntry ->
-                        val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
-                        VerDetalle(navController = navController, productId = productId)
-                    }
+                        composable(AppScreens.menuDetalleProd.route){
+                            menuDetalleProd(navController = navController)
+                        }
 
-                    composable(AppScreens.menuDetalleProd.route){
-                        menuDetalleProd(navController = navController)
-                    }
+                        composable(AppScreens.editProfile.route){
+                            EditarPerfil(navController = navController)
+                        }
 
-                    composable(AppScreens.editProfile.route){
-                        EditarPerfil(navController = navController)
-                    }
+                        composable(AppScreens.favorite.route){
+                            Favoritos(navController = navController)
+                        }
 
-                    composable(AppScreens.favorite.route){
-                        Favoritos(navController = navController)
-                    }
-
-                    composable(AppScreens.CreateChatView.route){
-                        CreateChat(navController = navController)
-                    }
-                    composable(AppScreens.ChatView.route){
-                        val userId = 16L
-                        ShowChats(navController = navController, userId = userId)
-                    }
-                    composable(
-                        route = AppScreens.ChatMessages.route,
-                        arguments = listOf(navArgument("chatId") { type = NavType.LongType })
-                    ) { backStackEntry ->
-                        val chatId = backStackEntry.arguments?.getLong("chatId") ?: 0L
-                        ChatMessage(navController = navController, chatId = chatId)
+                        composable(AppScreens.CreateChatView.route){
+                            CreateChat(navController = navController)
+                        }
+                        composable(AppScreens.ChatView.route){
+                            val userId = 16L
+                            ShowChats(navController = navController, userId = userId)
+                        }
+                        composable(
+                            route = AppScreens.ChatMessages.route,
+                            arguments = listOf(navArgument("chatId") { type = NavType.LongType })
+                        ) { backStackEntry ->
+                            val chatId = backStackEntry.arguments?.getLong("chatId") ?: 0L
+                            ChatMessage(navController = navController, chatId = chatId)
+                        }
                     }
                 }
             }
         }
     }
 }
-
-
