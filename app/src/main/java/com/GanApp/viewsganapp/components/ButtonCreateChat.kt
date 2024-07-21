@@ -36,7 +36,8 @@ import com.GanApp.viewsganapp.viewModels.ButtonCreateChatViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun CreateChat(navController: NavHostController, buttonCreateChatViewModel: ButtonCreateChatViewModel = viewModel()) {
+fun CreateChat(navController: NavHostController) {
+    val buttonCreateChatViewModel: ButtonCreateChatViewModel = viewModel()
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val snackbarMessage by buttonCreateChatViewModel.snackbarMessage.collectAsState()

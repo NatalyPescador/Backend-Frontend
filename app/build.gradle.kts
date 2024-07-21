@@ -86,6 +86,8 @@ dependencies {
 
     // SplashScreen
     implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    implementation("com.google.android.libraries.places:places:3.5.0")
 
     //Decodificacion del token
     implementation ("com.auth0.android:jwtdecode:2.0.0")

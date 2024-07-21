@@ -77,8 +77,8 @@ fun HomePage(navController: NavHostController) {
     val items = listOf(
         DrawerItem(
             title = "Login",
-            selectedIcon = Icons.Filled.Create,
-            unselectedIcon = Icons.Outlined.Create,
+            selectedIcon = Icons.Filled.Person,
+            unselectedIcon = Icons.Outlined.Person,
             route = "loginUser_screens"
         ),
         DrawerItem(
@@ -110,8 +110,7 @@ fun HomePage(navController: NavHostController) {
             selectedIcon = Icons.Filled.Create,
             unselectedIcon = Icons.Outlined.Create,
             route = "ChatView"
-        )
-
+        ),
 
     )
 

@@ -27,10 +27,10 @@ fun ChatItem(chat: ChatEntity, navController: NavHostController) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row {
-                Text(text = "Nombre producto: ${chat.productId}")
+                Text(text = "User ID: ${chat.userId}")
             }
             Row {
-                Text(text = "User ID: ${chat.userId}")
+                Text(text = "Nombre producto: ${chat.productId}")
             }
             Row {
                 Text(text = "Estas hablando con: ${chat.receiverId}")

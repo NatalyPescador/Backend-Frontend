@@ -51,5 +51,4 @@ object RetrofitInstance {
     val apiServiceChats: ChatApiService by lazy {
         retrofit.create(ChatApiService::class.java)
         }
-
 }

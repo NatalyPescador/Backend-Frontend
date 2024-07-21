@@ -1,9 +1,6 @@
 package com.GanApp.viewsganapp.navigation
 
 import android.annotation.SuppressLint
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -19,14 +16,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import androidx.navigation.navArgument
 import com.GanApp.viewsganapp.components.ChatMessage
 import com.GanApp.viewsganapp.models.LogInData
+import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.views.ForgotPasswordData
 import com.GanApp.viewsganapp.views.ProductData
 import com.GanApp.viewsganapp.views.ResetPasswordData
-import com.GanApp.viewsganapp.views.ReviewData
 import com.GanApp.viewsganapp.views.UserData
 import com.GanApp.viewsganapp.views.VerDetalle
 
@@ -48,7 +44,12 @@ sealed class AppScreens(val route: String) {
     object CreateChatView : AppScreens("CreateChatView")
     object ChatView : AppScreens("ChatView")
     object ChatMessages : AppScreens("chat_message/{chatId}")
-    object menuDetalleProd : AppScreens("menuDetalleProd")
+    object menuDetalleProd : AppScreens("menuDetalleProd/{productId}")
+    companion object {
+        fun editProfile(any: Any) {
+
+        }
+    }
 
 }
 

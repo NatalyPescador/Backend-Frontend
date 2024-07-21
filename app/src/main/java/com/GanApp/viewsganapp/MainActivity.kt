@@ -1,5 +1,6 @@
 package com.GanApp.viewsganapp
 
+import EditarPerfil
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
@@ -26,6 +27,7 @@ import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.components.CreateChat
+//import com.GanApp.viewsganapp.views.DetalleProducto
 import com.GanApp.viewsganapp.utils.BackgroundTimer
 import com.GanApp.viewsganapp.utils.TokenManager
 import com.GanApp.viewsganapp.viewModels.LoginViewModel
@@ -45,7 +47,8 @@ import com.GanApp.viewsganapp.views.VerDetalle
 import com.GanApp.viewsganapp.views.errorMessageForgotPassword
 import com.GanApp.viewsganapp.views.errorMessageRegister
 import com.GanApp.viewsganapp.views.errorMessageResetPassword
-import com.GanApp.viewsganapp.views.menuDetalleProd
+import com.GanApp.viewsganapp.views.errorMessageReview
+import com.GanApp.viewsganapp.views.MostrarMenuDetalleProd
 import com.GanApp.viewsganapp.views.showErrorForgotPassword
 import com.GanApp.viewsganapp.views.showErrorRegister
 import com.GanApp.viewsganapp.views.showErrorResetPassword
@@ -229,13 +232,15 @@ class MainActivity : ComponentActivity() {
                             VerDetalle(navController = navController, productId = productId)
                         }
 
-                        composable(AppScreens.menuDetalleProd.route){
-                            menuDetalleProd(navController = navController)
-                        }
+                    composable(AppScreens.menuDetalleProd.route){ backStackEntry ->
+                        val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
+                        MostrarMenuDetalleProd(navController = navController, productId = productId)
+                    }
 
-                        composable(AppScreens.editProfile.route){
-                            EditarPerfil(navController = navController)
-                        }
+                    composable(AppScreens.editProfile.route){backStackEntry ->
+                        val userId = backStackEntry.arguments?.getString("userId")?.toLong() ?: 0L
+                        EditarPerfil(navController = navController, userId = userId)
+                    }
 
                         composable(AppScreens.favorite.route){
                             Favoritos(navController = navController)
