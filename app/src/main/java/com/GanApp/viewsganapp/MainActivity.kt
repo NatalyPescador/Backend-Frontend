@@ -132,7 +132,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             }
-                        }git
+                        }
 
                         composable(AppScreens.conecctionFacebook.route) {
                             Facebook(navController = navController)
