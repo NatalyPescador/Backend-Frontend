@@ -3,6 +3,7 @@ package com.GanApp.viewsganapp.views
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -135,8 +136,6 @@ fun VerDetalle(navController: NavController, productId: Long) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                //.align(Alignment.Center)
-                                //.padding(16.dp)
                                 .clickable(onClick = { /* Evitar el cierre de la tarjeta al hacer clic en el fondo */ }),
                             contentAlignment = Alignment.Center
                         ) {
@@ -144,7 +143,9 @@ fun VerDetalle(navController: NavController, productId: Long) {
                                 modifier = Modifier
                                     .align(Alignment.Center)
                                     .padding(16.dp)
-                                    .clickable(onClick = {}) // Para evitar el cierre de la tarjeta al hacer clic en ella
+                                    .background(Color(0xFFF2F2F2))
+                                    .clickable(onClick = {}), // Para evitar el cierre de la tarjeta al hacer clic en ella
+                                //shape = RoundedCornerShape(32.dp),
                             ) {
                                 Column(
                                     modifier = Modifier
@@ -152,7 +153,9 @@ fun VerDetalle(navController: NavController, productId: Long) {
                                         .fillMaxWidth()
                                 ) {
                                     Row(
-                                        modifier = Modifier.fillMaxWidth(),
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                            //.border(1.dp, Color.Gray, RoundedCornerShape(16.dp)),
                                         horizontalArrangement = Arrangement.End
                                     ) {
                                         IconButton(onClick = { showDescription = false }) {
