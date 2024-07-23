@@ -26,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.GanApp.viewsganapp.models.ReviewEntity
+import com.GanApp.viewsganapp.utils.BaseUrlConstant
 import com.GanApp.viewsganapp.viewModels.ButtonCreateChatViewModel
 import com.GanApp.viewsganapp.viewModels.ProductViewModel
 import com.GanApp.viewsganapp.viewModels.ReviewViewModel
@@ -41,7 +42,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
     productViewModel.getProductById(productId)
     val selectedProduct by remember { productViewModel.selectedProduct }
     val filename = selectedProduct?.imagen?.substringAfterLast('\\') ?: ""
-    val imageUrl = "https://w9rrr6mq-8080.use2.devtunnels.ms/GanApp/uploads/$filename"
+    val imageUrl = BaseUrlConstant.BASE_URL + "uploads/$filename"
 
     // Variables de reseña
     val reviewViewModel: ReviewViewModel = viewModel()

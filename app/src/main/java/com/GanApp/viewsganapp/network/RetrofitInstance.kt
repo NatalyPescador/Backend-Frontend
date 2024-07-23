@@ -6,6 +6,7 @@ import com.GanApp.viewsganapp.apiService.ProductRegisterApiService
 import com.GanApp.viewsganapp.apiService.ReviewApiService
 import com.GanApp.viewsganapp.apiService.TypeServiceApiService
 import com.GanApp.viewsganapp.apiService.UserRegisterApiService
+import com.GanApp.viewsganapp.utils.BaseUrlConstant
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
@@ -14,7 +15,7 @@ import java.time.LocalDateTime
 
 object RetrofitInstance {
 
-    const val BASE_URL = "https://w9rrr6mq-8080.use2.devtunnels.ms/GanApp/" // Reemplaza esto con tu URL base
+    const val BASE_URL = BaseUrlConstant.BASE_URL // Reemplaza esto con tu URL base
 
     private val gson: Gson = GsonBuilder()
         .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
