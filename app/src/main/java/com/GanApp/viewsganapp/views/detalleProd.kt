@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.GanApp.viewsganapp.components.Cards
 import com.GanApp.viewsganapp.models.ReviewEntity
 import com.GanApp.viewsganapp.utils.BaseUrlConstant
 import com.GanApp.viewsganapp.viewModels.ButtonCreateChatViewModel
@@ -349,42 +350,3 @@ data class ReviewData(
     val productoId: Long,
     val resena: String,
 )
-
-@Composable
-fun Reviews(reviews: List<ReviewEntity>) {
-    LazyRow(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        items(reviews) { review ->
-            Cards(reviews = review)
-        }
-    }
-}
-
-
-@Composable
-fun Cards(reviews: ReviewEntity) {
-    Surface(
-        modifier = Modifier
-            .padding(end = 8.dp)
-            .width(120.dp)
-            .height(200.dp),
-        shape = RoundedCornerShape(8.dp),
-    ) {
-        Column(
-            modifier = Modifier.clickable { /* Handle click event */ }
-        ) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Usuario: ${reviews.usuarioId}",
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-            Text(
-                text = "Reseña: ${reviews.resena}",
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-        }
-    }
-}
