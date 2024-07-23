@@ -49,6 +49,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
     reviewViewModel.getReviewByProductId(productId)
     val selectedReview by remember { reviewViewModel.selectedReviews }
     var resena by remember { mutableStateOf("") }
+    val loading by reviewViewModel.loading.collectAsState()
 
     // Variables de ventana emergente
     var showDescription by remember { mutableStateOf(false) }
@@ -292,13 +293,22 @@ fun VerDetalle(navController: NavController, productId: Long) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                items(selectedReview) { review ->
-                    Cards(review)
+            if (loading) {
+                // Mostrar un indicador de carga mientras se cargan los datos
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    items(selectedReview) { review ->
+                        Cards(review)
+                    }
                 }
             }
         }
