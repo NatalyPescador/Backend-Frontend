@@ -3,6 +3,7 @@ package com.GanApp.viewsganapp.views
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -22,10 +23,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.GanApp.viewsganapp.components.Cards
 import com.GanApp.viewsganapp.models.ReviewEntity
+import com.GanApp.viewsganapp.utils.BaseUrlConstant
 import com.GanApp.viewsganapp.viewModels.ButtonCreateChatViewModel
 import com.GanApp.viewsganapp.viewModels.ProductViewModel
 import com.GanApp.viewsganapp.viewModels.ReviewViewModel
@@ -41,13 +45,14 @@ fun VerDetalle(navController: NavController, productId: Long) {
     productViewModel.getProductById(productId)
     val selectedProduct by remember { productViewModel.selectedProduct }
     val filename = selectedProduct?.imagen?.substringAfterLast('\\') ?: ""
-    val imageUrl = "https://w9rrr6mq-8080.use2.devtunnels.ms/GanApp/uploads/$filename"
+    val imageUrl = BaseUrlConstant.BASE_URL + "uploads/$filename"
 
     // Variables de reseña
     val reviewViewModel: ReviewViewModel = viewModel()
     reviewViewModel.getReviewByProductId(productId)
     val selectedReview by remember { reviewViewModel.selectedReviews }
     var resena by remember { mutableStateOf("") }
+    val loading by reviewViewModel.loading.collectAsState()
 
     // Variables de ventana emergente
     var showDescription by remember { mutableStateOf(false) }
@@ -121,105 +126,109 @@ fun VerDetalle(navController: NavController, productId: Long) {
             Spacer(modifier = Modifier.height(30.dp))
 
             if (showDescription) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        //.background(Color.Black.copy(alpha = 0.5f))
-                        .clickable(onClick = { showDescription = false })
-                ) {
+                Dialog(onDismissRequest = { showDescription = false }) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .clickable(onClick = { /* Evitar el cierre de la tarjeta al hacer clic en el fondo */ }),
-                        contentAlignment = Alignment.Center // Centrar contenido en el Box
+                            //.background(Color.Black.copy(alpha = 0.5f))
+                            .clickable(onClick = { showDescription = false })
                     ) {
-                        Card(
+                        Box(
                             modifier = Modifier
-                                .align(Alignment.Center)
-                                .offset(y = (-50).dp) // Ajustar esta línea para mover la tarjeta hacia arriba
-                                .padding(16.dp)
-                                .clickable(onClick = {}) // Para evitar el cierre de la tarjeta al hacer clic en ella
+                                .fillMaxSize()
+                                .clickable(onClick = { /* Evitar el cierre de la tarjeta al hacer clic en el fondo */ }),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Column(
+                            Card(
                                 modifier = Modifier
+                                    .align(Alignment.Center)
                                     .padding(16.dp)
-                                    .fillMaxWidth()
-
+                                    .background(Color(0xFFF2F2F2))
+                                    .clickable(onClick = {}), // Para evitar el cierre de la tarjeta al hacer clic en ella
+                                //shape = RoundedCornerShape(32.dp),
                             ) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.End
+                                Column(
+                                    modifier = Modifier
+                                        .padding(16.dp)
+                                        .fillMaxWidth()
                                 ) {
-                                    IconButton(onClick = { showDescription = false }) {
-                                        Icon(
-                                            imageVector = Icons.Default.Close,
-                                            contentDescription = "Cerrar"
-                                        )
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                            //.border(1.dp, Color.Gray, RoundedCornerShape(16.dp)),
+                                        horizontalArrangement = Arrangement.End
+                                    ) {
+                                        IconButton(onClick = { showDescription = false }) {
+                                            Icon(
+                                                imageVector = Icons.Default.Close,
+                                                contentDescription = "Cerrar"
+                                            )
+                                        }
                                     }
+
+                                    Spacer(modifier = Modifier.height(16.dp))
+
+                                    Text(
+                                        text = "Precio: ${selectedProduct?.precio ?: ""}",
+                                        fontSize = 18.sp
+                                    )
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Text(
+                                        text = "Descripción: ${selectedProduct?.descripcion ?: ""}",
+                                        fontSize = 18.sp
+                                    )
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Text(
+                                        text = "Raza: ${selectedProduct?.raza ?: ""}",
+                                        fontSize = 18.sp
+                                    )
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Text(
+                                        text = "Sexo: ${selectedProduct?.sexo ?: ""}",
+                                        fontSize = 18.sp
+                                    )
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Text(
+                                        text = "Peso: ${selectedProduct?.uom ?: ""}",
+                                        fontSize = 18.sp
+                                    )
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Text(
+                                        text = "Edad: ${selectedProduct?.edad ?: ""}",
+                                        fontSize = 18.sp
+                                    )
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Text(
+                                        text = "Cantidad: ${selectedProduct?.cantidad ?: ""}",
+                                        fontSize = 18.sp
+                                    )
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Text(
+                                        text = "Departamento: ${selectedProduct?.departamento ?: ""}",
+                                        fontSize = 18.sp
+                                    )
+
+                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                    Text(
+                                        text = "Municipio: ${selectedProduct?.municipio ?: ""}",
+                                        fontSize = 18.sp
+                                    )
                                 }
-
-                                Spacer(modifier = Modifier.height(16.dp))
-
-                                Text(
-                                    text = "Precio: ${selectedProduct?.precio ?: ""}",
-                                    fontSize = 18.sp
-                                )
-
-                                Spacer(modifier = Modifier.height(8.dp))
-
-                                Text(
-                                    text = "Descripción: ${selectedProduct?.descripcion ?: ""}",
-                                    fontSize = 18.sp
-                                )
-
-                                Spacer(modifier = Modifier.height(8.dp))
-
-                                Text(
-                                    text = "Raza: ${selectedProduct?.raza ?: ""}",
-                                    fontSize = 18.sp
-                                )
-
-                                Spacer(modifier = Modifier.height(8.dp))
-
-                                Text(
-                                    text = "Sexo: ${selectedProduct?.sexo ?: ""}",
-                                    fontSize = 18.sp
-                                )
-
-                                Spacer(modifier = Modifier.height(8.dp))
-
-                                Text(
-                                    text = "Peso: ${selectedProduct?.uom ?: ""}",
-                                    fontSize = 18.sp
-                                )
-
-                                Spacer(modifier = Modifier.height(8.dp))
-
-                                Text(
-                                    text = "Edad: ${selectedProduct?.edad ?: ""}",
-                                    fontSize = 18.sp
-                                )
-
-                                Spacer(modifier = Modifier.height(8.dp))
-
-                                Text(
-                                    text = "Cantidad: ${selectedProduct?.cantidad ?: ""}",
-                                    fontSize = 18.sp
-                                )
-
-                                Spacer(modifier = Modifier.height(8.dp))
-
-                                Text(
-                                    text = "Departamento: ${selectedProduct?.departamento ?: ""}",
-                                    fontSize = 18.sp
-                                )
-
-                                Spacer(modifier = Modifier.height(8.dp))
-
-                                Text(
-                                    text = "Municipio: ${selectedProduct?.municipio ?: ""}",
-                                    fontSize = 18.sp
-                                )
                             }
                         }
                     }
@@ -291,13 +300,22 @@ fun VerDetalle(navController: NavController, productId: Long) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                items(selectedReview) { review ->
-                    Cards(review)
+            if (loading) {
+                // Mostrar un indicador de carga mientras se cargan los datos
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    items(selectedReview) { review ->
+                        Cards(review)
+                    }
                 }
             }
         }
@@ -338,42 +356,3 @@ data class ReviewData(
     val productoId: Long,
     val resena: String,
 )
-
-@Composable
-fun Reviews(reviews: List<ReviewEntity>) {
-    LazyRow(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        items(reviews) { review ->
-            Cards(reviews = review)
-        }
-    }
-}
-
-
-@Composable
-fun Cards(reviews: ReviewEntity) {
-    Surface(
-        modifier = Modifier
-            .padding(end = 8.dp)
-            .width(120.dp)
-            .height(200.dp),
-        shape = RoundedCornerShape(8.dp),
-    ) {
-        Column(
-            modifier = Modifier.clickable { /* Handle click event */ }
-        ) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Usuario: ${reviews.usuarioId}",
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-            Text(
-                text = "Reseña: ${reviews.resena}",
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-        }
-    }
-}
