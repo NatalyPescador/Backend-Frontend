@@ -46,7 +46,7 @@ interface UserRegisterApiService {
     fun createUser(@Body user: RequestBody): Call<String>
 
     @PUT("user/{id}")
-    fun updateUser(@Path("id") userId: Long, @Body user: RequestBody): Call<Void>
+    fun updateUser(@Path("id") userId: Long, @Body user: UserDto): Call<Void>
 
     @POST("upgradeUser")
     fun upgradeUser(@Body user:UserDto) : Call<Void>

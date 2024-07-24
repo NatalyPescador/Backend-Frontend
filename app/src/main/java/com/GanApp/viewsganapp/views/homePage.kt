@@ -106,7 +106,7 @@ fun HomePage(navController: NavHostController) {
             route = "productRegister"
         ),
         DrawerItem(
-            title = "ShowChats",
+            title = "Chats",
             selectedIcon = Icons.Filled.Create,
             unselectedIcon = Icons.Outlined.Create,
             route = "ChatView"

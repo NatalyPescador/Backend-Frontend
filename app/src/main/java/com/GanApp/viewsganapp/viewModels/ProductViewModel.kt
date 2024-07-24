@@ -2,15 +2,16 @@ package com.GanApp.viewsganapp.viewModels
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.GanApp.viewsganapp.models.CategoriaEntity
+import com.GanApp.viewsganapp.models.ProductDataDto
 import com.GanApp.viewsganapp.models.ProductoEntity
 import com.GanApp.viewsganapp.models.TipoServicioEntity
 import com.GanApp.viewsganapp.network.RetrofitInstance
-import com.GanApp.viewsganapp.views.ProductData
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -37,7 +38,6 @@ class ProductViewModel : ViewModel() {
     private val _products = mutableStateListOf<ProductoEntity>()
     val products: List<ProductoEntity> get() = _products
     private val _product = mutableStateOf<ProductoEntity?>(null)
-    val product: ProductoEntity? get() = _product.value
     var selectedProduct = mutableStateOf<ProductoEntity?>(null)
 
     init {
@@ -51,7 +51,7 @@ class ProductViewModel : ViewModel() {
         }
     }
 
-    public fun fetchCategoriasByTipoServicio(tipoServicioId: Long) {
+    fun fetchCategoriasByTipoServicio(tipoServicioId: Long) {
         viewModelScope.launch {
             loading.value = true
             try {
@@ -59,10 +59,10 @@ class ProductViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     categorias.value = response.body() ?: emptyList()
                 } else {
-                    println("Error en la respuesta: ${response.errorBody()?.string()}")
+                    Log.d("ProductViewModel-fetchCategoriasByTipoServicio", "Error in response: ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
-                println("Excepción capturada: ${e.localizedMessage}")
+                Log.d("ProductViewModel-fetchCategoriasByTipoServicio", "Exception caught: ${e.localizedMessage}")
             } finally {
                 loading.value = false
             }
@@ -77,10 +77,10 @@ class ProductViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     tiposServicio.value = response.body() ?: emptyList()
                 } else {
-                    println("Error en la respuesta: ${response.errorBody()?.string()}")
+                    Log.d("ProductViewModel-fetchTiposServicio", "Error in response: ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
-                println("Excepción capturada: ${e.localizedMessage}")
+                Log.d("ProductViewModel-fetchTiposServicio", "Exception caught: ${e.localizedMessage}")
             } finally {
                 loading.value = false
             }
@@ -95,10 +95,10 @@ class ProductViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     categorias.value = response.body() ?: emptyList()
                 } else {
-                    println("Error en la respuesta: ${response.errorBody()?.string()}")
+                    Log.d("ProductViewModel-fetchCategorias", "Error in response: ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
-                println("Excepción capturada: ${e.localizedMessage}")
+                Log.d("ProductViewModel-fetchCategorias", "Exception caught: ${e.localizedMessage}")
             } finally {
                 loading.value = false
             }
@@ -110,10 +110,10 @@ class ProductViewModel : ViewModel() {
             val response = try {
                 RetrofitInstance.apiServiceProduct.getProductList()
             } catch (e: IOException) {
-                println("Network error: ${e.localizedMessage}")
+                Log.d("ProductViewModel-getProducts", "Network error: ${e.localizedMessage}")
                 return@launch
             } catch (e: HttpException) {
-                println("API error: ${e.localizedMessage}")
+                Log.d("ProductViewModel-getProducts", "API error: ${e.localizedMessage}")
                 return@launch
             }
 
@@ -132,10 +132,10 @@ class ProductViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     selectedProduct.value = response.body()
                 } else {
-                    println("Error en la respuesta: ${response.errorBody()?.string()}")
+                    Log.d("ProductViewModel-getProductById", "Error in response: ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
-                println("Excepción capturada: ${e.localizedMessage}")
+                Log.d("ProductViewModel-getProductById", "Exception caught: ${e.localizedMessage}")
             } finally {
                 loading.value = false
             }
@@ -146,29 +146,33 @@ class ProductViewModel : ViewModel() {
         _product.value = null
     }
 
-    fun uploadProductData(context: Context, imageUri: Uri, productData: ProductData) {
-        val gson = Gson()
-        val productJson = gson.toJson(productData)
-        val productRequestBody = productJson.toRequestBody("application/json".toMediaTypeOrNull())
+    fun uploadProductData(context: Context, imageUri: Uri, productData: ProductDataDto) {
+        try {
+            val gson = Gson()
+            val productJson = gson.toJson(productData)
+            val productRequestBody = productJson.toRequestBody("application/json".toMediaTypeOrNull())
 
-        val file = File(FileUtils.getPath(context, imageUri))
-        val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+            val file = File(FileUtils.getPath(context, imageUri))
+            val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
-        val service = RetrofitInstance.apiServiceProduct
-        val call = service.createProduct(body, productRequestBody)
-        call.enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                if (response.isSuccessful) {
-                    // Trata aquí el éxito de la carga
-                } else {
-                    // Trata aquí los errores de la carga
+            val service = RetrofitInstance.apiServiceProduct
+            val call = service.createProduct(body, productRequestBody)
+            call.enqueue(object : Callback<String> {
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    if (response.isSuccessful) {
+                        Log.d("ProductViewModel-uploadProductData", "Product registered successful")
+                    } else {
+                        Log.d("ProductViewModel-uploadProductData", "Error registering product: ${response.errorBody()?.string()}")
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                // Maneja aquí los fallos de la red o conversión
-            }
-        })
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Log.d("ProductViewModel-uploadProductData", "Network or conversion error: ${t.localizedMessage}")
+                }
+            })
+        }catch (e: Exception){
+            Log.d("ProductViewModel-uploadProductData", "Exception caught: ${e.localizedMessage}")
+        }
     }
 }

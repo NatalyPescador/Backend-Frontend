@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,10 +23,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.GanApp.viewsganapp.R
 import com.GanApp.viewsganapp.components.ChatItem
+import com.GanApp.viewsganapp.utils.getUserData
 import com.GanApp.viewsganapp.viewModels.ChatViewModel
 
 @Composable
-fun ShowChats(navController: NavHostController, userId: Long, chatViewModel: ChatViewModel = viewModel()) {
+fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = viewModel()) {
+    val context = LocalContext.current
+    val userId = remember { getUserData(context)?.userId ?: 0L }
     val chats by chatViewModel.chats.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val snackbarMessage by chatViewModel.snackbarMessage.collectAsState()

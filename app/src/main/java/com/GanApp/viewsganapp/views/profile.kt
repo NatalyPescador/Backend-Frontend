@@ -1,6 +1,7 @@
 package com.GanApp.viewsganapp.views
 
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -62,7 +63,7 @@ import androidx.compose.material3.Icon as Icon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Perfil(navController: NavHostController) {
+fun Perfil(navController: NavHostController, context: Context) {
     val viewModel : UserProfileViewModel = viewModel()
     val user by viewModel.user.collectAsState()
     val loading by viewModel.loading.collectAsState()
@@ -73,7 +74,7 @@ fun Perfil(navController: NavHostController) {
     var numeroTelefono by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        viewModel.fetchUserData(17L)
+        viewModel.fetchUserData(context)
     }
 
     LaunchedEffect(user) {
@@ -211,7 +212,7 @@ fun Perfil(navController: NavHostController) {
                                     numeroTelefono = numeroTelefono
                                 )
                                 if (updatedUser != null) {
-                                    viewModel.upgradeUser(updatedUser)
+                                    viewModel.upgradeUser(context, updatedUser)
                                 }
                                 isEditing = false
                             },

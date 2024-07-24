@@ -1,3 +1,4 @@
+import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -35,12 +36,12 @@ import com.GanApp.viewsganapp.viewmodels.UserProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditarPerfil(navController: NavController, userId: Long) {
+fun EditarPerfil(navController: NavController, context: Context) {
     val viewModel: UserProfileViewModel = viewModel()
     val user by viewModel.user.collectAsState()
 
-    LaunchedEffect(userId) {
-        viewModel.fetchUserData(userId)
+    LaunchedEffect(Unit) {
+        viewModel.fetchUserData(context)
     }
 
     var name by remember { mutableStateOf(user?.nombreCompleto ?: "Nombre de Usuario") }
@@ -201,12 +202,12 @@ fun EditarPerfil(navController: NavController, userId: Long) {
                 Button(
                     onClick = {
                         val upgradeUser = UserDto(
-                            userId = userId,
+                            userId = user?.userId ?: 0L,
                             nombreCompleto = name,
                             correo = email,
                             numeroTelefono = phoneNumber
                         )
-                        viewModel.upgradeUser(upgradeUser)
+                        viewModel.upgradeUser(context, upgradeUser)
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(10, 191, 4),

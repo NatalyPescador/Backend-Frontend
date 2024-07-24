@@ -18,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -26,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.GanApp.viewsganapp.models.ReviewEntity
+import com.GanApp.viewsganapp.utils.getUserData
 import com.GanApp.viewsganapp.viewModels.ButtonCreateChatViewModel
 import com.GanApp.viewsganapp.viewModels.ProductViewModel
 import com.GanApp.viewsganapp.viewModels.ReviewViewModel
@@ -37,6 +39,8 @@ var errorMessageReview by mutableStateOf("")
 
 @Composable
 fun VerDetalle(navController: NavController, productId: Long) {
+    val context = LocalContext.current
+    val userId = remember { getUserData(context)?.userId ?: 0L }
     val productViewModel: ProductViewModel = viewModel()
     productViewModel.getProductById(productId)
     val selectedProduct by remember { productViewModel.selectedProduct }
@@ -314,7 +318,8 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 onClick = {
                     coroutineScope.launch {
                         try {
-                            buttonCreateChatViewModel.createOrFetchChat(productId = productId, userId = 15L, receiverId = 8L)
+                            val receiverId = selectedProduct?.usuarioId ?: 0L
+                            buttonCreateChatViewModel.createOrFetchChat(productId = productId, userId = userId, receiverId = receiverId)
                             Log.d("chatView", "Botón presionado para crear el chat")
                         } catch (e: Exception) {
                             Log.e("chatView", "Error al crear el chat: ${e.message}", e)
