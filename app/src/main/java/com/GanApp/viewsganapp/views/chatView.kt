@@ -47,7 +47,7 @@ fun ShowChats(navController: NavHostController, userId: Long, chatViewModel: Cha
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .background(color = Color.White)
+                .background(color = Color.DarkGray)
                 .fillMaxSize() // Ocupa todo el tamaño disponible
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 8.dp), // Ajustes de padding
@@ -82,12 +82,15 @@ fun ShowChats(navController: NavHostController, userId: Long, chatViewModel: Cha
 
             // Lista de chats
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
                 chats.forEach { chat ->
-                    ChatItem(chat = chat, navController = navController)
+                    ChatItem(
+                        chat = chat,
+                        navController = navController,
+                        modifier = Modifier.fillMaxWidth() // Ocupa todo el ancho disponible
+                    )
+                    Spacer(modifier = Modifier.height(1.dp)) // Espaciado entre los elementos
                 }
             }
         }

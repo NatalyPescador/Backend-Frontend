@@ -6,23 +6,29 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.GanApp.viewsganapp.models.ChatEntity
 
 @Composable
-fun ChatItem(chat: ChatEntity, navController: NavHostController) {
+fun ChatItem(
+    chat: ChatEntity,
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    isSelected: Boolean = false // Puedes agregar un estado para saber si el item está seleccionado
+) {
+    val containerColor = if (isSelected) Color(10, 191, 4) else Color.Blue // Colores personalizados
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(8.dp)
             .clickable {
                 navController.navigate("chat_message/${chat.chatId}")
             },
+        colors = CardDefaults.cardColors(containerColor = containerColor), // Aplicar color de fondo
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
