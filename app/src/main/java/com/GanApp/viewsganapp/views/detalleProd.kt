@@ -269,7 +269,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
             Box(modifier = Modifier.padding(16.dp)) {
                 Button(
                     onClick = {
-                        val reviewData = ReviewData(productoId = productId, resena = resena)
+                        val reviewData = ReviewData(usuarioId = userId, productoId = productId, resena = resena)
                         reviewViewModel.publishReview(reviewData)
                     },
                     colors = ButtonDefaults.buttonColors(Color(10, 191, 4))
@@ -358,6 +358,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
 }
 
 data class ReviewData(
+    val usuarioId: Long,
     val productoId: Long,
     val resena: String,
 )
