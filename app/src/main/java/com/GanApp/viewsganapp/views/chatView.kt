@@ -47,7 +47,7 @@ fun ShowChats(navController: NavHostController, userId: Long, chatViewModel: Cha
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .background(color = Color.DarkGray)
+                .background(color = Color.White)
                 .fillMaxSize() // Ocupa todo el tamaño disponible
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 8.dp), // Ajustes de padding

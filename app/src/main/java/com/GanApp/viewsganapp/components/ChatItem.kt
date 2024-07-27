@@ -21,7 +21,7 @@ fun ChatItem(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false // Puedes agregar un estado para saber si el item está seleccionado
 ) {
-    val containerColor = if (isSelected) Color(10, 191, 4) else Color.Blue // Colores personalizados
+    val containerColor = if (isSelected) Color(10, 191, 4) else Color.White // Colores personalizados
     Card(
         modifier = modifier
             .padding(8.dp)
@@ -29,17 +29,19 @@ fun ChatItem(
                 navController.navigate("chat_message/${chat.chatId}")
             },
         colors = CardDefaults.cardColors(containerColor = containerColor), // Aplicar color de fondo
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(30.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier
+            .padding(16.dp)
+        ) {
             Row {
-                Text(text = "User ID: ${chat.userId}")
+                Text(text = "User ID: ${chat.userId}", color = Color.Black)
             }
             Row {
-                Text(text = "Nombre producto: ${chat.productId}")
+                Text(text = "Nombre producto: ${chat.productId}", color = Color.Black)
             }
             Row {
-                Text(text = "Estas hablando con: ${chat.receiverId}")
+                Text(text = "Estas hablando con: ${chat.receiverId}", color = Color.Black)
             }
         }
     }

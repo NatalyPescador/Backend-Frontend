@@ -119,7 +119,6 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                     onValueChange = { newValue -> message = newValue },
                     modifier = Modifier
                         .weight(1f)
-
                         .border(1.dp, Color.Gray, RoundedCornerShape(20.dp)), // Borde redondeado
                     placeholder = { Text(text = "Escribe un mensaje") },
                     shape = RoundedCornerShape(20.dp),// Redondear el campo de texto
