@@ -86,12 +86,15 @@ fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = v
 
             // Lista de chats
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
                 chats.forEach { chat ->
-                    ChatItem(chat = chat, navController = navController)
+                    ChatItem(
+                        chat = chat,
+                        navController = navController,
+                        modifier = Modifier.fillMaxWidth() // Ocupa todo el ancho disponible
+                    )
+                    Spacer(modifier = Modifier.height(1.dp)) // Espaciado entre los elementos
                 }
             }
         }
