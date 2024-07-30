@@ -12,10 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.GanApp.viewsganapp.models.ReviewDto
 import com.GanApp.viewsganapp.models.ReviewEntity
 
 @Composable
-fun Cards(reviews: ReviewEntity) {
+fun Cards(reviews: ReviewDto) {
     Surface(
         modifier = Modifier
             .padding(end = 8.dp)
@@ -28,7 +29,7 @@ fun Cards(reviews: ReviewEntity) {
         ) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Usuario: ${reviews.usuarioId}",
+                text = "Usuario: ${reviews.nombreCompleto}",
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
             Text(
