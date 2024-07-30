@@ -47,14 +47,14 @@ fun Cards(reviews: ReviewDto) {
                 modifier = Modifier.padding(horizontal = 8.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Default.AccountCircle, // Change to the icon you want to use
+                    imageVector = Icons.Default.AccountCircle,
                     contentDescription = "Usuario",
                     modifier = Modifier.size(24.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp)) // More space between icon and text
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = reviews.nombreCompleto,
-                    fontWeight = FontWeight.Bold // Bold text
+                    fontWeight = FontWeight.Bold
                 )
             }
 
