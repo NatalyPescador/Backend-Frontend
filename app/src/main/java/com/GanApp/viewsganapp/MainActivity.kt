@@ -185,6 +185,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(AppScreens.profile.route) {
+                            Log.d("NavHost", "Displaying Profile Composable")
                             Perfil(navController = navController, context = this@MainActivity)
                         }
 

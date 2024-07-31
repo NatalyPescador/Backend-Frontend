@@ -32,7 +32,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.GanApp.viewsganapp.models.UserDto
-import com.GanApp.viewsganapp.viewmodels.UserProfileViewModel
+import com.GanApp.viewsganapp.viewModels.UserProfileViewModel
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

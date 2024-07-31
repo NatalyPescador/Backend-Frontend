@@ -1,4 +1,4 @@
-package com.GanApp.viewsganapp.viewmodels
+package com.GanApp.viewsganapp.viewModels
 
 import android.content.Context
 import android.util.Log

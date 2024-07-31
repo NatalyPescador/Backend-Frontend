@@ -1,6 +1,7 @@
 package com.GanApp.viewsganapp.views
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -58,7 +59,6 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.Composable as Composable
-
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -140,21 +140,18 @@ fun HomePage(navController: NavHostController) {
                             )
                             Spacer(modifier = Modifier.height(26.dp))
                             items.forEachIndexed { index, drawerItem ->
-                                NavigationDrawerItem(label = {
-                                    Text(text = drawerItem.title)
-                                },
+                                NavigationDrawerItem(
+                                    label = {Text(text = drawerItem.title)},
                                     selected = index == selectedItemIndex,
                                     onClick = {
+                                        Log.d("Drawer", "Clicked on: ${drawerItem.title}, Route: ${drawerItem.route}")
                                         isLoading = true // Comienza la carga inmediatamente
                                         selectedItemIndex = index
                                         scope.launch {
                                             delay(100L) // Pequeño retraso para asegurar que la IU se actualice
                                             navigationState.close()
                                             navController.navigate(drawerItem.route) {
-                                                // Evita la duplicación de destinos en la pila de back stack
-                                                popUpTo(navController.graph.startDestinationId) {
-                                                    saveState = true
-                                                }
+                                                Log.d("Navigation", "Navigating to: ${drawerItem.route}")
                                                 launchSingleTop = true
                                                 restoreState = true
                                             }

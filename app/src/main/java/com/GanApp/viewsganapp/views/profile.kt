@@ -1,7 +1,7 @@
 package com.GanApp.viewsganapp.views
 
-
 import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -54,7 +54,7 @@ import androidx.compose.ui.draw.clip
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.GanApp.viewsganapp.navigation.AppScreens
-import com.GanApp.viewsganapp.viewmodels.UserProfileViewModel
+import com.GanApp.viewsganapp.viewModels.UserProfileViewModel
 import androidx.compose.material3.Icon as Icon
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,6 +78,13 @@ fun Perfil(navController: NavHostController, context: Context) {
             nombreCompleto = it.nombreCompleto
             correo = it.correo
             numeroTelefono = it.numeroTelefono
+        }
+    }
+
+    BackHandler {
+        navController.navigate(AppScreens.homePage.route) {
+            popUpTo(AppScreens.homePage.route) { inclusive = true }
+            launchSingleTop = true
         }
     }
 
