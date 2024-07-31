@@ -1,5 +1,7 @@
 package com.GanApp.viewsganapp.views
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,19 +24,31 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
-import kotlinx.coroutines.delay
-
-var showErrorLogin by mutableStateOf(false)
-var errorMessageLogin by mutableStateOf("")
+import com.GanApp.viewsganapp.models.LogInData
+import com.GanApp.viewsganapp.viewModels.LoginViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
+fun LogIn(navController: NavController, context: Context, snackbarHostState: SnackbarHostState, onLogin: (LogInData) -> Unit) {
+    val viewModel: LoginViewModel = viewModel()
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var isPasswordIncorrect by remember { mutableStateOf(false) }
-    var isEmailInvalid by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(viewModel.snackbarMessage) {
+        viewModel.snackbarMessage.collect { message ->
+            Log.d("LogIn", "Mensaje recibido en LogIn: $message")
+            message?.let {
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(it)
+                    viewModel._snackbarMessage.value = null
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -42,7 +56,7 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
             .padding(16.dp)
             .offset(y = 50.dp)
             .verticalScroll(rememberScrollState())
-            .fillMaxSize(), // Esto hará que la Column ocupe todo el tamaño disponible
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -51,7 +65,7 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center // Centra la imagen horizontalmente
+            horizontalArrangement = Arrangement.Center
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
@@ -99,15 +113,16 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
             modifier = Modifier.offset(y = 20.dp)
         )
 
-        Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
+        Spacer(modifier = Modifier.height(5.dp))
 
         Box(
             modifier = Modifier.offset(y = 20.dp)
         ) {
             Button(
                 onClick = {
-                    onSubmit(LogInData(correo, password))
-                    navController.navigate("homePage")
+                    val loginData = LogInData(correo, password)
+                    Log.d("LoginUser", "Intentando iniciar sesión con correo: $correo")
+                    onLogin(loginData)
                 },
                 colors = ButtonDefaults.buttonColors(
                     Color(10, 191, 4),
@@ -120,27 +135,12 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        LaunchedEffect(showErrorLogin) {
-            if (showErrorLogin) {
-                delay(5000)
-                showErrorLogin = false
-            }
-        }
-
-        if (showErrorLogin) {
-            Box(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    errorMessageLogin,
-                    color = Color.Red,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-            }
-        }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -170,7 +170,7 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
                 .fillMaxWidth()
                 .offset(y = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center // Centra las imágenes en el Row
+            horizontalArrangement = Arrangement.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(
@@ -183,19 +183,19 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
                         .height(80.dp)
                         .width(80.dp)
                 )
-                Spacer(modifier = Modifier.height(2.dp)) // Espacio entre imagen y texto
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(text = "Continuar con", textAlign = TextAlign.Center,
                     modifier = Modifier
-                    .clickable {
-                        navController.navigate("facebook")
-                    })
+                        .clickable {
+                            navController.navigate("facebook")
+                        })
                 Text(text = "Facebook", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
                     modifier = Modifier
-                    .clickable {
-                        navController.navigate("facebook")
-                    })
+                        .clickable {
+                            navController.navigate("facebook")
+                        })
             }
-            Spacer(modifier = Modifier.width(40.dp)) // Espacio entre las columnas
+            Spacer(modifier = Modifier.width(40.dp))
             Column(horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.offset(y = 10.dp)) {
                 Image(
@@ -209,12 +209,12 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
                         .width(60.dp)
                         .offset(y = (-8).dp)
                 )
-                Spacer(modifier = Modifier.height(5.dp)) // Espacio entre imagen y texto
+                Spacer(modifier = Modifier.height(5.dp))
                 Text(text = "Continuar con", textAlign = TextAlign.Center,
                     modifier = Modifier
-                    .clickable {
-                        navController.navigate("gmail")
-                    })
+                        .clickable {
+                            navController.navigate("gmail")
+                        })
                 Text(text = "Gmail", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .clickable {
@@ -235,8 +235,3 @@ fun LogIn(navController: NavController, onSubmit: (LogInData) -> Unit) {
         }
     }
 }
-
-data class LogInData(
-    val correo: String,
-    val password: String
-)

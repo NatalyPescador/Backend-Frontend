@@ -55,15 +55,18 @@ import com.GanApp.viewsganapp.R
 import com.GanApp.viewsganapp.components.CategoriaDropdown
 import com.GanApp.viewsganapp.components.TipoServicioDropdown
 import com.GanApp.viewsganapp.models.CategoriaEntity
+import com.GanApp.viewsganapp.models.ProductDataDto
 import com.GanApp.viewsganapp.models.TipoServicioEntity
+import com.GanApp.viewsganapp.utils.getUserData
 import com.GanApp.viewsganapp.viewModels.ProductViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Unit) {
+fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> Unit) {
     val viewModel: ProductViewModel = viewModel()
     val context = LocalContext.current
+    val userData = getUserData(context)
     var nombre by remember { mutableStateOf("") }
     var precio by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
@@ -381,7 +384,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                             viewModel.uploadProductData(
                                 context,
                                 uri,
-                                ProductData(
+                                ProductDataDto(
                                     nombre = nombre,
                                     precio = precio,
                                     descripcion = descripcion,
@@ -395,7 +398,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
                                     imagen = uri.toString(),
                                     tipoServicioId = selectedTipoServicio?.tipoServicioId ?: 0,
                                     categoriaId = selectedCategoria?.categoriaId ?: 0,
-                                    usuarioId = 8
+                                    usuarioId = userData?.userId ?: 0L
                                 )
                             )
                         }
@@ -426,22 +429,3 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Uni
         }
     }
 }
-
-
-
-data class ProductData(
-    val nombre: String,
-    val precio: String,
-    val descripcion: String,
-    val raza: String,
-    val sexo: String,
-    val uom: String,
-    val edad: String,
-    val cantidad: String,
-    val departamento: String,
-    val municipio: String,
-    val imagen: String,
-    val tipoServicioId: Long,
-    val categoriaId: Long,
-    val usuarioId: Long
-)

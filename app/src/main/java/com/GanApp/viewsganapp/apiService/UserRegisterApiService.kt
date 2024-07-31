@@ -1,8 +1,10 @@
 package com.GanApp.viewsganapp.apiService
 
+import com.GanApp.viewsganapp.models.LogInData
 import com.GanApp.viewsganapp.models.UserDto
+
+import com.GanApp.viewsganapp.models.LoginDto
 import com.GanApp.viewsganapp.views.ForgotPasswordData
-import com.GanApp.viewsganapp.views.LogInData
 import com.GanApp.viewsganapp.views.ResetPasswordData
 import com.GanApp.viewsganapp.views.UserData
 import okhttp3.MultipartBody
@@ -22,7 +24,7 @@ interface UserRegisterApiService {
     fun createUser(@Body userData: UserData): Call<Void>
 
     @POST("login")
-    fun logIn(@Body logInData: LogInData): Call<Void>
+    fun logIn(@Body logInData: LogInData): Call<LoginDto>
 
     @POST("forgot-password")
     fun forgotPassword(@Body forgotPasswordData: ForgotPasswordData): Call<Void>
@@ -44,7 +46,7 @@ interface UserRegisterApiService {
     fun createUser(@Body user: RequestBody): Call<String>
 
     @PUT("user/{id}")
-    fun updateUser(@Path("id") userId: Long, @Body user: RequestBody): Call<Void>
+    fun updateUser(@Path("id") userId: Long, @Body user: UserDto): Call<Void>
 
     @POST("upgradeUser")
     fun upgradeUser(@Body user:UserDto) : Call<Void>

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.GanApp.viewsganapp.models.ProductoEntity
+import com.GanApp.viewsganapp.models.ReviewDto
 import com.GanApp.viewsganapp.models.ReviewEntity
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.views.ReviewData
@@ -23,7 +24,7 @@ class ReviewViewModel: ViewModel() {
 
     private val _loading = MutableStateFlow(true)
     val loading: StateFlow<Boolean> get() = _loading
-    var selectedReviews = mutableStateOf<List<ReviewEntity>>(emptyList())
+    var selectedReviews = mutableStateOf<List<ReviewDto>>(emptyList())
 
     fun getReviewByProductId(productId: Long) {
         viewModelScope.launch {
@@ -31,7 +32,7 @@ class ReviewViewModel: ViewModel() {
             try {
                 val response = RetrofitInstance.apiServiceReviewApiService.getReviewByProductId(productId)
                 if (response.isSuccessful) {
-                    selectedReviews.value = response.body() ?: emptyList()
+                    selectedReviews.value = (response.body() ?: emptyList()) as List<ReviewDto>
                 } else {
                     println("Error en la respuesta: ${response.errorBody()?.string()}")
                 }

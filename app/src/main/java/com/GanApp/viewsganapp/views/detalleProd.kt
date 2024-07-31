@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddComment
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
@@ -19,7 +20,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,6 +33,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.GanApp.viewsganapp.components.Cards
 import com.GanApp.viewsganapp.models.ReviewEntity
 import com.GanApp.viewsganapp.utils.BaseUrlConstant
+import com.GanApp.viewsganapp.utils.getUserData
 import com.GanApp.viewsganapp.viewModels.ButtonCreateChatViewModel
 import com.GanApp.viewsganapp.viewModels.ProductViewModel
 import com.GanApp.viewsganapp.viewModels.ReviewViewModel
@@ -41,6 +45,8 @@ var errorMessageReview by mutableStateOf("")
 
 @Composable
 fun VerDetalle(navController: NavController, productId: Long) {
+    val context = LocalContext.current
+    val userId = remember { getUserData(context)?.userId ?: 0L }
     val productViewModel: ProductViewModel = viewModel()
     productViewModel.getProductById(productId)
     val selectedProduct by remember { productViewModel.selectedProduct }
@@ -101,8 +107,6 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             Text(
                 text = "Nombre del ejemplar: ${selectedProduct?.nombre ?: ""}",
                 fontSize = 20.sp,
@@ -123,7 +127,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 Text(text = if (showDescription) "Ocultar Descripción" else "Descripción", fontSize = 18.sp)
             }
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             if (showDescription) {
                 Dialog(onDismissRequest = { showDescription = false }) {
@@ -235,15 +239,15 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             Text(
                 text = "Reseñas",
                 fontSize = 20.sp,
+                color = Color(0xFF02730A), // Cambia el color a #02730A
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .padding(bottom = 16.dp)
+                    .align(Alignment.CenterHorizontally)
                     .offset(y = 20.dp),
-                color = Color.Black
             )
 
             OutlinedTextField(
@@ -251,30 +255,34 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 onValueChange = {
                     resena = it
                 },
-                label = { Text("Reseña") },
+                label = { Text("Escribe tu reseña") },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
-                    Icon(imageVector = Icons.Default.Person, contentDescription = "telefono")
+                    Icon(imageVector = Icons.Default.AddComment, contentDescription = "telefono")
                 },
                 shape = RoundedCornerShape(20.dp), // Ajusta el radio del borde según tus preferencias
-                modifier = Modifier.offset(y = 20.dp),
+                modifier = Modifier
+                    .offset(y = 20.dp)
+                    .align(Alignment.CenterHorizontally),
             )
 
             Spacer(modifier = Modifier.height(16.dp)) // Añade espacio entre el formulario y el botón
 
-            Box(modifier = Modifier.padding(16.dp)) {
+            Box(modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.CenterHorizontally)) {
                 Button(
                     onClick = {
-                        val reviewData = ReviewData(productoId = productId, resena = resena)
+                        val reviewData = ReviewData(usuarioId = userId, productoId = productId, resena = resena)
                         reviewViewModel.publishReview(reviewData)
+
+                        resena = ""
                     },
                     colors = ButtonDefaults.buttonColors(Color(10, 191, 4))
                 ) {
-                    Text("Publicar reseña", color = Color.Black)
+                    Text("Publicar reseña", fontSize = 18.sp, color = Color.White)
                 }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             LaunchedEffect(showErrorReview) {
                 if (showErrorReview) {
@@ -317,6 +325,8 @@ fun VerDetalle(navController: NavController, productId: Long) {
                         Cards(review)
                     }
                 }
+
+                Spacer(modifier = Modifier.height(30.dp))
             }
         }
 
@@ -332,7 +342,8 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 onClick = {
                     coroutineScope.launch {
                         try {
-                            buttonCreateChatViewModel.createOrFetchChat(productId = productId, userId = 15L, receiverId = 8L)
+                            val receiverId = selectedProduct?.usuarioId ?: 0L
+                            buttonCreateChatViewModel.createOrFetchChat(productId = productId, userId = userId, receiverId = receiverId)
                             Log.d("chatView", "Botón presionado para crear el chat")
                         } catch (e: Exception) {
                             Log.e("chatView", "Error al crear el chat: ${e.message}", e)
@@ -353,6 +364,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
 }
 
 data class ReviewData(
+    val usuarioId: Long,
     val productoId: Long,
     val resena: String,
 )

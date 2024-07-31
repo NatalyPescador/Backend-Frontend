@@ -18,10 +18,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.GanApp.viewsganapp.components.ChatMessage
+import com.GanApp.viewsganapp.models.LogInData
+import com.GanApp.viewsganapp.models.ProductDataDto
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.views.ForgotPasswordData
-import com.GanApp.viewsganapp.views.LogInData
-import com.GanApp.viewsganapp.views.ProductData
 import com.GanApp.viewsganapp.views.ResetPasswordData
 import com.GanApp.viewsganapp.views.UserData
 import com.GanApp.viewsganapp.views.VerDetalle
@@ -110,7 +110,7 @@ fun AppScreens(navController: NavController) {
             }
             composable(AppScreens.productRegister.route) {
                 @Composable
-                fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Unit) {
+                fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> Unit) {
                     var nombre by remember { mutableStateOf("") }
                     var precio by remember { mutableStateOf("") }
                     var descripcion by remember { mutableStateOf("") }
