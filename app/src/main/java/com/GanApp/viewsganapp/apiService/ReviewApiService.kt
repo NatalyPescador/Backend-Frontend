@@ -1,6 +1,7 @@
 package com.GanApp.viewsganapp.apiService;
 
 import com.GanApp.viewsganapp.models.ProductoEntity
+import com.GanApp.viewsganapp.models.ReviewDto
 import com.GanApp.viewsganapp.models.ReviewEntity
 import com.GanApp.viewsganapp.views.ReviewData;
 
@@ -20,5 +21,5 @@ public interface ReviewApiService {
     fun getReviews(): Call<List<ReviewEntity>>
 
     @GET("reseñas/{productId}")
-    suspend fun getReviewByProductId(@Path("productId") productId: Long): Response<List<ReviewEntity>>
+    suspend fun getReviewByProductId(@Path("productId") productId: Long): Response<List<ReviewDto>>
 }
