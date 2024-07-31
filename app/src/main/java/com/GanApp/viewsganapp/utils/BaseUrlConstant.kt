@@ -1,5 +1,5 @@
 package com.GanApp.viewsganapp.utils
 
 object BaseUrlConstant {
-    const val BASE_URL = "http://10.175.145.97:8080/GanApp/"
+    const val BASE_URL = "http://192.168.10.8:8080/GanApp/"
 }
