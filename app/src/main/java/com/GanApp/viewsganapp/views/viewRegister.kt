@@ -24,7 +24,6 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -45,8 +44,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.GanApp.viewsganapp.models.UserDataRegisterDto
+import com.GanApp.viewsganapp.navigation.AppScreens
+import com.GanApp.viewsganapp.viewModels.RegisterViewModel
+import com.GanApp.viewsganapp.viewModels.RegistrationState
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.layout.Column as Column
 
@@ -55,12 +58,21 @@ var showErrorRegister by mutableStateOf(false)
 var errorMessageRegister by mutableStateOf("")
 
 @Composable
-fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
+fun Register(navController: NavController, registerViewModel: RegisterViewModel = viewModel()) {
     var nombreCompleto by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var numeroTelefono by remember { mutableStateOf("") }
+    val registrationState by registerViewModel.registrationState.collectAsState()
 
+
+    LaunchedEffect(registrationState) {
+        if (registrationState is RegistrationState.Success) {
+            navController.navigate("loginUser_screens") {
+                popUpTo(AppScreens.viewReister.route) { inclusive = true }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -137,8 +149,6 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
             },
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier.offset(y = 20.dp)
-
-
         )
 
         OutlinedTextField(
@@ -155,18 +165,30 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
             },
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier.offset(y = 20.dp)
-
         )
 
         Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
 
+        if (registrationState is RegistrationState.Failure) {
+            Text(
+                text = (registrationState as RegistrationState.Failure).errorMessage,
+                color = Color.Red,
+                modifier = Modifier.padding(top = 8.dp),
+                textAlign = TextAlign.Center
+            )
+        }
+
         Box(
             modifier = Modifier.offset(y = 20.dp)
         ) {
-            Button( onClick = { navController.navigate("homePage")
-                onSubmit(UserData(nombreCompleto, correo, password, numeroTelefono)) },
-                colors = buttonColors(
-                    Color(10, 191, 4)
+            Button(
+                onClick = {
+                    //navController.navigate("loginUser_screens")
+                    val userData = UserDataRegisterDto(nombreCompleto, correo, password, numeroTelefono)
+                    registerViewModel.registerUser(userData)
+                  },
+                    colors = buttonColors(
+                        Color(10, 191, 4)
                 )
             )
             {
@@ -280,12 +302,3 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
         }
     }
 }
-
-
-
-data class UserData(
-    val nombreCompleto: String,
-    val correo: String,
-    val password: String,
-    val numeroTelefono:String
-)

@@ -28,6 +28,7 @@ import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.utils.BackgroundTimer
 import com.GanApp.viewsganapp.utils.TokenManager
 import com.GanApp.viewsganapp.viewModels.LoginViewModel
+import com.GanApp.viewsganapp.viewModels.RegisterViewModel
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Favoritos
 import com.GanApp.viewsganapp.views.Gmail
@@ -41,11 +42,9 @@ import com.GanApp.viewsganapp.views.ResetPassword
 import com.GanApp.viewsganapp.views.ShowChats
 import com.GanApp.viewsganapp.views.VerDetalle
 import com.GanApp.viewsganapp.views.errorMessageForgotPassword
-import com.GanApp.viewsganapp.views.errorMessageRegister
 import com.GanApp.viewsganapp.views.errorMessageResetPassword
 import com.GanApp.viewsganapp.views.MostrarMenuDetalleProd
 import com.GanApp.viewsganapp.views.showErrorForgotPassword
-import com.GanApp.viewsganapp.views.showErrorRegister
 import com.GanApp.viewsganapp.views.showErrorResetPassword
 import org.json.JSONException
 import org.json.JSONObject
@@ -91,32 +90,8 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(padding)
                     ) {
                         composable(AppScreens.viewReister.route) {
-                            Register(navController = navController) { userData ->
-                                val call = RetrofitInstance.apiService.createUser(userData)
-                                call.enqueue(object : Callback<Void> {
-                                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                                        if (response.isSuccessful) {
-                                            Log.d("API Call", "Usuario creado con éxito")
-                                        } else {
-                                            val errorBody = response.errorBody()?.string()
-                                            Log.d("API Call", "Response not successful: $errorBody")
-                                            if (!errorBody.isNullOrEmpty()) {
-                                                try {
-                                                    val json = JSONObject(errorBody)
-                                                    errorMessageRegister = json.getString("errorMessage")
-                                                    showErrorRegister = true
-                                                } catch (e: JSONException) {
-                                                    Log.e("API Call", "Error parsing JSON", e)
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                                        Log.d("API Call", "Failure: ${t.message}")
-                                    }
-                                })
-                            }
+                            val registerViewModel: RegisterViewModel = viewModel()
+                            Register(navController = navController, registerViewModel = registerViewModel)
                         }
 
                         composable(AppScreens.loginUser.route) {
@@ -202,24 +177,19 @@ class MainActivity : ComponentActivity() {
 
                         composable(AppScreens.productRegister.route) {
                             ProductRegister(navController = navController) {
-
                             }
-
                         }
 
                         composable(AppScreens.homePage.route) {
                             HomePage(navController = navController)
-
                         }
 
                         composable(AppScreens.profile.route) {
                             Perfil(navController = navController, context = this@MainActivity)
-
                         }
 
                         composable(AppScreens.catalogo.route) {
                             CatalogoPrincipal(navController = navController)
-
                         }
 
                         composable(AppScreens.detalleProd.route + "/{productId}") { backStackEntry ->

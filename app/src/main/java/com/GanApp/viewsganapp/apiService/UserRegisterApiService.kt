@@ -4,9 +4,9 @@ import com.GanApp.viewsganapp.models.LogInData
 import com.GanApp.viewsganapp.models.UserDto
 
 import com.GanApp.viewsganapp.models.LoginDto
+import com.GanApp.viewsganapp.models.UserDataRegisterDto
 import com.GanApp.viewsganapp.views.ForgotPasswordData
 import com.GanApp.viewsganapp.views.ResetPasswordData
-import com.GanApp.viewsganapp.views.UserData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -21,7 +21,7 @@ import retrofit2.http.Query
 
 interface UserRegisterApiService {
     @POST("register")
-    fun createUser(@Body userData: UserData): Call<Void>
+    fun createUser(@Body userData: UserDataRegisterDto): Call<Void>
 
     @POST("login")
     fun logIn(@Body logInData: LogInData): Call<LoginDto>

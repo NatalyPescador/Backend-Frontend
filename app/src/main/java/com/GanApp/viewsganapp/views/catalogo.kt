@@ -125,14 +125,6 @@ fun Tarjeta(producto: ProductoEntity, navController: NavController) {
                 text = "${producto.descripcion}",
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
-            /*Text(
-                text = "por ${producto.usuarioId}",
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-            Text(
-                text = "Categoría: ${producto.categoriaId}",
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )*/
         }
     }
 }

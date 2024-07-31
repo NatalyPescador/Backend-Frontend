@@ -207,7 +207,7 @@ fun EditarPerfil(navController: NavController, context: Context) {
                             correo = email,
                             numeroTelefono = phoneNumber
                         )
-                        viewModel.upgradeUser(context, upgradeUser)
+                        viewModel.upgradeUser(upgradeUser)
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(10, 191, 4),

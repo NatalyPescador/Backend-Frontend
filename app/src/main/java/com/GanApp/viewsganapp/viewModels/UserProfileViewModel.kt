@@ -22,7 +22,6 @@ class UserProfileViewModel : ViewModel() {
 
     private val _user = MutableStateFlow<UserDto?>(null)
     val user: StateFlow<UserDto?> get() = _user
-
     private val _loading = MutableStateFlow(true)
     val loading: StateFlow<Boolean> get() = _loading
 
@@ -56,28 +55,7 @@ class UserProfileViewModel : ViewModel() {
         }
     }
 
-    fun uploadUserData(context: Context, updatedUser: UserDto) {
-        _loading.value = true
-        val service = RetrofitInstance.apiService
-        val call = service.updateUser(updatedUser.userId, updatedUser)
-        call.enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
-                    _user.value = updatedUser
-                } else {
-                    Log.d("UserProfielViewModel-uploadUserData","uploadUserData Error en la respuesta: ${response.errorBody()?.string()}")
-                }
-                _loading.value = false
-            }
-
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.d("UserProfielViewModel-uploadUserData","uploadUserData Error de red o conversión: ${t.localizedMessage}")
-                _loading.value = false
-            }
-        })
-    }
-
-    fun upgradeUser(context: Context, user: UserDto) {
+    fun upgradeUser(user: UserDto) {
         _loading.value = true
         val service = RetrofitInstance.apiService
         val call = service.upgradeUser(user)

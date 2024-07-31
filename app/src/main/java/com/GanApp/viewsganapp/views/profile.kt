@@ -2,7 +2,6 @@ package com.GanApp.viewsganapp.views
 
 
 import android.content.Context
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +24,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
@@ -45,7 +43,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.material3.Text
@@ -54,10 +51,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
+import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.viewmodels.UserProfileViewModel
 import androidx.compose.material3.Icon as Icon
 
@@ -90,7 +86,11 @@ fun Perfil(navController: NavHostController, context: Context) {
             CenterAlignedTopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate("homePage") }) {
+                    IconButton(onClick = {
+                        navController.navigate(AppScreens.homePage.route){
+                            launchSingleTop = true
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             modifier = Modifier.size(35.dp),
@@ -212,7 +212,7 @@ fun Perfil(navController: NavHostController, context: Context) {
                                     numeroTelefono = numeroTelefono
                                 )
                                 if (updatedUser != null) {
-                                    viewModel.upgradeUser(context, updatedUser)
+                                    viewModel.upgradeUser(updatedUser)
                                 }
                                 isEditing = false
                             },

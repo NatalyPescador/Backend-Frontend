@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,10 +28,13 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.GanApp.viewsganapp.viewModels.ChatMessagesViewModel
 import com.GanApp.viewsganapp.models.MessageDto
+import com.GanApp.viewsganapp.utils.getUserData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatMessage(navController: NavHostController, chatId: Long) {
+    val context = LocalContext.current
+    val userId = remember { getUserData(context)?.userId ?: 0L }
     val chatViewModel: ChatMessagesViewModel = viewModel()
     var message by remember { mutableStateOf("") }
     val messages by chatViewModel.messages.collectAsState()
@@ -68,7 +72,7 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate("menuDetalleProd/{productId}") }) {
+                    IconButton(onClick = { navController.navigate("homePage") }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             modifier = Modifier.size(35.dp),
@@ -101,7 +105,7 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                     .verticalScroll(rememberScrollState())
             ) {
                 messages.forEach { msg ->
-                    MessageBubble(message = msg.message, isSentByCurrentUser = msg.senderId == 8L)
+                    MessageBubble(message = msg.message, isSentByCurrentUser = msg.senderId == userId)
                     Spacer(modifier = Modifier.height(8.dp)) // Espacio entre mensajes
                 }
             }
@@ -138,7 +142,7 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                                     chatId = chatId,
                                     message = message,
                                     status = "SENT",
-                                    senderId = 8L  // Ajuste temporal para prueba
+                                    senderId = userId  // userId del que registro el producto
                                 )
                                 chatViewModel.sendMessage(messageDto)
                                 message = ""  // Limpiar el campo de texto después de enviar

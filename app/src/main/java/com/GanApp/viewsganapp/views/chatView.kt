@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,9 +25,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.GanApp.viewsganapp.R
 import com.GanApp.viewsganapp.components.ChatItem
+import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.utils.getUserData
 import com.GanApp.viewsganapp.viewModels.ChatViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = viewModel()) {
     val context = LocalContext.current
@@ -46,6 +50,28 @@ fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = v
     }
 
     Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.navigate(AppScreens.homePage.route) {
+                            launchSingleTop = true
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            modifier = Modifier.size(35.dp),
+                            contentDescription = "Volver"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color(152, 255, 150),
+                    navigationIconContentColor = Color.Black
+                )
+            )
+        },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
         Column(
