@@ -14,5 +14,5 @@ data class ReviewEntity(
     val productoId: Long,
 
     @SerializedName("usuarioId")
-    val usuarioId: String,
+    val usuarioId: Long,
 )

@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddComment
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -103,8 +105,6 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             Text(
                 text = "Nombre del ejemplar: ${selectedProduct?.nombre ?: ""}",
                 fontSize = 20.sp,
@@ -125,7 +125,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 Text(text = if (showDescription) "Ocultar Descripción" else "Descripción", fontSize = 18.sp)
             }
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             if (showDescription) {
                 Dialog(onDismissRequest = { showDescription = false }) {
@@ -237,15 +237,15 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             Text(
                 text = "Reseñas",
                 fontSize = 20.sp,
+                color = Color(0xFF02730A), // Cambia el color a #02730A
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .padding(bottom = 16.dp)
+                    .align(Alignment.CenterHorizontally)
                     .offset(y = 20.dp),
-                color = Color.Black
             )
 
             OutlinedTextField(
@@ -253,30 +253,34 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 onValueChange = {
                     resena = it
                 },
-                label = { Text("Reseña") },
+                label = { Text("Escribe tu reseña") },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
-                    Icon(imageVector = Icons.Default.Person, contentDescription = "telefono")
+                    Icon(imageVector = Icons.Default.AddComment, contentDescription = "telefono")
                 },
                 shape = RoundedCornerShape(20.dp), // Ajusta el radio del borde según tus preferencias
-                modifier = Modifier.offset(y = 20.dp),
+                modifier = Modifier
+                    .offset(y = 20.dp)
+                    .align(Alignment.CenterHorizontally),
             )
 
             Spacer(modifier = Modifier.height(16.dp)) // Añade espacio entre el formulario y el botón
 
-            Box(modifier = Modifier.padding(16.dp)) {
+            Box(modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.CenterHorizontally)) {
                 Button(
                     onClick = {
-                        val reviewData = ReviewData(productoId = productId, resena = resena)
+                        val reviewData = ReviewData(usuarioId = userId, productoId = productId, resena = resena)
                         reviewViewModel.publishReview(reviewData)
+
+                        resena = ""
                     },
                     colors = ButtonDefaults.buttonColors(Color(10, 191, 4))
                 ) {
-                    Text("Publicar reseña", color = Color.Black)
+                    Text("Publicar reseña", fontSize = 18.sp, color = Color.White)
                 }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             LaunchedEffect(showErrorReview) {
                 if (showErrorReview) {
@@ -319,6 +323,8 @@ fun VerDetalle(navController: NavController, productId: Long) {
                         Cards(review)
                     }
                 }
+
+                Spacer(modifier = Modifier.height(30.dp))
             }
         }
 
@@ -356,6 +362,7 @@ fun VerDetalle(navController: NavController, productId: Long) {
 }
 
 data class ReviewData(
+    val usuarioId: Long,
     val productoId: Long,
     val resena: String,
 )
