@@ -15,12 +15,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
@@ -110,6 +112,12 @@ fun HomePage(navController: NavHostController) {
             selectedIcon = Icons.Filled.Create,
             unselectedIcon = Icons.Outlined.Create,
             route = "ChatView"
+        ),
+        DrawerItem(
+            title = "Mis productos",
+            selectedIcon = Icons.Filled.AddShoppingCart,
+            unselectedIcon = Icons.Outlined.AddShoppingCart,
+            route = "mis_productos"
         ),
 
     )

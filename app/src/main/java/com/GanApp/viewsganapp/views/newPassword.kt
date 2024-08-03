@@ -68,22 +68,22 @@ fun newPassword(navController: NavController, onSubmit: (newPasswordData) -> Uni
 
         Text(
             text = "¿Tienes problemas para entrar a tu cuenta?",
+            color = Color.Black,
             fontSize = 16.sp,
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .offset(y = 20.dp)
-
         )
 
         Spacer(modifier = Modifier.height(5.dp))
 
         Text(
             text = "Introduce tu correo electrónico o tu número de celular y te enviaremos un código, para que puedas ingresar de nuevo",
+            //color = Color.Blue,
             fontSize = 16.sp,
             modifier = Modifier
                 .padding( 16.dp)
                 .offset(y = 20.dp)
-
         )
 
         Spacer(modifier = Modifier.height(5.dp))

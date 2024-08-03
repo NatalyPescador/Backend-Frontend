@@ -12,6 +12,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,6 +39,7 @@ fun LogIn(navController: NavController, context: Context, snackbarHostState: Sna
     val viewModel: LoginViewModel = viewModel()
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(viewModel.snackbarMessage) {
@@ -76,6 +80,7 @@ fun LogIn(navController: NavController, context: Context, snackbarHostState: Sna
 
         Text(
             text = "Iniciar Sesión",
+            color = Color.Black,
             fontSize = 40.sp,
             modifier = Modifier
                 .padding(bottom = 16.dp)
@@ -99,16 +104,21 @@ fun LogIn(navController: NavController, context: Context, snackbarHostState: Sna
 
         OutlinedTextField(
             value = password,
-            onValueChange = {
-                val filteredText = it.replace("\n", "")
-                password = filteredText
-            },
+            onValueChange = { password = it },
             label = { Text("Contraseña") },
-            visualTransformation = PasswordVisualTransformation(),
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Lock, contentDescription = "telefono")
+                Icon(imageVector = Icons.Filled.Lock, contentDescription = "Contraseña")
             },
+            trailingIcon = {
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(
+                        imageVector = if (passwordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                        contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
+                    )
+                }
+            },
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier.offset(y = 20.dp)
         )
@@ -145,10 +155,13 @@ fun LogIn(navController: NavController, context: Context, snackbarHostState: Sna
         Spacer(modifier = Modifier.height(16.dp))
 
         Row {
-            Text(text = "¿Aun no tienes cuenta?")
+            Text(text = "¿Aun no tienes cuenta?",
+                color = Color.Black)
             Spacer(modifier = Modifier.width(15.dp))
             Text(
-                text = "Registrate", fontWeight = FontWeight.Bold,
+                text = "Registrate",
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
                 modifier = Modifier.clickable {
                     navController.navigate("viewRegister")
                 }
@@ -157,6 +170,7 @@ fun LogIn(navController: NavController, context: Context, snackbarHostState: Sna
         Spacer(modifier = Modifier.height(15.dp))
         Text(
             text = "¿Olvidaste tú contraseña?",
+            color = Color.Black,
             modifier = Modifier
                 .clickable {
                     navController.navigate("forgotPassword")
@@ -184,12 +198,17 @@ fun LogIn(navController: NavController, context: Context, snackbarHostState: Sna
                         .width(80.dp)
                 )
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(text = "Continuar con", textAlign = TextAlign.Center,
+                Text(text = "Continuar con",
+                    color = Color.Black,
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
                         .clickable {
                             navController.navigate("facebook")
                         })
-                Text(text = "Facebook", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
+                Text(text = "Facebook",
+                    color = Color.Black,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .clickable {
                             navController.navigate("facebook")
@@ -210,12 +229,17 @@ fun LogIn(navController: NavController, context: Context, snackbarHostState: Sna
                         .offset(y = (-8).dp)
                 )
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Continuar con", textAlign = TextAlign.Center,
+                Text(text = "Continuar con",
+                    color = Color.Black,
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
                         .clickable {
                             navController.navigate("gmail")
                         })
-                Text(text = "Gmail", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
+                Text(text = "Gmail",
+                    color = Color.Black,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .clickable {
                             navController.navigate("gmail")

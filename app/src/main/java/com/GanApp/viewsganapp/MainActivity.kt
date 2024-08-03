@@ -28,12 +28,15 @@ import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.utils.BackgroundTimer
 import com.GanApp.viewsganapp.utils.TokenManager
 import com.GanApp.viewsganapp.viewModels.LoginViewModel
+import com.GanApp.viewsganapp.views.EditProduct
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Favoritos
 import com.GanApp.viewsganapp.views.Gmail
 import com.GanApp.viewsganapp.views.ForgotPassword
 import com.GanApp.viewsganapp.views.HomePage
 import com.GanApp.viewsganapp.views.LogIn
+import com.GanApp.viewsganapp.views.MisProdDetalles
+import com.GanApp.viewsganapp.views.MisProductos
 import com.GanApp.viewsganapp.views.Perfil
 import com.GanApp.viewsganapp.views.ProductRegister
 import com.GanApp.viewsganapp.views.Register
@@ -66,7 +69,7 @@ class MainActivity : ComponentActivity() {
 
         backgroundTimer = BackgroundTimer(this) {
             runOnUiThread {
-                navController.navigate(AppScreens.loginUser.route) {
+                navController.navigate(AppScreens.homePage.route) {
                     popUpTo(AppScreens.loginUser.route) {
                         inclusive = true
                     }
@@ -87,7 +90,7 @@ class MainActivity : ComponentActivity() {
                 ) { padding ->
                     NavHost(
                         navController = navController,
-                        startDestination = AppScreens.loginUser.route,
+                        startDestination = AppScreens.homePage.route,
                         modifier = Modifier.padding(padding)
                     ) {
                         composable(AppScreens.viewReister.route) {
@@ -250,6 +253,18 @@ class MainActivity : ComponentActivity() {
                             val chatId = backStackEntry.arguments?.getLong("chatId") ?: 0L
                             ChatMessage(navController = navController, chatId = chatId)
                         }
+                        composable(AppScreens.myProductsView.route){
+                            MisProductos(navController = navController)
+                        }
+
+                        composable(AppScreens.myProductDetailView.route){ backStackEntry ->
+                            val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
+                            MisProdDetalles(navController = navController, productId = productId)
+                        }
+                        composable(AppScreens.editMyProductView.route){
+                            EditProduct(navController = navController)
+                        }
+
                     }
                 }
             }
