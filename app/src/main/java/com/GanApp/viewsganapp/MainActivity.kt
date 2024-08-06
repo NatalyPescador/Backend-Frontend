@@ -90,7 +90,7 @@ class MainActivity : ComponentActivity() {
                 ) { padding ->
                     NavHost(
                         navController = navController,
-                        startDestination = AppScreens.homePage.route,
+                        startDestination = AppScreens.myProductDetailView.route,
                         modifier = Modifier.padding(padding)
                     ) {
                         composable(AppScreens.viewReister.route) {
