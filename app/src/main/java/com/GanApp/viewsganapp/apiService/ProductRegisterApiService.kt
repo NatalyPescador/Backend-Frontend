@@ -27,4 +27,7 @@ interface ProductRegisterApiService {
 
     @GET("producto/{id}")
     suspend fun getProductById(@Path("id") id: Long): Response<ProductoEntity>
+
+    @GET("productos/{userId}")
+    suspend fun getProductsByUserId(@Path("userId") userId: Long): Response<List<ProductoEntity>>
 }

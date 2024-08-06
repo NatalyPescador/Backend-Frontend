@@ -14,28 +14,44 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.GanApp.viewsganapp.R
 import com.GanApp.viewsganapp.utils.BaseUrlConstant
+import com.GanApp.viewsganapp.utils.getUserData
 import java.text.NumberFormat
 import java.util.Locale
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MisProductos(navController: NavController, productViewModel: ProductViewModel = viewModel()) {
-    val products by remember { mutableStateOf(productViewModel.products) }
+fun MisProductos(navController: NavController) {
+    val context = LocalContext.current
+    val userId = remember { getUserData(context)?.userId ?: 0L }
+    val productViewModel: ProductViewModel = viewModel()
+    val products by remember { mutableStateOf(productViewModel.userProducts) }
+
+    LaunchedEffect(userId) {
+        productViewModel.getProductsByUserId(userId)
+    }
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = {},
+                title = {Text("")},
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("homePage") }) {
                         Icon(
@@ -56,17 +72,29 @@ fun MisProductos(navController: NavController, productViewModel: ProductViewMode
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxSize()
                 .padding(innerPadding)
+                .fillMaxSize()
                 .background(color = Color.White) // Cambiar el fondo a blanco
         ) {
-            Catalogo1(productos = products, navController = navController)
+            Text(
+                text = "Mis productos",
+                fontWeight = FontWeight.Bold,
+                fontSize = 38.sp,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .offset(y = 20.dp)
+                    .padding(bottom = 15.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            MyProducts(productos = products, navController = navController)
         }
     }
 }
 
 @Composable
-fun Catalogo1(productos: List<ProductoEntity>, navController: NavController) {
+fun MyProducts(productos: List<ProductoEntity>, navController: NavController) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
