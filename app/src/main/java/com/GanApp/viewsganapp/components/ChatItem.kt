@@ -13,10 +13,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.GanApp.viewsganapp.models.ChatEntity
+import com.GanApp.viewsganapp.models.ChatItemsDto
 
 @Composable
 fun ChatItem(
-    chat: ChatEntity,
+    chat: ChatItemsDto,
     navController: NavHostController,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false // Puedes agregar un estado para saber si el item está seleccionado
@@ -34,14 +35,14 @@ fun ChatItem(
         Column(modifier = Modifier
             .padding(16.dp)
         ) {
+//            Row {
+//                Text(text = "User ID: ${chat.userId}", color = Color.Black)
+//            }
             Row {
-                Text(text = "User ID: ${chat.userId}", color = Color.Black)
+                Text(text = "Nombre producto: ${chat.imagen}", color = Color.Black)
             }
             Row {
-                Text(text = "Nombre producto: ${chat.productId}", color = Color.Black)
-            }
-            Row {
-                Text(text = "Estas hablando con: ${chat.receiverId}", color = Color.Black)
+                Text(text = "Estas hablando con: ${chat.nombreCompleto}", color = Color.Black)
             }
         }
     }

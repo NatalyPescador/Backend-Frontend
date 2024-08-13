@@ -2,6 +2,7 @@ package com.GanApp.viewsganapp.apiService
 
 import com.GanApp.viewsganapp.models.ChatDto
 import com.GanApp.viewsganapp.models.ChatEntity
+import com.GanApp.viewsganapp.models.ChatItemsDto
 import com.GanApp.viewsganapp.models.MessageDto
 import com.GanApp.viewsganapp.models.MessageEntity
 import retrofit2.Response
@@ -24,6 +25,9 @@ interface ChatApiService {
 
     @GET("user/{userId}/chats")
     suspend fun getChatsByUserId(@Path("userId") userId : Long): Response<List<ChatEntity>>
+
+    @GET("chat/{userId}")
+    suspend fun getChatDetailsByUserId(@Path("userId") userId : Long): Response<List<ChatItemsDto>>
 
     @GET("chat/verifyExists")
     suspend fun verifyChatExists(

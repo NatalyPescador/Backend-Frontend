@@ -35,7 +35,7 @@ fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = v
     val snackbarMessage by chatViewModel.snackbarMessage.collectAsState()
 
     LaunchedEffect(userId) {
-        chatViewModel.getChatsByUserId(userId)
+        chatViewModel.getChatDetailsByUserId(userId)
     }
 
     LaunchedEffect(snackbarMessage) {
