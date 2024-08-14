@@ -1,43 +1,41 @@
 package com.GanApp.viewsganapp.views
 
-import androidx.compose.runtime.Composable
+import android.annotation.SuppressLint
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.GanApp.viewsganapp.models.ProductoEntity
+import com.GanApp.viewsganapp.viewModels.ProductViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import coil.compose.rememberAsyncImagePainter
+import com.GanApp.viewsganapp.utils.BaseUrlConstant
 import java.text.NumberFormat
 import java.util.Locale
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Favoritos(navController: NavController) {
-    val favoriteItems = listOf(
-        ProductoEntity(1, "Producto 1", "Descripción 1", 10000.0, "url1"),
-        ProductoEntity(2, "Producto 2", "Descripción 2", 20000.0, "url2"),
-        ProductoEntity(3, "Producto 3", "Descripción 3", 30000.0, "url3"),
-        ProductoEntity(4, "Producto 4", "Descripción 4", 40000.0, "url4")
-    )
+fun MisProductos(navController: NavController, productViewModel: ProductViewModel = viewModel()) {
+    val products by remember { mutableStateOf(productViewModel.products) }
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Mis Favoritos", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.Black) },
+                title = {},
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("homePage") }) {
                         Icon(
@@ -56,23 +54,39 @@ fun Favoritos(navController: NavController) {
             )
         }
     ) { innerPadding ->
-        LazyColumn(
+        Column(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(innerPadding)
-                .fillMaxHeight()
-                .background(Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+                .background(color = Color.White) // Cambiar el fondo a blanco
         ) {
-            items(favoriteItems.chunked(2)) { rowItems ->
-                Row(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    rowItems.forEach { item ->
-                        Tarjeta(producto = item, navController = navController)
+            Catalogo1(productos = products, navController = navController)
+        }
+    }
+}
+
+@Composable
+fun Catalogo1(productos: List<ProductoEntity>, navController: NavController) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        // Iterar sobre los productos en pasos de 2
+        items((productos.size + 1) / 2) { rowIndex ->
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                for (i in 0 until 2) {
+                    val index = rowIndex * 2 + i
+                    if (index < productos.size) {
+                        Tarjeta1(producto = productos[index], navController = navController)
+                    } else {
+                        // Si no hay un segundo producto, añade un espacio para mantener la consistencia
+                        Spacer(modifier = Modifier.weight(1f))
                     }
                 }
             }
@@ -81,7 +95,9 @@ fun Favoritos(navController: NavController) {
 }
 
 @Composable
-fun Tarjeta(producto: ProductoEntity, navController: NavController) {
+fun Tarjeta1(producto: ProductoEntity, navController: NavController) {
+    val filename = producto.imagen?.substringAfterLast('\\') ?: ""
+    val imageUrl = BaseUrlConstant.BASE_URL + "uploads/$filename"
     val numberFormat = NumberFormat.getInstance(Locale("es", "CO")).apply {
         maximumFractionDigits = 0
     }
@@ -90,20 +106,20 @@ fun Tarjeta(producto: ProductoEntity, navController: NavController) {
         modifier = Modifier
             .padding(end = 8.dp)
             .width(150.dp)
-            .height(230.dp),
+            .height(260.dp),
         shape = RoundedCornerShape(8.dp),
     ) {
         Column(
             modifier = Modifier.clickable {
-                navController.navigate("detalleProd/${producto.productoId}")
+                navController.navigate("my_product_detail")
             }
         ) {
             Image(
-                painter = rememberAsyncImagePainter(model = "http://10.175.145.205:8080/GanApp/uploads/${producto.imagen}"),
+                painter = rememberAsyncImagePainter(model = imageUrl),
                 contentDescription = producto.nombre ?: "Sin nombre",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp),
+                    .height(120.dp),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -113,18 +129,14 @@ fun Tarjeta(producto: ProductoEntity, navController: NavController) {
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "$${numberFormat.format(producto.precio)}",
+                text = "$${numberFormat.format(producto.precio.toDouble())}",
                 modifier = Modifier.padding(horizontal = 8.dp),
                 fontStyle = FontStyle.Italic
+            )
+            Text(
+                text = "${producto.descripcion}",
+                modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
     }
 }
-
-data class ProductoEntity(
-    val productoId: Int,
-    val nombre: String?,
-    val descripcion: String?,
-    val precio: Double,
-    val imagen:String?
-)

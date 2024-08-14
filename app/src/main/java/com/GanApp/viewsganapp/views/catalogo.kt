@@ -28,6 +28,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.GanApp.viewsganapp.R
 import com.GanApp.viewsganapp.network.RetrofitInstance
+import com.GanApp.viewsganapp.utils.BaseUrlConstant
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Locale
@@ -59,7 +60,8 @@ fun Catalogo(productos: List<ProductoEntity>, navController: NavController) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        items(productos.size / 2) { rowIndex ->
+        // Iterar sobre los productos en pasos de 2
+        items((productos.size + 1) / 2) { rowIndex ->
             Row(
                 modifier = Modifier
                     .padding(16.dp)
@@ -70,6 +72,9 @@ fun Catalogo(productos: List<ProductoEntity>, navController: NavController) {
                     val index = rowIndex * 2 + i
                     if (index < productos.size) {
                         Tarjeta(producto = productos[index], navController = navController)
+                    } else {
+                        // Si no hay un segundo producto, añade un espacio para mantener la consistencia
+                        Spacer(modifier = Modifier.weight(1f))
                     }
                 }
             }
@@ -80,7 +85,7 @@ fun Catalogo(productos: List<ProductoEntity>, navController: NavController) {
 @Composable
 fun Tarjeta(producto: ProductoEntity, navController: NavController) {
     val filename = producto.imagen?.substringAfterLast('\\') ?: ""
-    val imageUrl = "http://192.168.1.13:8080/GanApp/uploads/$filename"
+    val imageUrl = BaseUrlConstant.BASE_URL + "uploads/$filename"
     val numberFormat = NumberFormat.getInstance(Locale("es", "CO")).apply {
         maximumFractionDigits = 0
     }

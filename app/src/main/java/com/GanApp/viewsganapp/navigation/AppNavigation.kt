@@ -18,10 +18,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.GanApp.viewsganapp.components.ChatMessage
+import com.GanApp.viewsganapp.models.LogInData
+import com.GanApp.viewsganapp.models.ProductDataDto
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.views.ForgotPasswordData
-import com.GanApp.viewsganapp.views.LogInData
-import com.GanApp.viewsganapp.views.ProductData
 import com.GanApp.viewsganapp.views.ResetPasswordData
 import com.GanApp.viewsganapp.views.UserData
 import com.GanApp.viewsganapp.views.VerDetalle
@@ -45,6 +45,8 @@ sealed class AppScreens(val route: String) {
     object ChatView : AppScreens("ChatView")
     object ChatMessages : AppScreens("chat_message/{chatId}")
     object menuDetalleProd : AppScreens("menuDetalleProd/{productId}")
+    object myProductsView : AppScreens("mis_productos")
+    object myProductDetailView : AppScreens("my_product_detail")
     companion object {
         fun editProfile(any: Any) {
 
@@ -110,7 +112,7 @@ fun AppScreens(navController: NavController) {
             }
             composable(AppScreens.productRegister.route) {
                 @Composable
-                fun ProductRegister(navController: NavController, onSubmit: (ProductData) -> Unit) {
+                fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> Unit) {
                     var nombre by remember { mutableStateOf("") }
                     var precio by remember { mutableStateOf("") }
                     var descripcion by remember { mutableStateOf("") }
@@ -167,6 +169,15 @@ fun AppScreens(navController: NavController) {
                 val chatId = backStackEntry.arguments?.getLong("chatId") ?: 0L
                 ChatMessage(navController = navController, chatId = chatId)
             }
+
+        composable(AppScreens.myProductsView.route){
+            @Composable
+            fun MisProductos(navController: NavController){}
+        }
+        composable(AppScreens.myProductDetailView.route){
+            @Composable
+            fun MisProdDetalles(navController: NavController){}
+        }
 
     }
 }

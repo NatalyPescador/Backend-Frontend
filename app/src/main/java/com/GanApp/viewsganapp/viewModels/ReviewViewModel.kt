@@ -5,11 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.GanApp.viewsganapp.models.ProductoEntity
+import com.GanApp.viewsganapp.models.ReviewDto
 import com.GanApp.viewsganapp.models.ReviewEntity
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.views.ReviewData
 import com.GanApp.viewsganapp.views.errorMessageReview
 import com.GanApp.viewsganapp.views.showErrorReview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
@@ -18,35 +21,34 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ReviewViewModel: ViewModel() {
-    var loading = mutableStateOf(false)
-    var selectedReviews = mutableStateOf<List<ReviewEntity>>(emptyList())
+
+    private val _loading = MutableStateFlow(true)
+    val loading: StateFlow<Boolean> get() = _loading
+    var selectedReviews = mutableStateOf<List<ReviewDto>>(emptyList())
 
     fun getReviewByProductId(productId: Long) {
         viewModelScope.launch {
-            loading.value = true
+            _loading.value = true
             try {
                 val response = RetrofitInstance.apiServiceReviewApiService.getReviewByProductId(productId)
                 if (response.isSuccessful) {
-                    selectedReviews.value = response.body() ?: emptyList()
+                    selectedReviews.value = (response.body() ?: emptyList()) as List<ReviewDto>
                 } else {
                     println("Error en la respuesta: ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
                 println("Excepción capturada: ${e.localizedMessage}")
             } finally {
-                loading.value = false
+                _loading.value = false
             }
         }
     }
 
-    fun publishReview(reviewData : ReviewData) {
-
+    fun publishReview(reviewData: ReviewData) {
+        _loading.value = true
         val call = RetrofitInstance.apiServiceReviewApiService.publishReview(reviewData)
         call.enqueue(object : Callback<Void> {
-            override fun onResponse(
-                call: Call<Void>,
-                response: Response<Void>
-            ) {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     Log.d("API Call", "Reseña publicada con éxito")
                 } else {
@@ -62,12 +64,13 @@ class ReviewViewModel: ViewModel() {
                         }
                     }
                 }
+                _loading.value = false
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 Log.d("API Call", "Failure: ${t.message}")
+                _loading.value = false
             }
         })
     }
-
 }

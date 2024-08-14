@@ -72,6 +72,7 @@ fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) ->
 
         Text(
             text = "Restablecer Contraseña",
+            color = Color.Black,
             fontWeight = FontWeight.Bold,
             fontSize = 30.sp,
             textAlign = TextAlign.Center,
@@ -87,7 +88,7 @@ fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) ->
                 val filteredText = it.replace("\n", "")
                 token = filteredText
             },
-            label = { Text("Ingrese el código recibido") },
+            label = { Text("Ingrese el código recibido", color = Color.Black,) },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Lock, contentDescription = "candado")
@@ -104,7 +105,7 @@ fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) ->
                 val filteredText = it.replace("\n", "")
                 newPassword = filteredText
             },
-            label = { Text("Nueva Contraseña") },
+            label = { Text("Nueva Contraseña", color = Color.Black,) },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Edit, contentDescription = "gmail")
@@ -120,7 +121,7 @@ fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) ->
                 val filteredText = it.replace("\n", "")
                 confirmedPassword = filteredText
             },
-            label = { Text("Confirmar Contraseña") },
+            label = { Text("Confirmar Contraseña", color = Color.Black,) },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "telefono")

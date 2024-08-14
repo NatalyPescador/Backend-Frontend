@@ -61,7 +61,6 @@ import androidx.navigation.NavHostController
 import com.GanApp.viewsganapp.R
 import com.GanApp.viewsganapp.viewModels.ReviewViewModel
 import kotlinx.coroutines.launch
-import com.GanApp.viewsganapp.views.Cards
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

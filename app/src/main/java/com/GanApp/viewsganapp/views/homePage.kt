@@ -1,6 +1,5 @@
 package com.GanApp.viewsganapp.views
 
-//import com.GanApp.viewsganapp.views.DetalleProducto
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -276,7 +275,7 @@ fun HomePage(navController: NavHostController) {
                     .background(color = Color.White) // Cambiar el fondo a blanco
                 ) {
                     when (items[selectedItemIndex].title) {
-                        "Perfil" -> Perfil(navController = navController)
+                        //"Perfil" -> Perfil(navController = navController)
                         "Catálogo" -> CatalogoPrincipal(navController = navController)
                         //"Registrar producto" -> ProductRegister(navController = navController)
                         //"ShowChats" -> ShowChats(navController = navController)
