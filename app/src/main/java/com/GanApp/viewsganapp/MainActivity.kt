@@ -28,7 +28,6 @@ import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.utils.BackgroundTimer
 import com.GanApp.viewsganapp.utils.TokenManager
 import com.GanApp.viewsganapp.viewModels.LoginViewModel
-import com.GanApp.viewsganapp.views.EditProduct
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Favoritos
 import com.GanApp.viewsganapp.views.Gmail
@@ -90,7 +89,7 @@ class MainActivity : ComponentActivity() {
                 ) { padding ->
                     NavHost(
                         navController = navController,
-                        startDestination = AppScreens.myProductDetailView.route,
+                        startDestination = AppScreens.loginUser.route,
                         modifier = Modifier.padding(padding)
                     ) {
                         composable(AppScreens.viewReister.route) {
@@ -261,10 +260,6 @@ class MainActivity : ComponentActivity() {
                             val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
                             MisProdDetalles(navController = navController, productId = productId)
                         }
-                        composable(AppScreens.editMyProductView.route){
-                            EditProduct(navController = navController)
-                        }
-
                     }
                 }
             }

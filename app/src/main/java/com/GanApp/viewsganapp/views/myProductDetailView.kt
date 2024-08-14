@@ -204,7 +204,9 @@ fun MisProdDetalles(navController: NavController, productId: Long) {
 
                                         OutlinedTextField(
                                             value = precio,
-                                            onValueChange = { precio = it },
+                                            onValueChange = { precio = it
+                                                val filteredText = it.filter { char -> char.isDigit() }
+                                                precio = filteredText },
                                             label = { Text("Precio", color=Color.Gray) },
                                             textStyle = TextStyle(color = Color.Black),
                                             modifier = Modifier.fillMaxWidth(),
