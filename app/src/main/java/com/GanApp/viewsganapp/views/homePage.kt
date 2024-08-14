@@ -18,17 +18,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.material.icons.outlined.Create
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -59,9 +57,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.GanApp.viewsganapp.R
-import com.GanApp.viewsganapp.R.drawable.vaca_titulo
+import com.GanApp.viewsganapp.navigation.AppScreens
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+data class DrawerItem(
+    val title: String,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector,
+    val badgeCount: Int? = null,
+    val route: String,
+    val iconColor: Color = Color(2,115,10),
+)
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SuspiciousIndentation")
@@ -77,68 +84,44 @@ fun HomePage(navController: NavHostController) {
 
     // Estado de carga añadido
     var isLoading by remember { mutableStateOf(false) }
-    var currentScreen by remember { mutableStateOf(Screen.CatalogoPrincipal) }
+    var currentScreen by remember { mutableStateOf(AppScreens.profile.route) }
 
     val items = listOf(
         DrawerItem(
             title = "Perfil",
             selectedIcon = Icons.Filled.Person,
             unselectedIcon = Icons.Outlined.Person,
-            //route = "Profile_screens",
-            route = Screen.Profile,
+            route = AppScreens.profile.route
         ),
         DrawerItem(
             title = "Catálogo",
             selectedIcon = Icons.Filled.Home,
             unselectedIcon = Icons.Outlined.Home,
-            //route = "homePage",
-            route = Screen.CatalogoPrincipal,
-        ),
-        DrawerItem(
-            title = "Favoritos",
-            selectedIcon = Icons.Filled.FavoriteBorder,
-            unselectedIcon = Icons.Outlined.FavoriteBorder,
-            //route = "favorito",
-            route = Screen.Favorito,
-        ),
-        DrawerItem(
-            title = "Reseñas",
-            selectedIcon = Icons.Filled.Star,
-            unselectedIcon = Icons.Outlined.Star,
-            //route = "reviews",
-            route = Screen.Reviews,
+            route = AppScreens.catalogo.route
         ),
         DrawerItem(
             title = "Registrar producto",
             selectedIcon = Icons.Filled.Create,
             unselectedIcon = Icons.Outlined.Create,
-            //route = "productRegister"
-            route = Screen.ProductRegister,
-        ),
-        DrawerItem(
-            title = "CreateChat",
-            selectedIcon = Icons.Filled.Create,
-            unselectedIcon = Icons.Outlined.Create,
-            //route = "CreateChatView"
-            route = Screen.CreateChat,
+            route = AppScreens.productRegister.route
         ),
         DrawerItem(
             title = "ShowChats",
             selectedIcon = Icons.Filled.Create,
             unselectedIcon = Icons.Outlined.Create,
-            //route = "ChatView"
-            route = Screen.Chat,
+            route = AppScreens.ChatMessages.route
         ),
         DrawerItem(
-            title = "Detalle Producto",
-            selectedIcon = Icons.Filled.Create,
-            unselectedIcon = Icons.Outlined.Create,
-            //route = "menuDetalleProd"
-            route = Screen.DetalleProducto,
-        )
-    )
+            title = "Mis productos",
+            selectedIcon = Icons.Filled.AddShoppingCart,
+            unselectedIcon = Icons.Outlined.AddShoppingCart,
+            route = "mis_productos"
+        ),
 
-        Box {
+
+        )
+
+    Box {
         ModalNavigationDrawer(
             drawerContent = {
                 ModalDrawerSheet(/*modifier = Modifier.padding(end = 50.dp)*/  ) {
@@ -172,7 +155,7 @@ fun HomePage(navController: NavHostController) {
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        //.background(backgroundColor)
+                                    //.background(backgroundColor)
                                 )
 
                                 {
@@ -257,7 +240,7 @@ fun HomePage(navController: NavHostController) {
 
                         )
                         Image(
-                            painter = painterResource(id = vaca_titulo),
+                            painter = painterResource(id = R.drawable.vaca_titulo),
                             contentDescription = "Vaca",
                             modifier = Modifier
                                 .height(60.dp)
@@ -281,28 +264,27 @@ fun HomePage(navController: NavHostController) {
                             tint = Color(2,115,10),
                             modifier = Modifier.size(40.dp),
 
-                        )
+                            )
                     }
-                }, colors =TopAppBarDefaults.topAppBarColors(Color(255,255,255))
+                }, colors = TopAppBarDefaults.topAppBarColors(Color(255,255,255))
                 )
             }
             ) { innerPadding ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .background(color = Color.White) // Cambiar el fondo a blanco
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .background(color = Color.White) // Cambiar el fondo a blanco
                 ) {
-                    when (currentScreen) {
-                        Screen.Profile -> ProfileScreen()
-                        Screen.CatalogoPrincipal -> CatalogoPrincipal()
-                        Screen.Favorito -> FavoritoScreen()
-                        Screen.Reviews -> ReviewsScreen()
-                        Screen.ProductRegister -> ProductRegisterScreen()
-                        Screen.CreateChat -> CreateChatView()
-                        Screen.Chat -> ChatView()
-                        Screen.DetalleProducto -> MenuDetalleProd()
+                    when (items[selectedItemIndex].title) {
+                        "Perfil" -> Perfil(navController = navController)
+                        "Catálogo" -> CatalogoPrincipal(navController = navController)
+                        //"Registrar producto" -> ProductRegister(navController = navController)
+                        //"ShowChats" -> ShowChats(navController = navController)
+                        //"Mis productos" -> Funcion()
+
+                        else -> CatalogoPrincipal(navController = navController) // Fallback si no se encuentra la opción
                     }
+
                 }
             }
         }
@@ -327,79 +309,4 @@ fun HomePage(navController: NavHostController) {
 
 
 
-@Composable
-fun CatalogoPrincipal() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Catálogo Principal")
-    }
-}
 
-@Composable
-fun ProfileScreen() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Perfil Screen")
-    }
-}
-
-@Composable
-fun FavoritoScreen() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Favoritos Screen")
-    }
-}
-
-@Composable
-fun ReviewsScreen() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Reseñas Screen")
-    }
-}
-
-@Composable
-fun ProductRegisterScreen() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Registrar producto Screen")
-    }
-}
-
-@Composable
-fun CreateChatView() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Create Chat Screen")
-    }
-}
-
-@Composable
-fun ChatView() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Chat Screen")
-    }
-}
-
-@Composable
-fun MenuDetalleProd() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Detalle Producto Screen")
-    }
-}
-
-
-data class DrawerItem(
-    val title: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val badgeCount: Int? = null,
-    val route: Screen,
-    val iconColor: Color = Color(2,115,10),
-)
-
-enum class Screen {
-    Profile,
-    CatalogoPrincipal,
-    Favorito,
-    Reviews,
-    ProductRegister,
-    CreateChat,
-    Chat,
-    DetalleProducto
-}
