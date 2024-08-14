@@ -61,10 +61,9 @@ fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = v
             // Encabezado con logo
             Row(
                 verticalAlignment = Alignment.Top, // Alineación superior
+                horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .padding(start = 16.dp) // Más espacio arriba
                     .fillMaxWidth()
-                    .offset(y= (-20).dp)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.logo),
@@ -72,7 +71,9 @@ fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = v
                     modifier = Modifier
                         .size(140.dp) // Tamaño del logo más grande
                 )
+
                 Spacer(modifier = Modifier.width(8.dp))
+
                 Text(
                     text = "TUS CHATS",
                     fontSize = 24.sp,
@@ -81,8 +82,6 @@ fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = v
                     modifier = Modifier.align(Alignment.CenterVertically) // Centrar verticalmente el texto
                 )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             // Lista de chats
             Column(

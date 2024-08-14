@@ -74,19 +74,32 @@ fun MisProductos(navController: NavController) {
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .background(color = Color.White) // Cambiar el fondo a blanco
+                .background(color = Color.White), // Cambiar el fondo a blanco
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Mis productos",
-                fontWeight = FontWeight.Bold,
-                fontSize = 38.sp,
-                color = Color.Black,
-                textAlign = TextAlign.Center,
+            Row(
+                verticalAlignment = Alignment.Top, // Alineación superior
+                horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .offset(y = 20.dp)
-                    .padding(bottom = 15.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
+                    .fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "Logo",
+                    modifier = Modifier
+                        .size(140.dp) // Tamaño del logo más grande
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = "TUS PRODUCTOS",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    modifier = Modifier.align(Alignment.CenterVertically) // Centrar verticalmente el texto
+                )
+            }
 
             MyProducts(productos = products, navController = navController)
         }

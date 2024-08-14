@@ -16,12 +16,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddShoppingCart
+import androidx.compose.material.icons.filled.AddTask
+import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.AddShoppingCart
+import androidx.compose.material.icons.outlined.AddTask
+import androidx.compose.material.icons.outlined.Chat
 import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
@@ -82,37 +88,36 @@ fun MostrarMenuDetalleProd(navController: NavHostController, productId: Long) {
 
 
     val items = listOf(
-        DrawerItemDetalleProd(
+        DrawerItem(
             title = "Perfil",
             selectedIcon = Icons.Filled.Person,
             unselectedIcon = Icons.Outlined.Person,
             route = "Profile_screens"
         ),
-        DrawerItemDetalleProd(
-            title = "Catálodo",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home,
-            route = "homePage",
-
-            ),
-        DrawerItemDetalleProd(
-            title = "Favorites",
+        DrawerItem(
+            title = "Favoritos",
             selectedIcon = Icons.Filled.FavoriteBorder,
             unselectedIcon = Icons.Outlined.FavoriteBorder,
-            route = "favotito",
+            route = "favorito"
         ),
-        DrawerItemDetalleProd(
-            title = "Reseñas",
-            selectedIcon = Icons.Filled.Star,
-            unselectedIcon = Icons.Outlined.Star,
-            route = "reviews",
-        ),
-        DrawerItemDetalleProd(
-            title = "Resgistrar producto",
-            selectedIcon = Icons.Filled.Create,
-            unselectedIcon = Icons.Outlined.Create,
+        DrawerItem(
+            title = "Registrar producto",
+            selectedIcon = Icons.Filled.AddTask,
+            unselectedIcon = Icons.Outlined.AddTask,
             route = "productRegister"
-        )
+        ),
+        DrawerItem(
+            title = "Chats",
+            selectedIcon = Icons.Filled.Chat,
+            unselectedIcon = Icons.Outlined.Chat,
+            route = "ChatView"
+        ),
+        DrawerItem(
+            title = "Mis productos",
+            selectedIcon = Icons.Filled.AddShoppingCart,
+            unselectedIcon = Icons.Outlined.AddShoppingCart,
+            route = "mis_productos"
+        ),
     )
 
     Surface (
