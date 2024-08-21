@@ -1,6 +1,8 @@
 package com.GanApp.viewsganapp.views
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -52,11 +54,16 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.GanApp.viewsganapp.R
+import com.GanApp.viewsganapp.models.ProductDataDto
 import com.GanApp.viewsganapp.navigation.AppScreens
+import com.GanApp.viewsganapp.viewModels.ChatViewModel
+import com.GanApp.viewsganapp.viewModels.ProductViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -75,15 +82,31 @@ data class DrawerItem(
 @Composable
 fun HomePage(navController: NavHostController) {
 
+    val context = LocalContext.current
     val navigationState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var selectedItemIndex by rememberSaveable {
         mutableIntStateOf(1)
     }
 
+    val viewModel: ProductViewModel = viewModel()
+
+    val onSubmit: (ProductDataDto) -> Unit = { productDataDto ->
+    // Usar context correctamente aquí
+    viewModel.uploadProductData(
+        context,
+        Uri.parse(productDataDto.imagen), // Suponiendo que la imagen es una URI en cadena
+        productDataDto
+    )
+}
+    val chatViewModel: ChatViewModel = viewModel()
+    val productViewModel: ProductViewModel = viewModel()
+
+
     // Estado de carga añadido
     var isLoading by remember { mutableStateOf(false) }
     var currentScreen by remember { mutableStateOf(AppScreens.profile.route) }
+
 
     val items = listOf(
         DrawerItem(
@@ -245,7 +268,7 @@ fun HomePage(navController: NavHostController) {
                                 .height(60.dp)
                                 .width(85.dp)
                                 .offset(y = 65.dp)
-                                .offset(x = 35.dp)
+                                .offset(x = 55.dp)
 
                         )
 
@@ -269,17 +292,19 @@ fun HomePage(navController: NavHostController) {
                 )
             }
             ) { innerPadding ->
+                val context: Context = LocalContext.current
+
                 Box(modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
                     .background(color = Color.White) // Cambiar el fondo a blanco
                 ) {
                     when (items[selectedItemIndex].title) {
-                        //"Perfil" -> Perfil(navController = navController)
+                        "Perfil" -> Perfil( navController = navController, context = context)
                         "Catálogo" -> CatalogoPrincipal(navController = navController)
-                        //"Registrar producto" -> ProductRegister(navController = navController)
-                        //"ShowChats" -> ShowChats(navController = navController)
-                        //"Mis productos" -> Funcion()
+                        "Registrar producto" -> ProductRegister(navController = navController, onSubmit = onSubmit)
+                        "ShowChats" -> ShowChats(navController = navController, chatViewModel = chatViewModel)
+                        "Mis productos" -> MisProductos(navController = navController, productViewModel = productViewModel)
 
                         else -> CatalogoPrincipal(navController = navController) // Fallback si no se encuentra la opción
                     }
