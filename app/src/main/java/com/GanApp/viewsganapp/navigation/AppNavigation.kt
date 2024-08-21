@@ -47,7 +47,6 @@ sealed class AppScreens(val route: String) {
     object menuDetalleProd : AppScreens("menuDetalleProd/{productId}")
     object myProductsView : AppScreens("mis_productos")
     object myProductDetailView : AppScreens("my_product_detail")
-    object editMyProductView : AppScreens ("edit_product")
     companion object {
         fun editProfile(any: Any) {
 

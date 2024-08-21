@@ -24,19 +24,19 @@ import com.GanApp.viewsganapp.components.ChatMessage
 import com.GanApp.viewsganapp.navigation.AppScreens
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
-import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.utils.BackgroundTimer
 import com.GanApp.viewsganapp.utils.TokenManager
 import com.GanApp.viewsganapp.viewModels.LoginViewModel
-import com.GanApp.viewsganapp.views.EditProduct
+import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Favoritos
-import com.GanApp.viewsganapp.views.Gmail
 import com.GanApp.viewsganapp.views.ForgotPassword
+import com.GanApp.viewsganapp.views.Gmail
 import com.GanApp.viewsganapp.views.HomePage
 import com.GanApp.viewsganapp.views.LogIn
 import com.GanApp.viewsganapp.views.MisProdDetalles
 import com.GanApp.viewsganapp.views.MisProductos
+import com.GanApp.viewsganapp.views.MostrarMenuDetalleProd
 import com.GanApp.viewsganapp.views.Perfil
 import com.GanApp.viewsganapp.views.ProductRegister
 import com.GanApp.viewsganapp.views.Register
@@ -46,7 +46,6 @@ import com.GanApp.viewsganapp.views.VerDetalle
 import com.GanApp.viewsganapp.views.errorMessageForgotPassword
 import com.GanApp.viewsganapp.views.errorMessageRegister
 import com.GanApp.viewsganapp.views.errorMessageResetPassword
-import com.GanApp.viewsganapp.views.MostrarMenuDetalleProd
 import com.GanApp.viewsganapp.views.showErrorForgotPassword
 import com.GanApp.viewsganapp.views.showErrorRegister
 import com.GanApp.viewsganapp.views.showErrorResetPassword
@@ -261,10 +260,6 @@ class MainActivity : ComponentActivity() {
                             val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
                             MisProdDetalles(navController = navController, productId = productId)
                         }
-                        composable(AppScreens.editMyProductView.route){
-                            EditProduct(navController = navController)
-                        }
-
                     }
                 }
             }
