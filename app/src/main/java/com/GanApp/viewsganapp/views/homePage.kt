@@ -304,10 +304,10 @@ fun HomePage(navController: NavHostController) {
                     .background(color = Color.White) // Cambiar el fondo a blanco
                 ) {
                     when (items[selectedItemIndex].title) {
-                        "Perfil" -> Perfil( navController = navController, context = context)
+                        "Mi perfil" -> Perfil( navController = navController, context = context)
                         "Catálogo" -> CatalogoPrincipal(navController = navController)
                         "Registrar producto" -> ProductRegister(navController = navController, onSubmit = onSubmit)
-                        "ShowChats" -> ShowChats(navController = navController, chatViewModel = chatViewModel)
+                        "Mis chats" -> ShowChats(navController = navController, chatViewModel = chatViewModel)
                         "Mis productos" -> MisProductos(navController = navController)
 
                         else -> CatalogoPrincipal(navController = navController) // Fallback si no se encuentra la opción
