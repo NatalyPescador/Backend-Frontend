@@ -2,10 +2,23 @@ package com.GanApp.viewsganapp.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,8 +47,9 @@ fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = v
     val snackbarHostState = remember { SnackbarHostState() }
     val snackbarMessage by chatViewModel.snackbarMessage.collectAsState()
 
+
     LaunchedEffect(userId) {
-        chatViewModel.getChatsByUserId(userId)
+        chatViewModel.getChatDetailsByUserId(userId)
     }
 
     LaunchedEffect(snackbarMessage) {
@@ -61,10 +75,9 @@ fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = v
             // Encabezado con logo
             Row(
                 verticalAlignment = Alignment.Top, // Alineación superior
+                horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .padding(start = 16.dp) // Más espacio arriba
                     .fillMaxWidth()
-                    .offset(y= (-20).dp)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.logo),
@@ -72,7 +85,9 @@ fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = v
                     modifier = Modifier
                         .size(140.dp) // Tamaño del logo más grande
                 )
+
                 Spacer(modifier = Modifier.width(8.dp))
+
                 Text(
                     text = "TUS CHATS",
                     fontSize = 24.sp,
@@ -81,8 +96,6 @@ fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = v
                     modifier = Modifier.align(Alignment.CenterVertically) // Centrar verticalmente el texto
                 )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             // Lista de chats
             Column(

@@ -22,10 +22,13 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.layout.Column as Column
@@ -59,6 +63,7 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
     var nombreCompleto by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
     var numeroTelefono by remember { mutableStateOf("") }
 
 
@@ -85,6 +90,7 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
 
         Text(
             text = "Registrarse",
+            color = Color.Black,
             fontSize = 40.sp,
             modifier = Modifier
                 .padding(bottom = 16.dp)
@@ -143,16 +149,21 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
 
         OutlinedTextField(
             value = password,
-            onValueChange = {
-                val filteredText = it.replace("\n", "")
-                password = filteredText
-            },
+            onValueChange = { password = it },
             label = { Text("Contraseña") },
-            visualTransformation = PasswordVisualTransformation(),
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Lock, contentDescription = "candado")
+                Icon(imageVector = Icons.Filled.Lock, contentDescription = "Contraseña")
             },
+            trailingIcon = {
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(
+                        imageVector = if (passwordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                        contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
+                    )
+                }
+            },
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier.offset(y = 20.dp)
 
@@ -201,9 +212,11 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Row {
-            Text(text = "¿Ya tienes una cuenta?")
+            Text(text = "¿Ya tienes una cuenta?", color = Color.Black)
             Spacer(modifier = Modifier.width(15.dp))
-            Text(text = "Inicia Sesión", fontWeight = FontWeight.Bold,
+            Text(text = "Inicia Sesión",
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.clickable {
                         navController.navigate("loginUser_screens")
                 })
@@ -229,12 +242,16 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
                         .width(80.dp)
                 )
                 Spacer(modifier = Modifier.height(2.dp)) // Espacio entre imagen y texto
-                Text(text = "Continuar con", textAlign = TextAlign.Center,
+                Text(text = "Continuar con",
+                    color = Color.Black,
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
                         .clickable {
                             navController.navigate("facebook")
                         })
-                Text(text = "Facebook", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
+                Text(text = "Facebook",
+                    color = Color.Black,
+                    textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .clickable {
                             navController.navigate("facebook")
@@ -255,12 +272,16 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
                         .offset(y = (-8).dp)
                 )
                 Spacer(modifier = Modifier.height(5.dp)) // Espacio entre imagen y texto
-                Text(text = "Continuar con", textAlign = TextAlign.Center,
+                Text(text = "Continuar con",
+                    color = Color.Black,
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
                         .clickable {
                             navController.navigate("gmail")
                         })
-                Text(text = "Gmail", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
+                Text(text = "Gmail",
+                    color = Color.Black,
+                    textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .clickable {
                             navController.navigate("gmail")

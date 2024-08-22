@@ -40,6 +40,9 @@ class ProductViewModel : ViewModel() {
     private val _product = mutableStateOf<ProductoEntity?>(null)
     var selectedProduct = mutableStateOf<ProductoEntity?>(null)
 
+    private val _userProducts = mutableStateListOf<ProductoEntity>()
+    val userProducts: List<ProductoEntity> get() = _userProducts
+
     init {
         fetchTiposServicio()
         getProducts()
@@ -139,6 +142,31 @@ class ProductViewModel : ViewModel() {
             } finally {
                 loading.value = false
             }
+        }
+    }
+
+    fun getProductsByUserId(userId: Long) {
+        viewModelScope.launch {
+            loading.value = true
+            val response = try {
+                RetrofitInstance.apiServiceProduct.getProductsByUserId(userId)
+            } catch (e: IOException) {
+                Log.d("ProductViewModel-getProductsByUserId", "Network error: ${e.localizedMessage}")
+                loading.value = false
+                return@launch
+            } catch (e: HttpException) {
+                Log.d("ProductViewModel-getProductsByUserId", "API error: ${e.localizedMessage}")
+                loading.value = false
+                return@launch
+            }
+
+            if (response.isSuccessful && response.body() != null) {
+                _userProducts.clear()
+                _userProducts.addAll(response.body()!!)
+            } else {
+                Log.d("ProductViewModel-getProductsByUserId", "Error in response: ${response.errorBody()?.string()}")
+            }
+            loading.value = false
         }
     }
 

@@ -45,6 +45,8 @@ sealed class AppScreens(val route: String) {
     object ChatView : AppScreens("ChatView")
     object ChatMessages : AppScreens("chat_message/{chatId}")
     object menuDetalleProd : AppScreens("menuDetalleProd/{productId}")
+    object myProductsView : AppScreens("mis_productos")
+    object myProductDetailView : AppScreens("my_product_detail")
     companion object {
         fun editProfile(any: Any) {
 
@@ -167,6 +169,15 @@ fun AppScreens(navController: NavController) {
                 val chatId = backStackEntry.arguments?.getLong("chatId") ?: 0L
                 ChatMessage(navController = navController, chatId = chatId)
             }
+
+        composable(AppScreens.myProductsView.route){
+            @Composable
+            fun MisProductos(navController: NavController){}
+        }
+        composable(AppScreens.myProductDetailView.route){
+            @Composable
+            fun MisProdDetalles(navController: NavController){}
+        }
 
     }
 }

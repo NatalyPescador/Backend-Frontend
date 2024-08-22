@@ -19,7 +19,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -27,13 +29,16 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.GanApp.viewsganapp.viewModels.ChatMessagesViewModel
 import com.GanApp.viewsganapp.models.MessageDto
+import com.GanApp.viewsganapp.utils.getUserData
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ChatMessage(navController: NavHostController, chatId: Long) {
     val chatViewModel: ChatMessagesViewModel = viewModel()
     var message by remember { mutableStateOf("") }
     val messages by chatViewModel.messages.collectAsState()
+    val context = LocalContext.current
+    val userId = remember { getUserData(context)?.userId ?: 0L }
 
     // Aquí puedes añadir la lógica para obtener la imagen de perfil y el nombre del usuario desde el backend
     val profileImageUrl = "https://example.com/path/to/profile/image.jpg" // Reemplaza esta URL con la URL real
@@ -90,7 +95,7 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                 .background(color = Color.White)
                 .fillMaxSize()
                 .padding(paddingValues)
-                .nestedScroll(rememberNestedScrollInteropConnection()), // Agregar nestedScrol
+                .nestedScroll(rememberNestedScrollInteropConnection()), // Agregar nestedScroll
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             // Sección para mostrar los mensajes
@@ -98,6 +103,7 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                 modifier = Modifier
                     .weight(1f)
                     .padding(16.dp)
+                    //.imeNestedScroll()
                     .verticalScroll(rememberScrollState())
             ) {
                 messages.forEach { msg ->
@@ -106,22 +112,30 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                 }
             }
 
+
             // Row inferior para escribir y enviar mensajes
             Row(
                 modifier = Modifier
                     .padding(16.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .imePadding(), // Ajustar el padding inferior para el teclado
                 verticalAlignment = Alignment.CenterVertically,
-
             ) {
                 TextField(
                     value = message,
                     onValueChange = { newValue -> message = newValue },
                     modifier = Modifier
                         .weight(1f)
+                        .imePadding()
                         .border(1.dp, Color.Gray, RoundedCornerShape(20.dp)), // Borde redondeado
                     placeholder = { Text(text = "Escribe un mensaje") },
-                    shape = RoundedCornerShape(20.dp),// Redondear el campo de texto
+                    shape = RoundedCornerShape(20.dp), // Redondear el campo de texto
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = Color.White, // Color de fondo del TextField
+                        focusedIndicatorColor = Color.Transparent, // Color del indicador cuando está enfocado
+                        unfocusedIndicatorColor = Color.Transparent, // Color del indicador cuando no está enfocado
+                    ),
+                    textStyle = TextStyle(color = Color.Black) // Color del texto
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Box(
@@ -137,7 +151,7 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                                     chatId = chatId,
                                     message = message,
                                     status = "SENT",
-                                    senderId = 8L  // Ajuste temporal para prueba
+                                    senderId = userId
                                 )
                                 chatViewModel.sendMessage(messageDto)
                                 message = ""  // Limpiar el campo de texto después de enviar

@@ -37,7 +37,7 @@ fun Favoritos(navController: NavController) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Favoritos", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.Black) },
+                title = { Text("Mis Favoritos", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.Black) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate("homePage") }) {
                         Icon(
