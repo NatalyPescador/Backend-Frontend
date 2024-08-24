@@ -1,6 +1,7 @@
 package com.GanApp.viewsganapp.views
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -90,6 +91,12 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
     LaunchedEffect(selectedTipoServicio) {
         selectedTipoServicio?.tipoServicioId?.let {
             viewModel.fetchCategoriasByTipoServicio(it)
+        }
+    }
+
+    BackHandler {
+        navController.navigate("homePage") {
+            popUpTo(0) { inclusive = true } // Elimina toda la pila de navegación
         }
     }
 

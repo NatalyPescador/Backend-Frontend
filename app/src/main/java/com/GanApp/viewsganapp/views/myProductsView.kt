@@ -1,6 +1,7 @@
 package com.GanApp.viewsganapp.views
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,6 +47,12 @@ fun MisProductos(navController: NavController) {
 
     LaunchedEffect(userId) {
         productViewModel.getProductsByUserId(userId)
+    }
+
+    BackHandler {
+        navController.navigate("homePage") {
+            popUpTo(0) { inclusive = true } // Elimina toda la pila de navegación
+        }
     }
 
     Scaffold(

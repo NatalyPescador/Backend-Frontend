@@ -1,5 +1,6 @@
 import android.content.Context
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -42,6 +43,12 @@ fun EditarPerfil(navController: NavController, context: Context) {
 
     LaunchedEffect(Unit) {
         viewModel.fetchUserData(context)
+    }
+
+    BackHandler {
+        navController.navigate("homePage") {
+            popUpTo(0) { inclusive = true } // Elimina toda la pila de navegación
+        }
     }
 
     var name by remember { mutableStateOf(user?.nombreCompleto ?: "Nombre de Usuario") }

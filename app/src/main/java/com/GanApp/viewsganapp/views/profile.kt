@@ -2,6 +2,7 @@ package com.GanApp.viewsganapp.views
 
 
 import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -82,6 +83,12 @@ fun Perfil(navController: NavHostController, context: Context) {
             nombreCompleto = it.nombreCompleto
             correo = it.correo
             numeroTelefono = it.numeroTelefono
+        }
+    }
+
+    BackHandler {
+        navController.navigate("homePage") {
+            popUpTo(0) { inclusive = true } // Elimina toda la pila de navegación
         }
     }
 
