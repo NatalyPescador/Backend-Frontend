@@ -63,7 +63,7 @@ fun Facebook (navController: NavController){
 
         Spacer(modifier = Modifier.height(50.dp))
 
-        Text(text = "Tus nombres, foto de perfil y dirección de correo electronico",
+        Text(text = "Tus nombres, tu foto de perfil y tu dirección de correo electrónico",
             fontSize = 20.sp,
             textAlign = TextAlign.Center)
 

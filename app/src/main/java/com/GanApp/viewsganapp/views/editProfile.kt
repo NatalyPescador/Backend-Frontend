@@ -167,10 +167,10 @@ fun EditarPerfil(navController: NavController, context: Context) {
             OutlinedTextField(
                 value = phoneNumber,
                 onValueChange = { phoneNumber = it },
-                label = { Text("Telefono") },
+                label = { Text("Teléfono") },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
-                    Icon(imageVector = Icons.Filled.Phone, contentDescription = "Telefono")
+                    Icon(imageVector = Icons.Filled.Phone, contentDescription = "Teléfono")
                 },
                 modifier = Modifier
                     .offset(y = (-40).dp)

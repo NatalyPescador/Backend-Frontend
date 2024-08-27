@@ -114,7 +114,7 @@ fun ForgotPassword(navController: NavController, onSubmit: (ForgotPasswordData) 
                 correo = filteredText
                 isCorreoValido = isValidEmail(filteredText) // Verificar si el correo tiene un formato válido
             },
-            label = { Text("Ingrese su correo electrónico") },
+            label = { Text("Ingresa tu correo electrónico") },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Email, contentDescription = "gmail")

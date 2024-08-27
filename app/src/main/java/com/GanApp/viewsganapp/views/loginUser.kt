@@ -159,7 +159,7 @@ fun LogIn(navController: NavController, context: Context, snackbarHostState: Sna
                 color = Color.Black)
             Spacer(modifier = Modifier.width(15.dp))
             Text(
-                text = "Registrate",
+                text = "Regístrate",
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
                 modifier = Modifier.clickable {
@@ -169,7 +169,7 @@ fun LogIn(navController: NavController, context: Context, snackbarHostState: Sna
         }
         Spacer(modifier = Modifier.height(15.dp))
         Text(
-            text = "¿Olvidaste tú contraseña?",
+            text = "¿Olvidaste tu contraseña?",
             color = Color.Black,
             modifier = Modifier
                 .clickable {

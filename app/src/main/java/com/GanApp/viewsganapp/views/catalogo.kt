@@ -54,7 +54,7 @@ fun CatalogoPrincipal(navController: NavController, productViewModel: ProductVie
             ),
             modifier = Modifier.padding(16.dp)
         ) {
-            Icon(imageVector = Icons.Default.RadioButtonChecked, contentDescription = "telefono")
+            Icon(imageVector = Icons.Default.RadioButtonChecked, contentDescription = "teléfono")
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = "Filtrar",
                 style = TextStyle(

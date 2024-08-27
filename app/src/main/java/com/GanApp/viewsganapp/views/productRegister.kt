@@ -156,7 +156,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                     val filteredText = it.replace("\n", "")
                     nombre = filteredText
                 },
-                label = { Text("Nombre producto", color=Color.Black) },
+                label = { Text("Nombre del producto", color=Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     val painter = painterResource(id = R.drawable.nombre_producto_icn)
@@ -272,12 +272,12 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                     val filteredText = it.replace("\n", "")
                     uom = filteredText
                 },
-                label = { Text("Unidad de Medida", color=Color.Black) },
+                label = { Text("Unidad de medida", color=Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     val painter = painterResource(id = R.drawable.nombre_producto_icn)
                     Icon(
-                        painter = painter, contentDescription = "Unidad de Medida",
+                        painter = painter, contentDescription = "Unidad de medida",
                         modifier = Modifier.size(24.dp)
                     )
                 },

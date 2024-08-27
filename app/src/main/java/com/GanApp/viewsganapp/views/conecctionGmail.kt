@@ -63,7 +63,7 @@ fun Gmail (navController: NavController){
 
         Spacer(modifier = Modifier.height(50.dp))
 
-        Text(text = "Tú correo electronico",
+        Text(text = "Tu correo electrónico",
             fontSize = 20.sp,
             textAlign = TextAlign.Center)
 
