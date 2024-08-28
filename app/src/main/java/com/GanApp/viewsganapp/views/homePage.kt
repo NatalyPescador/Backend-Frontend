@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,14 +23,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.AddTask
 import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.material.icons.outlined.AddTask
 import androidx.compose.material.icons.outlined.Chat
-import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.DrawerValue
@@ -96,13 +95,13 @@ fun HomePage(navController: NavHostController) {
     val viewModel: ProductViewModel = viewModel()
 
     val onSubmit: (ProductDataDto) -> Unit = { productDataDto ->
-    // Usar context correctamente aquí
-    viewModel.uploadProductData(
-        context,
-        Uri.parse(productDataDto.imagen), // Suponiendo que la imagen es una URI en cadena
-        productDataDto
-    )
-}
+        // Usar context correctamente aquí
+        viewModel.uploadProductData(
+            context,
+            Uri.parse(productDataDto.imagen), // Suponiendo que la imagen es una URI en cadena
+            productDataDto
+        )
+    }
     val chatViewModel: ChatViewModel = viewModel()
     val productViewModel: ProductViewModel = viewModel()
 
@@ -147,28 +146,48 @@ fun HomePage(navController: NavHostController) {
 
         )
 
-    Box {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         ModalNavigationDrawer(
+            modifier = Modifier
+                .background(Color.White),
             drawerContent = {
-                ModalDrawerSheet(/*modifier = Modifier.padding(end = 50.dp)*/  ) {
+                ModalDrawerSheet(
+                    modifier = Modifier
+                        .width(270.dp) // Ajusta el ancho del Drawer
+                        .background(Color.White)
+                ) {
                     Box(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .background(color = Color(255, 255, 255))//.background(color = Color(195, 252, 219))
+                            .fillMaxHeight()
+
+                            .background(
+                                color = Color(
+                                    255,
+                                    255,
+                                    255
+                                )
+                            )//.background(color = Color(195, 252, 219))
                     ) {
                         Column(
                             modifier = Modifier
                                 .verticalScroll(rememberScrollState())
+                                .background(color = Color(255, 255, 255))
+                                .fillMaxHeight()
                         ) {
                             Spacer(modifier = Modifier.height(26.dp))
                             Image(
                                 painter = painterResource(id = R.drawable.icono_proyect),
                                 contentDescription = "",
                                 modifier = Modifier
-                                    .width(150.dp)
-                                    .height(150.dp)
+                                    //.width(150.dp)
+                                    //.height(150.dp)
                                     .size(150.dp)
-                                    .fillMaxWidth()
+                                    //.fillMaxWidth()
                                     .align(CenterHorizontally)
                             )
                             Spacer(modifier = Modifier.height(26.dp))
@@ -180,12 +199,12 @@ fun HomePage(navController: NavHostController) {
 
                                 Box(
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                    //.background(backgroundColor)
+                                        .background(Color.White)
                                 )
 
                                 {
                                     NavigationDrawerItem(
+
                                         colors = NavigationDrawerItemDefaults.colors(
                                             selectedContainerColor = Color(10, 191, 4),
                                             unselectedContainerColor = Color.White
@@ -225,11 +244,13 @@ fun HomePage(navController: NavHostController) {
                                                 } else drawerItem.unselectedIcon,
                                                 contentDescription = drawerItem.title,
                                                 tint = iconColor, // Aplicar el color del icono
+                                                modifier = Modifier.size(24.dp)
 
 
                                             )
 
                                         },
+
                                         badge = {
                                             drawerItem.badgeCount?.let {
                                                 Text(text = drawerItem.badgeCount.toString())
@@ -238,11 +259,21 @@ fun HomePage(navController: NavHostController) {
                                         },
 
                                         modifier = Modifier
+                                            .fillMaxHeight()
                                             .padding(NavigationDrawerItemDefaults.ItemPadding)
+                                            .background(Color.White)
                                     )
                                 }
                                 Spacer(modifier = Modifier.height(10.dp))
+
+
                             }
+                            Row(
+                                modifier = Modifier
+                                    .height(50.dp)
+                                    .background(Color.White)
+                            ) {}
+                            Spacer(modifier = Modifier.height(10.dp))
                         }
                     }
                 }
@@ -272,7 +303,7 @@ fun HomePage(navController: NavHostController) {
                                 .height(60.dp)
                                 .width(85.dp)
                                 .offset(y = 65.dp)
-                                .offset(x = 55.dp)
+                                .offset(x = 45.dp)
 
                         )
 
@@ -287,27 +318,36 @@ fun HomePage(navController: NavHostController) {
                         Icon(
                             imageVector = Icons.Default.Menu,
                             contentDescription = "Menu",
-                            tint = Color(2,115,10),
-                            modifier = Modifier.size(40.dp),
+                            tint = Color(2, 115, 10),
+                            modifier = Modifier.size(24.dp),
 
                             )
                     }
-                }, colors = TopAppBarDefaults.topAppBarColors(Color(255,255,255))
+                }, colors = TopAppBarDefaults.topAppBarColors(Color(255, 255, 255))
                 )
             }
             ) { innerPadding ->
                 val context: Context = LocalContext.current
 
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .background(color = Color.White) // Cambiar el fondo a blanco
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .background(color = Color.White) // Cambiar el fondo a blanco
                 ) {
                     when (items[selectedItemIndex].title) {
-                        "Mi perfil" -> Perfil( navController = navController, context = context)
+                        "Mi perfil" -> Perfil(navController = navController, context = context)
                         "Catálogo" -> CatalogoPrincipal(navController = navController)
-                        "Registrar producto" -> ProductRegister(navController = navController, onSubmit = onSubmit)
-                        "Mis chats" -> ShowChats(navController = navController, chatViewModel = chatViewModel)
+                        "Registrar producto" -> ProductRegister(
+                            navController = navController,
+                            onSubmit = onSubmit
+                        )
+
+                        "Mis chats" -> ShowChats(
+                            navController = navController,
+                            chatViewModel = chatViewModel
+                        )
+
                         "Mis productos" -> MisProductos(navController = navController)
 
                         else -> CatalogoPrincipal(navController = navController) // Fallback si no se encuentra la opción
