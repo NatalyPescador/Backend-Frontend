@@ -26,17 +26,16 @@ import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,15 +43,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
+import com.GanApp.viewsganapp.ui.theme.Utendo
 import kotlinx.coroutines.delay
-import androidx.compose.foundation.layout.Column as Column
 
 
 var showErrorRegister by mutableStateOf(false)
@@ -78,23 +76,24 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
 
         Row(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(10.dp)
                 .fillMaxWidth()
-                .offset(y = 20.dp),
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
                 modifier = Modifier.offset(y = 35.dp)
             )
         }
+        Spacer(modifier = Modifier.height(30.dp))
 
         Text(
-            text = "Registrarse",
+            text = "Regístrate",
             color = Color.Black,
-            fontSize = 40.sp,
+            fontFamily = Utendo,
+            fontSize = 35.sp,
             modifier = Modifier
                 .padding(bottom = 16.dp)
-                .offset(y = 20.dp)
+                .offset(y = 10.dp)
 
         )
 
@@ -110,9 +109,10 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
                 Icon(imageVector = Icons.Default.Person, contentDescription = "telefono")
             },
             shape = RoundedCornerShape(20.dp), // Ajusta el radio del borde según tus preferencias
-            modifier = Modifier.offset(y = 20.dp),
+            modifier = Modifier.offset(y = 5.dp),
 
         )
+        Spacer(modifier = Modifier.height(5.dp))
 
         OutlinedTextField(
             value = correo,
@@ -120,15 +120,16 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
                 val filteredText = it.replace("\n", "")
                 correo = filteredText
             },
-            label = { Text("Correo Electrónico") },
+            label = { Text("Correo electrónico") },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Email, contentDescription = "gmail")
             },
             shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 20.dp)
+            modifier = Modifier.offset(y = 5.dp)
 
         )
+        Spacer(modifier = Modifier.height(5.dp))
 
         OutlinedTextField(
             value = numeroTelefono,
@@ -136,16 +137,17 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
                 val filteredText = it.filter { char -> char.isDigit() }
                 numeroTelefono = filteredText
             },
-            label = { Text("Número de Teléfono") },
+            label = { Text("Número de teléfono") },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Phone, contentDescription = "nombre")
             },
             shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 20.dp)
+            modifier = Modifier.offset(y = 5.dp)
 
 
         )
+        Spacer(modifier = Modifier.height(5.dp))
 
         OutlinedTextField(
             value = password,
@@ -165,11 +167,11 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
             },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 20.dp)
+            modifier = Modifier.offset(y = 5.dp)
 
         )
 
-        Spacer(modifier = Modifier.height(5.dp)) // Añade espacio entre el formulario y el botón
+        Spacer(modifier = Modifier.height(10.dp)) // Añade espacio entre el formulario y el botón
 
         Box(
             modifier = Modifier.offset(y = 20.dp)
@@ -177,15 +179,21 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
             Button( onClick = { navController.navigate("homePage")
                 onSubmit(UserData(nombreCompleto, correo, password, numeroTelefono)) },
                 colors = buttonColors(
-                    Color(10, 191, 4)
-                )
+                    Color(10, 191, 4)),
+                modifier = Modifier
+                    .height(55.dp)
             )
             {
-                Text("Registrarse", color = Color.Black)
+                Text("Regístrate", color = Color.White,
+                    style = TextStyle(
+                        fontFamily = Utendo,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
+                    ),)
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
         LaunchedEffect(showErrorRegister) {
             if (showErrorRegister) {
@@ -215,7 +223,7 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
             Text(text = "¿Ya tienes una cuenta?", color = Color.Black)
             Spacer(modifier = Modifier.width(15.dp))
             Text(text = "Inicia Sesión",
-                color = Color.Black,
+                color = Color.Blue,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.clickable {
                         navController.navigate("loginUser_screens")
@@ -225,8 +233,8 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
         Row(
             modifier = Modifier
                 .padding(16.dp)
-                .fillMaxWidth()
-                .offset(y = 20.dp),
+                .fillMaxWidth(),
+                //.offset(y = 5.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center // Centra las imágenes en el Row
         ) {

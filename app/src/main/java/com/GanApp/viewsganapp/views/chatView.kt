@@ -1,6 +1,5 @@
 package com.GanApp.viewsganapp.views
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
@@ -28,14 +25,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.GanApp.viewsganapp.R
 import com.GanApp.viewsganapp.components.ChatItem
+import com.GanApp.viewsganapp.ui.theme.Utendo
 import com.GanApp.viewsganapp.utils.getUserData
 import com.GanApp.viewsganapp.viewModels.ChatViewModel
 
@@ -78,24 +73,19 @@ fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = v
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.logo),
-                    contentDescription = "Logo",
-                    modifier = Modifier
-                        .size(140.dp) // Tamaño del logo más grande
-                )
+                    .offset(y = (30).dp),
 
-                Spacer(modifier = Modifier.width(8.dp))
+            ) {
 
                 Text(
-                    text = "TUS CHATS",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
+                    text = "Tus Chats",
+                    fontFamily = Utendo,
+                    fontSize = 35.sp,
                     color = Color.Black,
                     modifier = Modifier.align(Alignment.CenterVertically) // Centrar verticalmente el texto
                 )
             }
+            Spacer(modifier = Modifier.height(16.dp))
 
             // Lista de chats
             Column(

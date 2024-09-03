@@ -20,12 +20,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
+import com.GanApp.viewsganapp.ui.theme.Utendo
 
 @Composable
 
@@ -51,21 +53,27 @@ fun Gmail (navController: NavController){
                 modifier = Modifier.offset(y = 35.dp)
             )
         }
+        Spacer(modifier = Modifier.height(30.dp))
 
         Text(
             text = "GanApp está solicitando acceso a:",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
             modifier = Modifier
-                .padding(bottom = 16.dp)
+                .padding(26.dp)
                 .offset(y = 35.dp)
         )
 
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Text(text = "Tu correo electrónico",
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center)
+            fontSize = 18.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(26.dp)
+        )
+        Spacer(modifier = Modifier.height(35.dp))
 
         Box(
             modifier = Modifier.offset(y = 30.dp)
@@ -76,11 +84,17 @@ fun Gmail (navController: NavController){
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 50.dp, vertical = 10.dp)
+                    .padding(horizontal = 70.dp, vertical = 10.dp)
+                    .height(55.dp)
             )
             {
-                Text("Continuar", color = Color.Black,
-                    fontSize = 17.sp)
+                Text("Continuar", color = Color.White,
+                    style = TextStyle(
+                        fontFamily = Utendo,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
+                    )
+                )
             }
         }
 
@@ -94,10 +108,15 @@ fun Gmail (navController: NavController){
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 65.dp, vertical = 10.dp)
+                    .height(55.dp)
             )
             {
-                Text("Cancelar", color = Color.Black,
-                    fontSize = 17.sp)
+                Text("Cancelar", color = Color.White,
+                    style = TextStyle(
+                        fontFamily = Utendo,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
+                    ))
             }
         }
 

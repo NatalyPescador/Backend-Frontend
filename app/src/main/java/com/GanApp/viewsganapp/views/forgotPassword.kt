@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -25,7 +25,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
+import com.GanApp.viewsganapp.ui.theme.Utendo
 import kotlinx.coroutines.delay
 
 var showErrorForgotPassword by mutableStateOf(false)
@@ -60,7 +66,7 @@ fun ForgotPassword(navController: NavController, onSubmit: (ForgotPasswordData) 
 
         Row(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(26.dp)
                 .fillMaxWidth()
         ) {
             Image(
@@ -74,22 +80,25 @@ fun ForgotPassword(navController: NavController, onSubmit: (ForgotPasswordData) 
             modifier = Modifier
                 .padding(120.dp)
                 .fillMaxWidth()
+                .wrapContentWidth(Alignment.CenterHorizontally)
+
         ) {
             Image(
                 painter = painterResource(id = R.drawable.candado), contentDescription = "Logo",
                 modifier = Modifier
                     .height(90.dp)
                     .width(90.dp)
-                    .offset(y = (-90).dp)
+                    .offset(y = (-90).dp),
+
             )
         }
 
-        Spacer(modifier = Modifier.height(25.dp))
+        Spacer(modifier = Modifier.height(40.dp))
 
         Text(
             text = "¿Tienes problemas para ingresar a tu cuenta?",
             fontWeight = FontWeight.Bold,
-            fontSize = 27.sp,
+            fontSize = 25.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(bottom = 16.dp)
@@ -98,11 +107,11 @@ fun ForgotPassword(navController: NavController, onSubmit: (ForgotPasswordData) 
         )
 
         Text(
-            text = "Introduce tu correo electrónico y te enviaremos un código para que puedas ingresar de nuevo.",
-            fontSize = 20.sp,
+            text = "Introduce tu correo electrónico y te enviaremos un código para que puedas ingresar de nuevo",
+            fontSize = 18.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier
-                .padding(bottom = 16.dp)
+                .padding(bottom = 26.dp)
                 .offset(y = (-220).dp)
 
         )
@@ -114,7 +123,8 @@ fun ForgotPassword(navController: NavController, onSubmit: (ForgotPasswordData) 
                 correo = filteredText
                 isCorreoValido = isValidEmail(filteredText) // Verificar si el correo tiene un formato válido
             },
-            label = { Text("Ingresa tu correo electrónico") },
+            label = { Text("Ingresa tu correo electrónico", fontSize = 14.sp) },
+
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Email, contentDescription = "gmail")
@@ -148,7 +158,7 @@ fun ForgotPassword(navController: NavController, onSubmit: (ForgotPasswordData) 
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(15.dp))
 
         Box(
             modifier = Modifier.offset(y = (-220).dp)
@@ -163,15 +173,21 @@ fun ForgotPassword(navController: NavController, onSubmit: (ForgotPasswordData) 
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 65.dp, vertical = 10.dp),
+                    .padding(horizontal = 80.dp, vertical = 10.dp)
+                    .height(55.dp),
                 enabled = isCorreoValido // Habilitar el botón solo si el correo es válido
             )
             {
                 Text("Enviar", color = Color.Black,
-                    fontSize = 17.sp)
+                    style = TextStyle(
+                        fontFamily = Utendo,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
+                    ))
             }
 
         }
+        Spacer(modifier = Modifier.height(15.dp))
 
         Box(
             modifier = Modifier.offset(y = (-230).dp)
@@ -183,10 +199,15 @@ fun ForgotPassword(navController: NavController, onSubmit: (ForgotPasswordData) 
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 80.dp, vertical = 10.dp)
+                    .height(55.dp)
             )
             {
-                Text("Cancelar", color = Color.Black,
-                    fontSize = 17.sp)
+                Text("Cancelar", color = Color.White,
+                    style = TextStyle(
+                        fontFamily = Utendo,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
+                    ))
             }
         }
     }

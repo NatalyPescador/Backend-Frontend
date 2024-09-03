@@ -23,29 +23,36 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.AddLocationAlt
+import androidx.compose.material.icons.filled.Apps
+import androidx.compose.material.icons.filled.AspectRatio
+import androidx.compose.material.icons.filled.Balance
+import androidx.compose.material.icons.filled.Campaign
+import androidx.compose.material.icons.filled.ContentPaste
+import androidx.compose.material.icons.filled.SwipeDownAlt
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,6 +65,7 @@ import com.GanApp.viewsganapp.components.TipoServicioDropdown
 import com.GanApp.viewsganapp.models.CategoriaEntity
 import com.GanApp.viewsganapp.models.ProductDataDto
 import com.GanApp.viewsganapp.models.TipoServicioEntity
+import com.GanApp.viewsganapp.ui.theme.Utendo
 import com.GanApp.viewsganapp.utils.getUserData
 import com.GanApp.viewsganapp.viewModels.ProductViewModel
 
@@ -102,52 +110,33 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigate("homePage") }) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            modifier = Modifier.size(35.dp),
-                            contentDescription = "Volver"
-                        )
-                    }
-                },
+            TopAppBar(
+                title = {}, // Deja el título vacío para no mostrar contenido
+                navigationIcon = {}, // Deja el icono de navegación vacío
+                actions = {}, // Deja las acciones vacías
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(152, 255, 150),
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.Black,
-                    actionIconContentColor = Color.Red
-                )
+                    containerColor = Color(255, 255, 255)              )// Deja las acciones vacías)
             )
-        }
+        },
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxHeight()
+                .fillMaxWidth()
                 .background(Color.White)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .offset(y = (30).dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Row(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
-                    modifier = Modifier.offset(y = (-20).dp)
-                )
-            }
             Text(
-                text = "Registrar producto",
-                fontWeight = FontWeight.Bold,
-                fontSize = 38.sp,
+                text = "Registrar Producto",
+                fontFamily = Utendo,
+                fontSize = 35.sp,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.offset(y = (-35).dp)
+                modifier = Modifier.offset(y = (-30).dp)
             )
 
             OutlinedTextField(
@@ -168,6 +157,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.offset(y = (-5).dp)
             )
+            Spacer(modifier = Modifier.height(5.dp))
 
             OutlinedTextField(
                 value = precio,
@@ -190,6 +180,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 keyboardActions = KeyboardActions.Default,
                 singleLine = true
             )
+            Spacer(modifier = Modifier.height(5.dp))
 
             OutlinedTextField(
                 value = descripcion,
@@ -209,6 +200,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.offset(y = (-5).dp)
             )
+            Spacer(modifier = Modifier.height(5.dp))
 
             TipoServicioDropdown(
                 tiposServicio = viewModel.tiposServicio.value,
@@ -227,6 +219,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                     }
                 )
             }
+            Spacer(modifier = Modifier.height(5.dp))
 
             OutlinedTextField(
                 value = raza,
@@ -237,15 +230,17 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 label = { Text("Raza", color=Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
-                    val painter = painterResource(id = R.drawable.nombre_producto_icn)
+                    //val painter = painterResource(id = R.drawable.nombre_producto_icn)
                     Icon(
-                        painter = painter, contentDescription = "Raza",
+                        imageVector = Icons.Default.AspectRatio,
+                        contentDescription = "Raza",
                         modifier = Modifier.size(24.dp)
                     )
                 },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.offset(y = (-5).dp)
             )
+            Spacer(modifier = Modifier.height(5.dp))
 
             OutlinedTextField(
                 value = sexo,
@@ -256,15 +251,17 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 label = { Text("Sexo", color=Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
-                    val painter = painterResource(id = R.drawable.nombre_producto_icn)
+                    //val painter = painterResource(id = R.drawable.nombre_producto_icn)
                     Icon(
-                        painter = painter, contentDescription = "Sexo",
+                        imageVector = Icons.Default.SwipeDownAlt,
+                        contentDescription = "Sexo",
                         modifier = Modifier.size(24.dp)
                     )
                 },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.offset(y = (-5).dp)
             )
+            Spacer(modifier = Modifier.height(5.dp))
 
             OutlinedTextField(
                 value = uom,
@@ -275,15 +272,17 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 label = { Text("Unidad de medida", color=Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
-                    val painter = painterResource(id = R.drawable.nombre_producto_icn)
+                    //val painter = painterResource(id = R.drawable.nombre_producto_icn)
                     Icon(
-                        painter = painter, contentDescription = "Unidad de medida",
+                        imageVector = Icons.Default.Balance,
+                        contentDescription = "Unidad de Medida",
                         modifier = Modifier.size(24.dp)
                     )
                 },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.offset(y = (-5).dp)
             )
+            Spacer(modifier = Modifier.height(5.dp))
 
             OutlinedTextField(
                 value = edad,
@@ -294,9 +293,10 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 label = { Text("Edad", color=Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
-                    val painter = painterResource(id = R.drawable.dolar_icn)
+                    //val painter = painterResource(id = R.drawable.dolar_icn)
                     Icon(
-                        painter = painter, contentDescription = "Edad",
+                        imageVector = Icons.Default.ContentPaste,
+                        contentDescription = "Edad",
                         modifier = Modifier.size(24.dp)
                     )
                 },
@@ -306,6 +306,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 keyboardActions = KeyboardActions.Default,
                 singleLine = true
             )
+            Spacer(modifier = Modifier.height(5.dp))
 
             OutlinedTextField(
                 value = cantidad,
@@ -316,9 +317,10 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 label = { Text("Cantidad", color=Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
-                    val painter = painterResource(id = R.drawable.dolar_icn)
+                    //val painter = painterResource(id = R.drawable.dolar_icn)
                     Icon(
-                        painter = painter, contentDescription = "Cantidad",
+                        imageVector = Icons.Default.Apps,
+                        contentDescription = "Cantidad",
                         modifier = Modifier.size(24.dp)
                     )
                 },
@@ -328,6 +330,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 keyboardActions = KeyboardActions.Default,
                 singleLine = true
             )
+            Spacer(modifier = Modifier.height(5.dp))
 
             OutlinedTextField(
                 value = departamento,
@@ -338,15 +341,17 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 label = { Text("Departamento", color=Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
-                    val painter = painterResource(id = R.drawable.nombre_producto_icn)
+                    //val painter = painterResource(id = R.drawable.nombre_producto_icn)
                     Icon(
-                        painter = painter, contentDescription = "Departamento",
+                        imageVector = Icons.Default.AddLocationAlt,
+                        contentDescription = "Departamento",
                         modifier = Modifier.size(24.dp)
                     )
                 },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.offset(y = (-5).dp)
             )
+            Spacer(modifier = Modifier.height(5.dp))
 
             OutlinedTextField(
                 value = municipio,
@@ -357,9 +362,10 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 label = { Text("Municipio", color=Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
-                    val painter = painterResource(id = R.drawable.nombre_producto_icn)
+                    //val painter = painterResource(id = R.drawable.nombre_producto_icn)
                     Icon(
-                        painter = painter, contentDescription = "Municipio",
+                        imageVector = Icons.Default.AddLocationAlt,
+                        contentDescription = "Municipio",
                         modifier = Modifier.size(24.dp)
                     )
                 },
@@ -367,13 +373,19 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 modifier = Modifier.offset(y = (-5).dp)
             )
 
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(15.dp))
 
             Button(
                 onClick = { imagePickerLauncher.launch("image/*") },
                 colors = ButtonDefaults.buttonColors(Color(10, 191, 4))
             ) {
-                Text("Seleccionar Imagen")
+                Text("Añadir imagen",
+                    style = TextStyle(
+                    fontFamily = Utendo,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
+                    )
+                )
             }
 
             imageUri?.let {
@@ -414,11 +426,19 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
-                            painter = painterResource(id = R.drawable.promocion_icn),
+                            //painter = painterResource(id = R.drawable.promocion_icn),
+                            imageVector = Icons.Default.Campaign,
                             contentDescription = "Descripción del icono",
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(24.dp),
+                            tint = Color.White
                         )
-                        Text("Publicar", color = Color.Black, modifier = Modifier.padding(start = 8.dp))
+                        Text("Publicar",
+                            style = TextStyle(
+                                fontFamily = Utendo,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
+                            ),
+                            color = Color.White, modifier = Modifier.padding(start = 8.dp))
                     }
                 }
             }

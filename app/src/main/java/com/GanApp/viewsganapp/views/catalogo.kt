@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.RadioButtonChecked
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -54,8 +54,6 @@ fun CatalogoPrincipal(navController: NavController, productViewModel: ProductVie
             ),
             modifier = Modifier.padding(16.dp)
         ) {
-            Icon(imageVector = Icons.Default.RadioButtonChecked, contentDescription = "teléfono")
-            Spacer(modifier = Modifier.width(8.dp))
             Text(text = "Filtrar",
                 style = TextStyle(
                     fontFamily = Utendo,
@@ -63,6 +61,9 @@ fun CatalogoPrincipal(navController: NavController, productViewModel: ProductVie
                     fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
                 )
             )
+            Spacer(modifier = Modifier.width(8.dp))
+            Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = "telefono")
+
         }
 
         Catalogo(productos = products, navController = navController)

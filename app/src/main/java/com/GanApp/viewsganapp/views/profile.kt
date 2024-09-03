@@ -23,44 +23,38 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
+import com.GanApp.viewsganapp.ui.theme.Utendo
 import com.GanApp.viewsganapp.viewmodels.UserProfileViewModel
-import androidx.compose.material3.Icon as Icon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,32 +88,12 @@ fun Perfil(navController: NavHostController, context: Context) {
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {},
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigate("homePage") }) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            modifier = Modifier.size(35.dp),
-                            contentDescription = "Volver"
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { navController.navigate("favorito") }) {
-                        Icon(
-                            imageVector = Icons.Filled.Favorite,
-                            modifier = Modifier.size(35.dp),
-                            contentDescription = "Favorito"
-                        )
-                    }
-                },
+            TopAppBar(
+                title = {}, // Deja el título vacío para no mostrar contenido
+                navigationIcon = {}, // Deja el icono de navegación vacío
+                actions = {},
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(152, 255, 150),
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.Black,
-                    actionIconContentColor = Color.Red
-                )
+                    containerColor = Color(255, 255, 255)              )// Deja las acciones vacías
             )
         }
     ) { innerPadding ->
@@ -134,20 +108,23 @@ fun Perfil(navController: NavHostController, context: Context) {
                     .padding(innerPadding)
                     .fillMaxHeight()
                     .background(Color.White)
-                    .verticalScroll(rememberScrollState()),
+                    .verticalScroll(rememberScrollState())
+                    .offset(y = (-55).dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
+
             ) {
                 Text(
                     text = "Mi Perfil",
+                    fontFamily = Utendo,
                     fontSize = 35.sp,
-                    fontWeight = FontWeight.Bold,
                     modifier = Modifier
-                        .padding(16.dp)
+                        .padding(8.dp)
                         .fillMaxWidth()
                         .wrapContentWidth(Alignment.CenterHorizontally),
                     color = Color.Black
                 )
+                Spacer(modifier = Modifier.height(15.dp))
 
                 Box(
                     modifier = Modifier
@@ -180,7 +157,7 @@ fun Perfil(navController: NavHostController, context: Context) {
                 OutlinedTextField(
                     value = correo,
                     onValueChange = { if (isEditing) correo = it },
-                    label = { Text("Gmail") },
+                    label = { Text("Correo electrónico") },
                     textStyle = TextStyle(color = Color.Black),
                     leadingIcon = {
                         Icon(imageVector = Icons.Filled.Email, contentDescription = "Gmail")
@@ -206,6 +183,7 @@ fun Perfil(navController: NavHostController, context: Context) {
                     shape = RoundedCornerShape(20.dp),
                     enabled = isEditing
                 )
+                Spacer(modifier = Modifier.height(25.dp))
 
                 Box(
                     modifier = Modifier.offset(y = (-50).dp)
@@ -238,7 +216,13 @@ fun Perfil(navController: NavHostController, context: Context) {
                                 contentColor = Color.Black
                             )
                         ) {
-                            Text("Editar perfil", color = Color.Black)
+                            Text("Editar perfil", color = Color.White,
+                                style = TextStyle(
+                                    fontFamily = Utendo,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
+                                )
+                            )
                         }
                     }
                 }
