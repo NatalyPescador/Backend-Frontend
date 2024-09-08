@@ -224,7 +224,7 @@ class MainActivity : ComponentActivity() {
 
                         }
 
-                        composable(AppScreens.detalleProd.route + "/{productId}") { backStackEntry ->
+                        composable(AppScreens.detalleProd.route) { backStackEntry ->
                             val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
                             VerDetalle(navController = navController, productId = productId)
                         }

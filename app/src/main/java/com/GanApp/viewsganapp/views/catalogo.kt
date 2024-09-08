@@ -116,7 +116,8 @@ fun Tarjeta(producto: ProductoEntity, navController: NavController) {
     ) {
         Column(
             modifier = Modifier.clickable {
-                navController.navigate("menuDetalleProd/${producto.productoId}")
+                //navController.navigate("menuDetalleProd/${producto.productoId}")
+                navController.navigate("detalleProd/${producto.productoId}")
             }
         ) {
             Image(
