@@ -1,5 +1,6 @@
 package com.GanApp.viewsganapp.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,12 @@ fun ChatItem(
     val containerColor = if (isSelected) Color(10, 191, 4) else Color.White // Colores personalizados
     val filename = chat.imagen.substringAfterLast('\\')
     val imageUrl = BaseUrlConstant.BASE_URL + "uploads/$filename"
+
+    BackHandler {
+        navController.navigate("homePage") {
+            popUpTo(0) { inclusive = true } // Elimina toda la pila de navegación
+        }
+    }
 
     Card(
         modifier = modifier

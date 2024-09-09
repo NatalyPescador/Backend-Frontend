@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.AddTask
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -185,25 +187,44 @@ fun MostrarMenuDetalleProd(navController: NavHostController, productId: Long) {
 
             ) {
             Scaffold( topBar = {
-                TopAppBar(title = { Image(painter = painterResource(id = R.drawable.logo),
-                    contentDescription = "Logo", modifier = Modifier
-                        .height(200.dp)
-                        .width(200.dp)
-                )
-
-                }, navigationIcon = {
-                    IconButton(onClick = {
-                        scope.launch {
-                            navigationState.open()
-                        }
-                    }) {
-                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu",
-                            tint = Color.Black,
-                            modifier = Modifier.size(40.dp)
+                TopAppBar(title = {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(205.dp)
+                            .padding(5.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.logo),
+                            contentDescription = "Logo",
+                            modifier = Modifier
+                                .height(200.dp)
+                                .width(200.dp)
 
                         )
+                        Image(
+                            painter = painterResource(id = R.drawable.vaca_titulo),
+                            contentDescription = "Vaca",
+                            modifier = Modifier
+                                .height(60.dp)
+                                .width(85.dp)
+                                .offset(y = 65.dp)
+                                .offset(x = 45.dp)
+
+                        )
+
                     }
-                },  colors = TopAppBarDefaults.topAppBarColors(Color(152, 255, 150))
+
+                }, navigationIcon = {
+                    IconButton(onClick = { navController.navigate("homePage") }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            modifier = Modifier.size(35.dp),
+                            tint = Color(2, 115, 10),
+                            contentDescription = "Volver"
+                        )
+                    }
+                },  colors = TopAppBarDefaults.topAppBarColors(Color(255, 255, 255))
 
                 )
             }

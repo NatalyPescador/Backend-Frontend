@@ -1,6 +1,7 @@
 package com.GanApp.viewsganapp.views
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,22 +15,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
-import com.GanApp.viewsganapp.R
+import com.GanApp.viewsganapp.ui.theme.Utendo
 import com.GanApp.viewsganapp.utils.BaseUrlConstant
 import com.GanApp.viewsganapp.utils.getUserData
 import java.text.NumberFormat
@@ -48,27 +46,22 @@ fun MisProductos(navController: NavController) {
         productViewModel.getProductsByUserId(userId)
     }
 
+    BackHandler {
+        navController.navigate("homePage") {
+            popUpTo(0) { inclusive = true } // Elimina toda la pila de navegación
+        }
+    }
+
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {Text("")},
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigate("homePage") }) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            modifier = Modifier.size(35.dp),
-                            contentDescription = "Volver"
-                        )
-                    }
-                },
+            TopAppBar(
+                title = {}, // Deja el título vacío para no mostrar contenido
+                navigationIcon = {}, // Deja el icono de navegación vacío
+                actions = {}, // Deja las acciones vacías
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(152, 255, 150),
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.Black,
-                    actionIconContentColor = Color.Red
-                )
+                    containerColor = Color(255, 255, 255)              )// Deja las acciones vacías)
             )
-        }
+        },
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -82,22 +75,17 @@ fun MisProductos(navController: NavController) {
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .offset(y = (30).dp),
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.logo),
-                    contentDescription = "Logo",
-                    modifier = Modifier
-                        .size(140.dp) // Tamaño del logo más grande
-                )
-
-                Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = "TUS PRODUCTOS",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
+                    text = "Tus Productos",
+                    fontFamily = Utendo,
+                    fontSize = 35.sp,
                     color = Color.Black,
-                    modifier = Modifier.align(Alignment.CenterVertically) // Centrar verticalmente el texto
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .offset(y = (-30).dp) // Ajusta la posición del título
                 )
             }
 
@@ -152,7 +140,7 @@ fun Tarjeta1(producto: ProductoEntity, navController: NavController) {
     ) {
         Column(
             modifier = Modifier.clickable {
-                navController.navigate("my_product_detail")
+                navController.navigate("my_product_detail/${producto.productoId}")
             }
         ) {
             Image(

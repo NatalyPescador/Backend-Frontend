@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddComment
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +31,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.GanApp.viewsganapp.R
 import com.GanApp.viewsganapp.components.Cards
 import com.GanApp.viewsganapp.utils.BaseUrlConstant
 import com.GanApp.viewsganapp.utils.getUserData
@@ -41,6 +44,7 @@ import kotlinx.coroutines.launch
 var showErrorReview by mutableStateOf(false)
 var errorMessageReview by mutableStateOf("")
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VerDetalle(navController: NavController, productId: Long) {
     val context = LocalContext.current
@@ -78,284 +82,350 @@ fun VerDetalle(navController: NavController, productId: Long) {
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(bottom = 70.dp) // Espacio para el botón fijo
-        ) {
-
+    Scaffold( topBar = {
+        TopAppBar(title = {
             Row(
                 modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                    .fillMaxWidth()
+                    .height(205.dp)
+                    .padding(5.dp)
             ) {
                 Image(
-                    painter = rememberAsyncImagePainter(model = imageUrl),
-                    contentDescription = selectedProduct?.nombre ?: "Sin nombre",
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "Logo",
                     modifier = Modifier
-                        .width(300.dp)
-                        .height(350.dp)
+                        .height(200.dp)
+                        .width(200.dp)
+
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.vaca_titulo),
+                    contentDescription = "Vaca",
+                    modifier = Modifier
+                        .height(60.dp)
+                        .width(85.dp)
+                        .offset(y = 65.dp)
+                        .offset(x = 45.dp)
+
+                )
+
+            }
+
+        }, navigationIcon = {
+            IconButton(onClick = { navController.navigate("homePage") }) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    modifier = Modifier.size(35.dp),
+                    tint = Color(2, 115, 10),
+                    contentDescription = "Volver"
                 )
             }
+        },  colors = TopAppBarDefaults.topAppBarColors(Color(255, 255, 255))
 
-            Text(
-                text = "Nombre del ejemplar: ${selectedProduct?.nombre ?: ""}",
-                fontSize = 20.sp,
-                color = Color.Black,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
+        )
+    }
+    ) { innerPadding ->
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = { showDescription = !showDescription },
-                colors = ButtonDefaults.buttonColors(Color(10, 191, 4)),
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(color = Color.White)
+        ) {
+            Column(
                 modifier = Modifier
-                    .padding(25.dp)
-                    .align(Alignment.CenterHorizontally)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(bottom = 70.dp) // Espacio para el botón fijo
             ) {
-                Text(text = if (showDescription) "Ocultar Descripción" else "Descripción", fontSize = 18.sp)
-            }
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            if (showDescription) {
-                Dialog(onDismissRequest = { showDescription = false }) {
-                    Box(
+                Row(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = rememberAsyncImagePainter(model = imageUrl),
+                        contentDescription = selectedProduct?.nombre ?: "Sin nombre",
                         modifier = Modifier
-                            .fillMaxSize()
-                            //.background(Color.Black.copy(alpha = 0.5f))
-                            .clickable(onClick = { showDescription = false })
-                    ) {
+                            .width(300.dp)
+                            .height(350.dp)
+                    )
+                }
+
+                Text(
+                    text = "Nombre del ejemplar: ${selectedProduct?.nombre ?: ""}",
+                    fontSize = 20.sp,
+                    color = Color.Black,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = { showDescription = !showDescription },
+                    colors = ButtonDefaults.buttonColors(Color(10, 191, 4)),
+                    modifier = Modifier
+                        .padding(25.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text(
+                        text = if (showDescription) "Ocultar Descripción" else "Descripción",
+                        fontSize = 18.sp
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                if (showDescription) {
+                    Dialog(onDismissRequest = { showDescription = false }) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .clickable(onClick = { /* Evitar el cierre de la tarjeta al hacer clic en el fondo */ }),
-                            contentAlignment = Alignment.Center
+                                //.background(Color.Black.copy(alpha = 0.5f))
+                                .clickable(onClick = { showDescription = false })
                         ) {
-                            Card(
+                            Box(
                                 modifier = Modifier
-                                    .align(Alignment.Center)
-                                    .padding(16.dp)
-                                    .background(Color(0xFFF2F2F2))
-                                    .clickable(onClick = {}), // Para evitar el cierre de la tarjeta al hacer clic en ella
-                                //shape = RoundedCornerShape(32.dp),
+                                    .fillMaxSize()
+                                    .clickable(onClick = { /* Evitar el cierre de la tarjeta al hacer clic en el fondo */ }),
+                                contentAlignment = Alignment.Center
                             ) {
-                                Column(
+                                Card(
                                     modifier = Modifier
+                                        .align(Alignment.Center)
                                         .padding(16.dp)
-                                        .fillMaxWidth()
+                                        .background(Color(0xFFF2F2F2))
+                                        .clickable(onClick = {}), // Para evitar el cierre de la tarjeta al hacer clic en ella
+                                    //shape = RoundedCornerShape(32.dp),
                                 ) {
-                                    Row(
+                                    Column(
                                         modifier = Modifier
-                                            .fillMaxWidth(),
-                                            //.border(1.dp, Color.Gray, RoundedCornerShape(16.dp)),
-                                        horizontalArrangement = Arrangement.End
+                                            .padding(16.dp)
+                                            .fillMaxWidth()
                                     ) {
-                                        IconButton(onClick = { showDescription = false }) {
-                                            Icon(
-                                                imageVector = Icons.Default.Close,
-                                                contentDescription = "Cerrar"
-                                            )
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth(),
+                                            //.border(1.dp, Color.Gray, RoundedCornerShape(16.dp)),
+                                            horizontalArrangement = Arrangement.End
+                                        ) {
+                                            IconButton(onClick = { showDescription = false }) {
+                                                Icon(
+                                                    imageVector = Icons.Default.Close,
+                                                    contentDescription = "Cerrar"
+                                                )
+                                            }
                                         }
+
+                                        Spacer(modifier = Modifier.height(16.dp))
+
+                                        Text(
+                                            text = "Precio: ${selectedProduct?.precio ?: ""}",
+                                            fontSize = 18.sp
+                                        )
+
+                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                        Text(
+                                            text = "Descripción: ${selectedProduct?.descripcion ?: ""}",
+                                            fontSize = 18.sp
+                                        )
+
+                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                        Text(
+                                            text = "Raza: ${selectedProduct?.raza ?: ""}",
+                                            fontSize = 18.sp
+                                        )
+
+                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                        Text(
+                                            text = "Sexo: ${selectedProduct?.sexo ?: ""}",
+                                            fontSize = 18.sp
+                                        )
+
+                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                        Text(
+                                            text = "Peso: ${selectedProduct?.uom ?: ""}",
+                                            fontSize = 18.sp
+                                        )
+
+                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                        Text(
+                                            text = "Edad: ${selectedProduct?.edad ?: ""}",
+                                            fontSize = 18.sp
+                                        )
+
+                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                        Text(
+                                            text = "Cantidad: ${selectedProduct?.cantidad ?: ""}",
+                                            fontSize = 18.sp
+                                        )
+
+                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                        Text(
+                                            text = "Departamento: ${selectedProduct?.departamento ?: ""}",
+                                            fontSize = 18.sp
+                                        )
+
+                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                        Text(
+                                            text = "Municipio: ${selectedProduct?.municipio ?: ""}",
+                                            fontSize = 18.sp
+                                        )
                                     }
-
-                                    Spacer(modifier = Modifier.height(16.dp))
-
-                                    Text(
-                                        text = "Precio: ${selectedProduct?.precio ?: ""}",
-                                        fontSize = 18.sp
-                                    )
-
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    Text(
-                                        text = "Descripción: ${selectedProduct?.descripcion ?: ""}",
-                                        fontSize = 18.sp
-                                    )
-
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    Text(
-                                        text = "Raza: ${selectedProduct?.raza ?: ""}",
-                                        fontSize = 18.sp
-                                    )
-
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    Text(
-                                        text = "Sexo: ${selectedProduct?.sexo ?: ""}",
-                                        fontSize = 18.sp
-                                    )
-
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    Text(
-                                        text = "Peso: ${selectedProduct?.uom ?: ""}",
-                                        fontSize = 18.sp
-                                    )
-
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    Text(
-                                        text = "Edad: ${selectedProduct?.edad ?: ""}",
-                                        fontSize = 18.sp
-                                    )
-
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    Text(
-                                        text = "Cantidad: ${selectedProduct?.cantidad ?: ""}",
-                                        fontSize = 18.sp
-                                    )
-
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    Text(
-                                        text = "Departamento: ${selectedProduct?.departamento ?: ""}",
-                                        fontSize = 18.sp
-                                    )
-
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    Text(
-                                        text = "Municipio: ${selectedProduct?.municipio ?: ""}",
-                                        fontSize = 18.sp
-                                    )
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            Text(
-                text = "Reseñas",
-                fontSize = 20.sp,
-                color = Color(0xFF02730A), // Cambia el color a #02730A
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .offset(y = 20.dp),
-            )
+                Text(
+                    text = "Reseñas",
+                    fontSize = 20.sp,
+                    color = Color(0xFF02730A), // Cambia el color a #02730A
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .offset(y = 20.dp),
+                )
 
-            OutlinedTextField(
-                value = resena,
-                onValueChange = {
-                    resena = it
-                },
-                label = { Text("Escribe tu reseña") },
-                textStyle = TextStyle(color = Color.Black),
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.AddComment, contentDescription = "telefono")
-                },
-                shape = RoundedCornerShape(20.dp), // Ajusta el radio del borde según tus preferencias
-                modifier = Modifier
-                    .offset(y = 20.dp)
-                    .align(Alignment.CenterHorizontally),
-            )
-
-            Spacer(modifier = Modifier.height(16.dp)) // Añade espacio entre el formulario y el botón
-
-            Box(modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.CenterHorizontally)) {
-                Button(
-                    onClick = {
-                        val reviewData = ReviewData(usuarioId = userId, productoId = productId, resena = resena)
-                        reviewViewModel.publishReview(reviewData)
-
-                        resena = ""
+                OutlinedTextField(
+                    value = resena,
+                    onValueChange = {
+                        resena = it
                     },
-                    colors = ButtonDefaults.buttonColors(Color(10, 191, 4))
-                ) {
-                    Text("Publicar reseña", fontSize = 18.sp, color = Color.White)
-                }
-            }
+                    label = { Text("Escribe tu reseña") },
+                    textStyle = TextStyle(color = Color.Black),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.AddComment,
+                            contentDescription = "telefono"
+                        )
+                    },
+                    shape = RoundedCornerShape(20.dp), // Ajusta el radio del borde según tus preferencias
+                    modifier = Modifier
+                        .offset(y = 20.dp)
+                        .align(Alignment.CenterHorizontally),
+                )
 
-            LaunchedEffect(showErrorReview) {
-                if (showErrorReview) {
-                    delay(5000)
-                    showErrorReview = false
-                }
-            }
+                Spacer(modifier = Modifier.height(16.dp)) // Añade espacio entre el formulario y el botón
 
-            if (showErrorReview) {
                 Box(
                     modifier = Modifier
                         .padding(16.dp)
-                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally)
                 ) {
-                    Text(
-                        errorMessageReview,
-                        color = Color.Red,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = 8.dp)
-                    )
-                }
-            }
+                    Button(
+                        onClick = {
+                            val reviewData = ReviewData(
+                                usuarioId = userId,
+                                productoId = productId,
+                                resena = resena
+                            )
+                            reviewViewModel.publishReview(reviewData)
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            if (loading) {
-                // Mostrar un indicador de carga mientras se cargan los datos
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            } else {
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                ) {
-                    items(selectedReview) { review ->
-                        Cards(review)
+                            resena = ""
+                        },
+                        colors = ButtonDefaults.buttonColors(Color(10, 191, 4))
+                    ) {
+                        Text("Publicar reseña", fontSize = 18.sp, color = Color.White)
                     }
                 }
 
-                Spacer(modifier = Modifier.height(30.dp))
-            }
-        }
+                LaunchedEffect(showErrorReview) {
+                    if (showErrorReview) {
+                        delay(5000)
+                        showErrorReview = false
+                    }
+                }
 
+                if (showErrorReview) {
+                    Box(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            errorMessageReview,
+                            color = Color.Red,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                    }
+                }
 
-        // Botón fijo en la parte inferior
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(16.dp)
-        ) {
-            Button(
-                onClick = {
-                    coroutineScope.launch {
-                        try {
-                            val receiverId = selectedProduct?.usuarioId ?: 0L
-                            buttonCreateChatViewModel.createOrFetchChat(productId = productId, userId = userId, receiverId = receiverId)
-                            Log.d("chatView", "Botón presionado para crear el chat")
-                        } catch (e: Exception) {
-                            Log.e("chatView", "Error al crear el chat: ${e.message}", e)
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if (loading) {
+                    // Mostrar un indicador de carga mientras se cargan los datos
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                } else {
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)
+                    ) {
+                        items(selectedReview) { review ->
+                            Cards(review)
                         }
                     }
-                },
-                colors = ButtonDefaults.buttonColors(Color(10, 191, 4)),
+
+                    Spacer(modifier = Modifier.height(30.dp))
+                }
+            }
+
+
+            // Botón fijo en la parte inferior
+            Box(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .offset(y = (-40).dp)
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(16.dp)
             ) {
-                Icon(imageVector = Icons.Default.Person, contentDescription = "Contactar al Vendedor")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Contactar al Vendedor", fontSize = 18.sp)
+                Button(
+                    onClick = {
+                        coroutineScope.launch {
+                            try {
+                                val receiverId = selectedProduct?.usuarioId ?: 0L
+                                buttonCreateChatViewModel.createOrFetchChat(
+                                    productId = productId,
+                                    userId = userId,
+                                    receiverId = receiverId
+                                )
+                                Log.d("chatView", "Botón presionado para crear el chat")
+                            } catch (e: Exception) {
+                                Log.e("chatView", "Error al crear el chat: ${e.message}", e)
+                            }
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(Color(10, 191, 4)),
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .offset(y = (-40).dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Contactar al Vendedor"
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = "Contactar al Vendedor", fontSize = 18.sp)
+                }
             }
         }
     }

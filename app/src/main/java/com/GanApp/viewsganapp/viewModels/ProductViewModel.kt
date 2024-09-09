@@ -5,13 +5,18 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.GanApp.viewsganapp.models.CategoriaEntity
 import com.GanApp.viewsganapp.models.ProductDataDto
 import com.GanApp.viewsganapp.models.ProductoEntity
 import com.GanApp.viewsganapp.models.TipoServicioEntity
+import com.GanApp.viewsganapp.models.UpdateProductDto
 import com.GanApp.viewsganapp.network.RetrofitInstance
+import com.GanApp.viewsganapp.network.RetrofitInstance.apiService
+import com.GanApp.viewsganapp.network.RetrofitInstance.apiServiceProduct
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -42,6 +47,8 @@ class ProductViewModel : ViewModel() {
 
     private val _userProducts = mutableStateListOf<ProductoEntity>()
     val userProducts: List<ProductoEntity> get() = _userProducts
+    private val _updateStatus = MutableLiveData<Result<String>>()
+    val updateStatus: LiveData<Result<String>> get() = _updateStatus
 
     init {
         fetchTiposServicio()
@@ -201,6 +208,22 @@ class ProductViewModel : ViewModel() {
             })
         }catch (e: Exception){
             Log.d("ProductViewModel-uploadProductData", "Exception caught: ${e.localizedMessage}")
+        }
+    }
+
+    fun updateProduct(id: Long, updatedProductDto: UpdateProductDto) {
+        viewModelScope.launch {
+            try {
+                // Realiza la llamada a la API
+                val response = apiServiceProduct.updateProduct(id, updatedProductDto)
+                if (response.isSuccessful) {
+                    _updateStatus.value = Result.success("Información actualizada exitosamente")
+                } else {
+                    _updateStatus.value = Result.failure(Exception("Error al actualizar el producto: ${response.errorBody()?.string()}"))
+                }
+            } catch (e: Exception) {
+                _updateStatus.value = Result.failure(e)
+            }
         }
     }
 }

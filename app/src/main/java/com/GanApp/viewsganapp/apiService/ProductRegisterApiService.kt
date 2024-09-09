@@ -2,13 +2,17 @@ package com.GanApp.viewsganapp.apiService
 
 import com.GanApp.viewsganapp.models.ProductoEntity
 import com.GanApp.viewsganapp.models.ReviewEntity
+import com.GanApp.viewsganapp.models.UpdateProductDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 
@@ -30,4 +34,10 @@ interface ProductRegisterApiService {
 
     @GET("productos/{userId}")
     suspend fun getProductsByUserId(@Path("userId") userId: Long): Response<List<ProductoEntity>>
+
+    @PUT("producto/actualizar/{id}")
+    suspend fun updateProduct(
+        @Path("id") id: Long,
+        @Body updatedProduct: UpdateProductDto
+    ): Response<ResponseBody>
 }

@@ -115,7 +115,7 @@ fun newPassword(navController: NavController, onSubmit: (newPasswordData) -> Uni
             label = { Text("teléfono") },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
-                Icon(imageVector = Icons.Default.Lock1, contentDescription = "telefono")
+                Icon(imageVector = Icons.Default.Lock1, contentDescription = "teléfono")
             },
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier.offset(y = 20.dp)

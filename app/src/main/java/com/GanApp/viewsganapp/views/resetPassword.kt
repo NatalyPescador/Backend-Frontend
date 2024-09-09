@@ -88,7 +88,7 @@ fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) ->
                 val filteredText = it.replace("\n", "")
                 token = filteredText
             },
-            label = { Text("Ingrese el código recibido", color = Color.Black,) },
+            label = { Text("Ingresa el código recibido", color = Color.Black,) },
             textStyle = TextStyle(color = Color.Black),
             leadingIcon = {
                 Icon(imageVector = Icons.Default.Lock, contentDescription = "candado")

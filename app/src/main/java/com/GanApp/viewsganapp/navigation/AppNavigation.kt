@@ -22,6 +22,8 @@ import com.GanApp.viewsganapp.models.LogInData
 import com.GanApp.viewsganapp.models.ProductDataDto
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.views.ForgotPasswordData
+import com.GanApp.viewsganapp.views.MisProdDetalles
+import com.GanApp.viewsganapp.views.MisProductos
 import com.GanApp.viewsganapp.views.ResetPasswordData
 import com.GanApp.viewsganapp.views.UserData
 import com.GanApp.viewsganapp.views.VerDetalle
@@ -46,7 +48,7 @@ sealed class AppScreens(val route: String) {
     object ChatMessages : AppScreens("chat_message/{chatId}")
     object menuDetalleProd : AppScreens("menuDetalleProd/{productId}")
     object myProductsView : AppScreens("mis_productos")
-    object myProductDetailView : AppScreens("my_product_detail")
+    object myProductDetailView : AppScreens("my_product_detail/{productId}")
     companion object {
         fun editProfile(any: Any) {
 
@@ -171,12 +173,11 @@ fun AppScreens(navController: NavController) {
             }
 
         composable(AppScreens.myProductsView.route){
-            @Composable
-            fun MisProductos(navController: NavController){}
+            MisProductos(navController = navController)
         }
-        composable(AppScreens.myProductDetailView.route){
-            @Composable
-            fun MisProdDetalles(navController: NavController){}
+        composable(AppScreens.myProductDetailView.route){ backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("productId")?.toLong() ?: 0L
+            MisProdDetalles(navController = navController, productId = productId)
         }
 
     }

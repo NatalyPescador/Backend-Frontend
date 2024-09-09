@@ -73,10 +73,13 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate("menuDetalleProd/{productId}") }) {
+                    IconButton(onClick = {
+                        navController.navigateUp()
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             modifier = Modifier.size(35.dp),
+                            tint = Color(2, 115, 10),
                             contentDescription = "Volver"
                         )
                     }
