@@ -27,6 +27,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.GanApp.viewsganapp.R
+import com.GanApp.viewsganapp.models.ProductDataDto
+import com.GanApp.viewsganapp.models.UpdateProductDto
 import com.GanApp.viewsganapp.ui.theme.Utendo
 import com.GanApp.viewsganapp.utils.BaseUrlConstant
 import com.GanApp.viewsganapp.viewModels.ProductViewModel
@@ -288,7 +290,17 @@ fun MisProdDetalles(navController: NavController, productId: Long) {
 
                                         Button(
                                             onClick = {
-                                                // Añadir lógica para guardar los cambios aquí
+                                                productViewModel.updateProduct(
+                                                    productId,
+                                                    UpdateProductDto(
+                                                        precio = precio,
+                                                        descripcion = descripcion,
+                                                        raza = raza,
+                                                        uom = uom,
+                                                        edad = edad,
+                                                        cantidad = cantidad
+                                                    )
+                                                )
                                             },
                                             colors = ButtonDefaults.buttonColors(Color(10, 191, 4)),
                                             modifier = Modifier
