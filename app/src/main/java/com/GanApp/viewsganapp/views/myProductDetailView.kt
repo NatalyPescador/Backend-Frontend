@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.GanApp.viewsganapp.R
+import com.GanApp.viewsganapp.ui.theme.Utendo
 import com.GanApp.viewsganapp.utils.BaseUrlConstant
 import com.GanApp.viewsganapp.viewModels.ProductViewModel
 
@@ -44,16 +45,22 @@ fun MisProdDetalles(navController: NavController, productId: Long) {
     var showDescription by remember { mutableStateOf(false) }
 
     // Variables para editar los campos
-    var nombre by remember { mutableStateOf(selectedProduct?.nombre ?: "") }
     var precio by remember { mutableStateOf(selectedProduct?.precio?.toString() ?: "") }
     var descripcion by remember { mutableStateOf(selectedProduct?.descripcion ?: "") }
     var raza by remember { mutableStateOf(selectedProduct?.raza ?: "") }
-    var sexo by remember { mutableStateOf(selectedProduct?.sexo ?: "") }
     var uom by remember { mutableStateOf(selectedProduct?.uom ?: "") }
     var edad by remember { mutableStateOf(selectedProduct?.edad?.toString() ?: "") }
     var cantidad by remember { mutableStateOf(selectedProduct?.cantidad?.toString() ?: "") }
-    var departamento by remember { mutableStateOf(selectedProduct?.departamento ?: "") }
-    var municipio by remember { mutableStateOf(selectedProduct?.municipio ?: "") }
+
+    // Actualiza los valores cuando selectedProduct cambia
+    LaunchedEffect(selectedProduct) {
+        precio = selectedProduct?.precio?.toString() ?: ""
+        descripcion = selectedProduct?.descripcion ?: ""
+        raza = selectedProduct?.raza ?: ""
+        uom = selectedProduct?.uom ?: ""
+        edad = selectedProduct?.edad?.toString() ?: ""
+        cantidad = selectedProduct?.cantidad?.toString() ?: ""
+    }
 
     Scaffold( topBar = {
         TopAppBar(title = {
@@ -110,20 +117,10 @@ fun MisProdDetalles(navController: NavController, productId: Long) {
             verticalArrangement = Arrangement.Center
         )
         {
-            Row(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
-                    modifier = Modifier.offset(y = (-20).dp)
-                )
-            }
             Text(
                 text = "Editar Producto",
-                fontWeight = FontWeight.Bold,
-                fontSize = 38.sp,
+                fontFamily = Utendo,
+                fontSize = 35.sp,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -146,19 +143,15 @@ fun MisProdDetalles(navController: NavController, productId: Long) {
                 )
             }
 
-                Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Nombre del ejemplar: ${selectedProduct?.nombre ?: ""}",
+                fontSize = 20.sp,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
 
-                Text(
-                    text = "Nombre del ejemplar: $nombre",
-                    fontSize = 20.sp,
-                    color = Color.Black,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .offset(y = (-25).dp) // Ajuste de la posición del nombre
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
                 Button(
                     onClick = { showDescription = !showDescription },

@@ -83,7 +83,9 @@ fun MisProductos(navController: NavController) {
                     fontFamily = Utendo,
                     fontSize = 35.sp,
                     color = Color.Black,
-                    modifier = Modifier.align(Alignment.CenterVertically) // Centrar verticalmente el texto
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .offset(y = (-30).dp) // Ajusta la posición del título
                 )
             }
 
@@ -138,7 +140,7 @@ fun Tarjeta1(producto: ProductoEntity, navController: NavController) {
     ) {
         Column(
             modifier = Modifier.clickable {
-                navController.navigate("my_product_detail")
+                navController.navigate("my_product_detail/${producto.productoId}")
             }
         ) {
             Image(
