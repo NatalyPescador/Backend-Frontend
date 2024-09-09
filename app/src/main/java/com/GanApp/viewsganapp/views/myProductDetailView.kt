@@ -55,27 +55,50 @@ fun MisProdDetalles(navController: NavController, productId: Long) {
     var departamento by remember { mutableStateOf(selectedProduct?.departamento ?: "") }
     var municipio by remember { mutableStateOf(selectedProduct?.municipio ?: "") }
 
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigate("homePage") }) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            modifier = Modifier.size(35.dp),
-                            contentDescription = "Volver"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(152, 255, 150),
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.Black,
-                    actionIconContentColor = Color.Red
+    Scaffold( topBar = {
+        TopAppBar(title = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(205.dp)
+                    .padding(5.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "Logo",
+                    modifier = Modifier
+                        .height(200.dp)
+                        .width(200.dp)
+
                 )
-            )
-        }
+                Image(
+                    painter = painterResource(id = R.drawable.vaca_titulo),
+                    contentDescription = "Vaca",
+                    modifier = Modifier
+                        .height(60.dp)
+                        .width(85.dp)
+                        .offset(y = 65.dp)
+                        .offset(x = 45.dp)
+
+                )
+
+            }
+
+        }, navigationIcon = {
+            IconButton(onClick = {
+                navController.navigateUp()
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    modifier = Modifier.size(35.dp),
+                    tint = Color(2, 115, 10),
+                    contentDescription = "Volver"
+                )
+            }
+        },  colors = TopAppBarDefaults.topAppBarColors(Color(255, 255, 255))
+
+        )
+    }
     ) { innerPadding ->
         Column(
             modifier = Modifier
