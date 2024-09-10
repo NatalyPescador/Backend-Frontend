@@ -65,247 +65,188 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
     var numeroTelefono by remember { mutableStateOf("") }
 
 
-    Column(
+    Box (
         modifier = Modifier
-            .background(color = Color.White)
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
-            .fillMaxSize(), // Esto hará que la Column ocupe todo el tamaño disponible
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Row(
+            .fillMaxSize()
+            .background(Color.White),
+        contentAlignment = Alignment.Center
+    )
+    {
+        Column(
             modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
-                modifier = Modifier.offset(y = 35.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(30.dp))
-
-        Text(
-            text = "Regístrate",
-            color = Color.Black,
-            fontFamily = Utendo,
-            fontSize = 35.sp,
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-                .offset(y = 10.dp)
-
-        )
-
-        OutlinedTextField(
-            value = nombreCompleto,
-            onValueChange = {
-                val filteredText = it.replace("\n", "")
-                nombreCompleto = filteredText
-            },
-            label = { Text("Nombre") },
-            textStyle = TextStyle(color = Color.Black),
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Person, contentDescription = "telefono")
-            },
-            shape = RoundedCornerShape(20.dp), // Ajusta el radio del borde según tus preferencias
-            modifier = Modifier.offset(y = 5.dp),
-
-        )
-        Spacer(modifier = Modifier.height(5.dp))
-
-        OutlinedTextField(
-            value = correo,
-            onValueChange = {
-                val filteredText = it.replace("\n", "")
-                correo = filteredText
-            },
-            label = { Text("Correo electrónico") },
-            textStyle = TextStyle(color = Color.Black),
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Email, contentDescription = "gmail")
-            },
-            shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 5.dp)
-
-        )
-        Spacer(modifier = Modifier.height(5.dp))
-
-        OutlinedTextField(
-            value = numeroTelefono,
-            onValueChange = {
-                val filteredText = it.filter { char -> char.isDigit() }
-                numeroTelefono = filteredText
-            },
-            label = { Text("Número de teléfono") },
-            textStyle = TextStyle(color = Color.Black),
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Phone, contentDescription = "nombre")
-            },
-            shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 5.dp)
-
-
-        )
-        Spacer(modifier = Modifier.height(5.dp))
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Contraseña") },
-            textStyle = TextStyle(color = Color.Black),
-            leadingIcon = {
-                Icon(imageVector = Icons.Filled.Lock, contentDescription = "Contraseña")
-            },
-            trailingIcon = {
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(
-                        imageVector = if (passwordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
-                        contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
-                    )
-                }
-            },
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            shape = RoundedCornerShape(20.dp),
-            modifier = Modifier.offset(y = 5.dp)
-
-        )
-
-        Spacer(modifier = Modifier.height(10.dp)) // Añade espacio entre el formulario y el botón
-
-        Box(
-            modifier = Modifier.offset(y = 20.dp)
-        ) {
-            Button( onClick = { navController.navigate("homePage")
-                onSubmit(UserData(nombreCompleto, correo, password, numeroTelefono)) },
-                colors = buttonColors(
-                    Color(10, 191, 4)),
-                modifier = Modifier
-                    .height(55.dp)
-            )
-            {
-                Text("Regístrate", color = Color.White,
-                    style = TextStyle(
-                        fontFamily = Utendo,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
-                    ),)
-            }
-        }
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        LaunchedEffect(showErrorRegister) {
-            if (showErrorRegister) {
-                delay(5000)
-                showErrorRegister = false
-            }
-        }
-
-        if (showErrorRegister) {
-            Box(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    errorMessageRegister,
-                    color = Color.Red,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row {
-            Text(text = "¿Ya tienes una cuenta?", color = Color.Black)
-            Spacer(modifier = Modifier.width(15.dp))
-            Text(text = "Inicia Sesión",
-                color = Color.Blue,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable {
-                        navController.navigate("loginUser_screens")
-                })
-        }
-
-        Row(
-            modifier = Modifier
+                .background(color = Color.White)
                 .padding(16.dp)
-                .fillMaxWidth(),
-                //.offset(y = 5.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center // Centra las imágenes en el Row
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize(), // Esto hará que la Column ocupe todo el tamaño disponible
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(
-                    painter = painterResource(id = R.drawable.fc_logo),
-                    contentDescription = "Logo de Facebook",
-                    modifier = Modifier
-                        .clickable {
-                            navController.navigate("facebook")
-                        }
-                        .height(80.dp)
-                        .width(80.dp)
-                )
-                Spacer(modifier = Modifier.height(2.dp)) // Espacio entre imagen y texto
-                Text(text = "Continuar con",
-                    color = Color.Black,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .clickable {
-                            navController.navigate("facebook")
-                        })
-                Text(text = "Facebook",
-                    color = Color.Black,
-                    textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .clickable {
-                            navController.navigate("facebook")
-                        })
-            }
-            Spacer(modifier = Modifier.width(40.dp)) // Espacio entre las columnas
-            Column(horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.offset(y = 10.dp)) {
-                Image(
-                    painter = painterResource(id = R.drawable.gmail_logo),
-                    contentDescription = "Logo Gmail",
-                    modifier = Modifier
-                        .clickable {
-                            navController.navigate("gmail")
-                        }
-                        .height(60.dp)
-                        .width(60.dp)
-                        .offset(y = (-8).dp)
-                )
-                Spacer(modifier = Modifier.height(5.dp)) // Espacio entre imagen y texto
-                Text(text = "Continuar con",
-                    color = Color.Black,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .clickable {
-                            navController.navigate("gmail")
-                        })
-                Text(text = "Gmail",
-                    color = Color.Black,
-                    textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .clickable {
-                            navController.navigate("gmail")
-                        })
-            }
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
+                    modifier = Modifier
+                )
+            }
 
-        repeat(3) {
+            Spacer(modifier = Modifier.height(10.dp))
+
             Text(
                 text = "Regístrate",
-                color = Color.White,
-                fontSize = 40.sp,
-                modifier = Modifier.padding(bottom = 16.dp)
+                color = Color.Black,
+                fontFamily = Utendo,
+                fontSize = 35.sp,
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .offset(y = 10.dp)
+
             )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            OutlinedTextField(
+                value = nombreCompleto,
+                onValueChange = {
+                    val filteredText = it.replace("\n", "")
+                    nombreCompleto = filteredText
+                },
+                label = { Text("Nombre") },
+                textStyle = TextStyle(color = Color.Black),
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Person, contentDescription = "telefono")
+                },
+                shape = RoundedCornerShape(20.dp), // Ajusta el radio del borde según tus preferencias
+                modifier = Modifier.offset(y = 5.dp),
+
+                )
+            Spacer(modifier = Modifier.height(10.dp))
+
+            OutlinedTextField(
+                value = correo,
+                onValueChange = {
+                    val filteredText = it.replace("\n", "")
+                    correo = filteredText
+                },
+                label = { Text("Correo electrónico") },
+                textStyle = TextStyle(color = Color.Black),
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Email, contentDescription = "gmail")
+                },
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier.offset(y = 5.dp)
+
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+
+            OutlinedTextField(
+                value = numeroTelefono,
+                onValueChange = {
+                    val filteredText = it.filter { char -> char.isDigit() }
+                    numeroTelefono = filteredText
+                },
+                label = { Text("Número de teléfono") },
+                textStyle = TextStyle(color = Color.Black),
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Phone, contentDescription = "nombre")
+                },
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier.offset(y = 5.dp)
+
+
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Contraseña") },
+                textStyle = TextStyle(color = Color.Black),
+                leadingIcon = {
+                    Icon(imageVector = Icons.Filled.Lock, contentDescription = "Contraseña")
+                },
+                trailingIcon = {
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(
+                            imageVector = if (passwordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                            contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
+                        )
+                    }
+                },
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier.offset(y = 5.dp)
+
+            )
+
+            Spacer(modifier = Modifier.height(10.dp)) // Añade espacio entre el formulario y el botón
+
+            Box(
+                modifier = Modifier.offset(y = 20.dp)
+            ) {
+                Button(
+                    onClick = {
+                        navController.navigate("homePage")
+                        onSubmit(UserData(nombreCompleto, correo, password, numeroTelefono))
+                    },
+                    colors = buttonColors(
+                        Color(10, 191, 4)
+                    ),
+                    modifier = Modifier
+                        .height(55.dp)
+                )
+                {
+                    Text(
+                        "Regístrate", color = Color.White,
+                        style = TextStyle(
+                            fontFamily = Utendo,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
+                        ),
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+            LaunchedEffect(showErrorRegister) {
+                if (showErrorRegister) {
+                    delay(5000)
+                    showErrorRegister = false
+                }
+            }
+
+            if (showErrorRegister) {
+                Box(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        errorMessageRegister,
+                        color = Color.Red,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(18.dp))
+
+            Row {
+                Text(text = "¿Ya tienes una cuenta?", color = Color.Black)
+                Spacer(modifier = Modifier.width(15.dp))
+                Text(text = "Inicia Sesión",
+                    color = Color.Blue,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.clickable {
+                        navController.navigate("loginUser_screens")
+                    })
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
