@@ -32,6 +32,7 @@ import com.GanApp.viewsganapp.utils.BaseUrlConstant
 import com.GanApp.viewsganapp.utils.getUserData
 import java.text.NumberFormat
 import java.util.Locale
+import androidx.compose.ui.zIndex
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,7 +60,7 @@ fun MisProductos(navController: NavController) {
                 navigationIcon = {}, // Deja el icono de navegación vacío
                 actions = {}, // Deja las acciones vacías
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(255, 255, 255)              )// Deja las acciones vacías)
+                    containerColor = Color(255, 255, 255))
             )
         },
     ) { innerPadding ->
@@ -85,7 +86,7 @@ fun MisProductos(navController: NavController) {
                     color = Color.Black,
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
-                        .offset(y = (-30).dp) // Ajusta la posición del título
+                        .offset(y = (-45).dp) // Ajusta la posición del título
                 )
             }
 

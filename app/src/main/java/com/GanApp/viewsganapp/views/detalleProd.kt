@@ -19,6 +19,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -197,19 +198,18 @@ fun VerDetalle(navController: NavController, productId: Long) {
                                     modifier = Modifier
                                         .align(Alignment.Center)
                                         .padding(16.dp)
-                                        .background(Color(0xFFF2F2F2))
                                         .clickable(onClick = {}), // Para evitar el cierre de la tarjeta al hacer clic en ella
                                     //shape = RoundedCornerShape(32.dp),
                                 ) {
                                     Column(
                                         modifier = Modifier
+                                            .background(Color.White)
                                             .padding(16.dp)
                                             .fillMaxWidth()
                                     ) {
                                         Row(
                                             modifier = Modifier
                                                 .fillMaxWidth(),
-                                            //.border(1.dp, Color.Gray, RoundedCornerShape(16.dp)),
                                             horizontalArrangement = Arrangement.End
                                         ) {
                                             IconButton(onClick = { showDescription = false }) {
@@ -219,8 +219,6 @@ fun VerDetalle(navController: NavController, productId: Long) {
                                                 )
                                             }
                                         }
-
-                                        Spacer(modifier = Modifier.height(16.dp))
 
                                         Text(
                                             text = "Precio: ${selectedProduct?.precio ?: ""}",
@@ -282,6 +280,8 @@ fun VerDetalle(navController: NavController, productId: Long) {
                                             text = "Municipio: ${selectedProduct?.municipio ?: ""}",
                                             fontSize = 18.sp
                                         )
+
+                                        Spacer(modifier = Modifier.height(16.dp))
                                     }
                                 }
                             }
