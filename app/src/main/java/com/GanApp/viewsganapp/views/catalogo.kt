@@ -1,6 +1,7 @@
 package com.GanApp.viewsganapp.views
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -113,12 +114,15 @@ fun Tarjeta(producto: ProductoEntity, navController: NavController) {
             .width(150.dp)
             .height(260.dp),
         shape = RoundedCornerShape(8.dp),
+        shadowElevation = 3.dp
     ) {
         Column(
-            modifier = Modifier.clickable {
-                //navController.navigate("menuDetalleProd/${producto.productoId}")
-                navController.navigate("detalleProd/${producto.productoId}")
-            }
+            modifier = Modifier
+                .background(Color.White)
+                .clickable {
+                    //navController.navigate("menuDetalleProd/${producto.productoId}")
+                    navController.navigate("detalleProd/${producto.productoId}")
+                }
         ) {
             Image(
                 painter = rememberAsyncImagePainter(model = imageUrl),
@@ -143,16 +147,9 @@ fun Tarjeta(producto: ProductoEntity, navController: NavController) {
                 text = "${producto.descripcion}",
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
-            /*Text(
-                text = "por ${producto.usuarioId}",
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-            Text(
-                text = "Categoría: ${producto.categoriaId}",
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )*/
         }
     }
 }
+
 
 

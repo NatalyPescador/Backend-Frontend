@@ -91,6 +91,7 @@ fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = v
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
+                Spacer(modifier = Modifier.height(30.dp))
                 chats.forEach { chat ->
                     ChatItem(
                         chat = chat,

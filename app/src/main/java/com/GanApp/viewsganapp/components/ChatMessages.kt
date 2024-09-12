@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
@@ -52,6 +53,8 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
+                modifier = Modifier
+                    .shadow(6.dp),
                 title = {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
@@ -85,7 +88,7 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(152, 255, 150), // Cambia este color según tus necesidades
+                    containerColor = Color.White, // Cambia este color según tus necesidades
                     titleContentColor = Color.White, // Color del título
                     navigationIconContentColor = Color.Black, // Color del icono de navegación
                     actionIconContentColor = Color.Red // Color de los iconos de acción
@@ -102,6 +105,7 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             // Sección para mostrar los mensajes
+            Spacer(modifier = Modifier.height(10.dp))
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -114,7 +118,6 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                     Spacer(modifier = Modifier.height(8.dp)) // Espacio entre mensajes
                 }
             }
-
 
             // Row inferior para escribir y enviar mensajes
             Row(
