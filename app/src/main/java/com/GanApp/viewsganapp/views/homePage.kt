@@ -24,12 +24,14 @@ import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.AddTask
 import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.material.icons.outlined.AddTask
 import androidx.compose.material.icons.outlined.Chat
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -112,6 +114,7 @@ fun HomePage(navController: NavHostController) {
 
 
     val items = listOf(
+
         DrawerItem(
             title = "Mi perfil",
             selectedIcon = Icons.Filled.Person,
@@ -142,8 +145,12 @@ fun HomePage(navController: NavHostController) {
             unselectedIcon = Icons.Outlined.AddShoppingCart,
             route = "mis_productos"
         ),
-
-
+        DrawerItem(
+            title = "Cerrar sesión",
+            selectedIcon = Icons.Filled.Logout,
+            unselectedIcon = Icons.Outlined.Logout,
+            route = "logout"
+        ),
         )
 
     Box(
@@ -220,20 +227,22 @@ fun HomePage(navController: NavHostController) {
                                         onClick = {
                                             isLoading = true // Comienza la carga inmediatamente
                                             selectedItemIndex = index
-                                            currentScreen = drawerItem.route
-                                            scope.launch {
-                                                delay(100L) // Pequeño retraso para asegurar que la IU se actualice
-                                                navigationState.close()
-                                                /*navController.navigate(drawerItem.route) {
-                                                    // Evita la duplicación de destinos en la pila de back stack
-                                                    popUpTo(navController.graph.startDestinationId) {
-                                                        saveState = true
+                                            if (drawerItem.title == "Cerrar sesión") {
+                                                // Lógica para cerrar sesión
+                                                scope.launch {
+                                                    delay(100L) // Pequeño retraso para asegurar que la IU se actualice
+                                                    navController.navigate(AppScreens.loginUser.route) {
+                                                        popUpTo(0) // Despeja todo el back stack para que no pueda volver
                                                     }
-                                                    launchSingleTop = true
-                                                    restoreState = true
-                                                }*/
-                                                delay(100L) // Asegurarse de que la IU tenga tiempo de actualizarse
-                                                isLoading = false // Termina la carga
+                                                }
+                                            } else {
+                                                currentScreen = drawerItem.route
+                                                scope.launch {
+                                                    delay(100L) // Pequeño retraso para asegurar que la IU se actualice
+                                                    navigationState.close()
+                                                    delay(100L) // Asegurarse de que la IU tenga tiempo de actualizarse
+                                                    isLoading = false // Termina la carga
+                                                }
                                             }
                                         },
                                         icon = {
