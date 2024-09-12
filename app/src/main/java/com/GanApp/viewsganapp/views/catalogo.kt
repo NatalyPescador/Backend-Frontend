@@ -49,6 +49,7 @@ import java.util.Locale
 fun CatalogoPrincipal(navController: NavController, productViewModel: ProductViewModel = viewModel()) {
     val products by remember { mutableStateOf(productViewModel.products) }
     var filterExpanded by remember { mutableStateOf(false) }
+    var selectedFilter by remember { mutableStateOf<Long?>(null) } // Estado para el filtro seleccionado
 
     Column {
         FilterButton(
@@ -56,9 +57,10 @@ fun CatalogoPrincipal(navController: NavController, productViewModel: ProductVie
             onExpand = { filterExpanded = true },
             onDismiss = { filterExpanded = false },
             onFilterSelected = { tipoServicioId ->
-                // Llamar al ViewModel para filtrar los productos
+                selectedFilter = tipoServicioId
                 productViewModel.filterProductsByTipoServicio(tipoServicioId)
-            }
+            },
+            selectedFilter = selectedFilter
         )
 
         Catalogo(productos = products, navController = navController)
