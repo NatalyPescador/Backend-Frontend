@@ -120,7 +120,6 @@ fun Tarjeta(producto: ProductoEntity, navController: NavController) {
             modifier = Modifier
                 .background(Color.White)
                 .clickable {
-                    //navController.navigate("menuDetalleProd/${producto.productoId}")
                     navController.navigate("detalleProd/${producto.productoId}")
                 }
         ) {

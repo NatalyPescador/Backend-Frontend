@@ -23,6 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -56,11 +57,21 @@ fun MisProductos(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {}, // Deja el título vacío para no mostrar contenido
-                navigationIcon = {}, // Deja el icono de navegación vacío
-                actions = {}, // Deja las acciones vacías
+                title = {
+                    Text(
+                        text = "Tus Productos",
+                        fontFamily = Utendo,
+                        fontSize = 35.sp,
+                        color = Color.Black,
+                        modifier = Modifier
+                            .offset(y = 20.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center // Asegura que el texto esté centrado
+                    )
+                },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(255, 255, 255))
+                    containerColor = Color(255, 255, 255) // Fondo blanco para la barra superior
+                )
             )
         },
     ) { innerPadding ->
@@ -68,28 +79,10 @@ fun MisProductos(navController: NavController) {
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .background(color = Color.White), // Cambiar el fondo a blanco
+                .background(color = Color.White),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                verticalAlignment = Alignment.Top, // Alineación superior
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(y = (30).dp),
-            ) {
-
-                Text(
-                    text = "Tus Productos",
-                    fontFamily = Utendo,
-                    fontSize = 35.sp,
-                    color = Color.Black,
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .offset(y = (-45).dp) // Ajusta la posición del título
-                )
-            }
-
+            Spacer(modifier = Modifier.height(16.dp)) // Añade espacio debajo de la barra superior
             MyProducts(productos = products, navController = navController)
         }
     }
@@ -138,9 +131,12 @@ fun Tarjeta1(producto: ProductoEntity, navController: NavController) {
             .width(150.dp)
             .height(260.dp),
         shape = RoundedCornerShape(8.dp),
+        shadowElevation = 3.dp
     ) {
         Column(
-            modifier = Modifier.clickable {
+            modifier = Modifier
+                .background(Color.White)
+                .clickable {
                 navController.navigate("my_product_detail/${producto.productoId}")
             }
         ) {
