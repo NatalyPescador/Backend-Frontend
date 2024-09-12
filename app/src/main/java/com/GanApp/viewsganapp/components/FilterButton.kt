@@ -1,9 +1,13 @@
 package com.GanApp.viewsganapp.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
@@ -36,11 +40,16 @@ fun FilterButton(
         TipoServicio(3, "Servicios")
     )
 
-    Box {
+    Box (
+        modifier = Modifier
+            .padding(start = 25.dp, top = 10.dp)
+    ){
         Button(
             onClick = { onExpand() },
             colors = ButtonDefaults.buttonColors(Color(10, 191, 4)),
-            modifier = Modifier.padding(16.dp)
+            shape = RoundedCornerShape(18.dp),
+            modifier = Modifier//.padding(16.dp)
+                .offset(x = (-10).dp)
         ) {
             Text(
                 text = "Filtrar",
@@ -56,11 +65,16 @@ fun FilterButton(
 
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { onDismiss() }
+            onDismissRequest = { onDismiss() },
+            modifier = Modifier
+                .background(Color.White)
         ) {
             tiposServicio.forEach { tipo ->
                 DropdownMenuItem( text = {
-                    Text(text = tipo.nombre)
+                    Text(
+                        text = tipo.nombre,
+                        color = Color(10, 191, 4)
+                        )
                 },
                     onClick = {
                         onFilterSelected(tipo.id)
