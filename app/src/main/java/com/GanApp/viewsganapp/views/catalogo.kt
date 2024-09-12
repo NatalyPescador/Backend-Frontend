@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.GanApp.viewsganapp.components.FilterButton
 import com.GanApp.viewsganapp.models.ProductoEntity
 import com.GanApp.viewsganapp.ui.theme.Utendo
 import com.GanApp.viewsganapp.utils.BaseUrlConstant
@@ -46,26 +48,18 @@ import java.util.Locale
 @Composable
 fun CatalogoPrincipal(navController: NavController, productViewModel: ProductViewModel = viewModel()) {
     val products by remember { mutableStateOf(productViewModel.products) }
+    var filterExpanded by remember { mutableStateOf(false) }
 
     Column {
-        Button(
-            onClick = { /* Handle filter button click */ },
-            colors = ButtonDefaults.buttonColors(
-                Color(10, 191, 4)
-            ),
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text(text = "Filtrar",
-                style = TextStyle(
-                    fontFamily = Utendo,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
-                )
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = "telefono")
-
-        }
+        FilterButton(
+            expanded = filterExpanded,
+            onExpand = { filterExpanded = true },
+            onDismiss = { filterExpanded = false },
+            onFilterSelected = { tipoServicioId ->
+                // Llamar al ViewModel para filtrar los productos
+                productViewModel.filterProductsByTipoServicio(tipoServicioId)
+            }
+        )
 
         Catalogo(productos = products, navController = navController)
     }

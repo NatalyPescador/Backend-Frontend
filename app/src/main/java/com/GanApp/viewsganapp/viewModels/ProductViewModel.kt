@@ -97,6 +97,26 @@ class ProductViewModel : ViewModel() {
         }
     }
 
+    fun filterProductsByTipoServicio(tipoServicioId: Long) {
+        viewModelScope.launch {
+            loading.value = true
+            selectedTipoServicioId.value = tipoServicioId
+            try {
+                val response = RetrofitInstance.apiServiceProduct.getProductsByTipoServicio(tipoServicioId)
+                if (response.isSuccessful) {
+                    _products.clear()
+                    _products.addAll(response.body() ?: emptyList())
+                } else {
+                    Log.d("ProductViewModel-filterProductsByTipoServicio", "Error in response: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.d("ProductViewModel-filterProductsByTipoServicio", "Exception caught: ${e.localizedMessage}")
+            } finally {
+                loading.value = false
+            }
+        }
+    }
+
     private fun fetchCategorias() {
         viewModelScope.launch {
             loading.value = true
