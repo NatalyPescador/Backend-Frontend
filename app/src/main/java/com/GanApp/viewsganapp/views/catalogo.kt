@@ -56,11 +56,15 @@ fun CatalogoPrincipal(navController: NavController, productViewModel: ProductVie
             expanded = filterExpanded,
             onExpand = { filterExpanded = true },
             onDismiss = { filterExpanded = false },
+            selectedFilter = selectedFilter,
             onFilterSelected = { tipoServicioId ->
                 selectedFilter = tipoServicioId
-                productViewModel.filterProductsByTipoServicio(tipoServicioId)
-            },
-            selectedFilter = selectedFilter
+                if (tipoServicioId == null) {
+                    productViewModel.getProducts()
+                } else {
+                    productViewModel.filterProductsByTipoServicio(tipoServicioId)
+                }
+            }
         )
 
         Catalogo(productos = products, navController = navController)

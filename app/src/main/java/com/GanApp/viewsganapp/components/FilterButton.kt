@@ -31,8 +31,8 @@ fun FilterButton(
     expanded: Boolean,
     onExpand: () -> Unit,
     onDismiss: () -> Unit,
-    onFilterSelected: (Long) -> Unit,
-    selectedFilter: Long? // Añade el parámetro para el filtro seleccionado
+    onFilterSelected: (Long?) -> Unit,
+    selectedFilter: Long?
 ) {
     val tiposServicio = listOf(
         TipoServicio(1, "Ganado"),
@@ -82,7 +82,11 @@ fun FilterButton(
                         )
                     },
                     onClick = {
-                        onFilterSelected(tipo.id)
+                        if (isSelected) {
+                            onFilterSelected(null)
+                        } else {
+                            onFilterSelected(tipo.id)
+                        }
                         onDismiss()
                     },
                     modifier = Modifier
