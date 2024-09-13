@@ -114,7 +114,7 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                     .verticalScroll(rememberScrollState())
             ) {
                 messages.forEach { msg ->
-                    MessageBubble(message = msg.message, isSentByCurrentUser = msg.senderId == 8L)
+                    MessageBubble(message = msg.message, isSentByCurrentUser = msg.senderId == userId)
                     Spacer(modifier = Modifier.height(8.dp)) // Espacio entre mensajes
                 }
             }

@@ -1,9 +1,7 @@
 package com.GanApp.viewsganapp.views
 
-
 import android.content.Context
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -54,7 +52,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.GanApp.viewsganapp.ui.theme.Utendo
-import com.GanApp.viewsganapp.viewmodels.UserProfileViewModel
+import com.GanApp.viewsganapp.viewModels.UserProfileViewModel
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

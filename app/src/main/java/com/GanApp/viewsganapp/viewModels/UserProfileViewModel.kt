@@ -1,19 +1,15 @@
-package com.GanApp.viewsganapp.viewmodels
+package com.GanApp.viewsganapp.viewModels
 
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.GanApp.viewsganapp.apiService.UserRegisterApiService
 import com.GanApp.viewsganapp.models.UserDto
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.utils.getUserData
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
