@@ -95,6 +95,7 @@ fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = v
                 chats.forEach { chat ->
                     ChatItem(
                         chat = chat,
+                        userId = userId,
                         navController = navController,
                         modifier = Modifier.fillMaxWidth() // Ocupa todo el ancho disponible
                     )
