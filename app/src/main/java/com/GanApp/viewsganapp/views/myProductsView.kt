@@ -245,5 +245,15 @@ fun Tarjeta1(producto: ProductoEntity, navController: NavController) {
             }
         }
     }
+    if (productViewModel.isDeleting.collectAsState().value) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f)),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    }
 }
 

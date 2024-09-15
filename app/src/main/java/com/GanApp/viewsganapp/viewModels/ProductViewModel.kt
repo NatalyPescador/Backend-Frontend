@@ -55,6 +55,9 @@ class ProductViewModel : ViewModel() {
     private val _deleteProductStatus = MutableStateFlow<String?>(null)
     val deleteProductStatus: StateFlow<String?> get() = _deleteProductStatus
 
+    private val _isDeleting = MutableStateFlow(false)
+    val isDeleting: StateFlow<Boolean> get() = _isDeleting
+
     init {
         fetchTiposServicio()
         getProducts()
@@ -254,15 +257,21 @@ class ProductViewModel : ViewModel() {
 
     fun deleteProductById(productId: Long) {
         viewModelScope.launch {
+            _isDeleting.value = true
             try {
                 val response = RetrofitInstance.apiServiceProduct.deleteProduct(productId)
                 if (response.isSuccessful) {
                     _deleteProductStatus.value = "Producto eliminado correctamente"
+                    // Elimina el producto de las listas
+                    _products.removeAll { it.productoId == productId }
+                    _userProducts.removeAll { it.productoId == productId }
                 } else {
                     _deleteProductStatus.value = "Error al eliminar el producto: ${response.message()}"
                 }
             } catch (e: Exception) {
                 _deleteProductStatus.value = "Excepción al eliminar el producto: ${e.message}"
+            } finally {
+                _isDeleting.value = false
             }
         }
     }
