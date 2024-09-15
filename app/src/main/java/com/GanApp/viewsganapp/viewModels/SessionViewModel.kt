@@ -10,6 +10,7 @@ import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.utils.decodeJWT
 import com.GanApp.viewsganapp.utils.saveLoginData
 import com.GanApp.viewsganapp.utils.saveUserData
+import com.GanApp.viewsganapp.views.UserData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -18,10 +19,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LoginViewModel : ViewModel() {
+class SessionViewModel : ViewModel() {
 
     val _snackbarMessage = MutableStateFlow<String?>(null)
     val snackbarMessage: StateFlow<String?> = _snackbarMessage
+
+    private val _registrationSuccess = MutableStateFlow<Boolean?>(null)
+    val registrationSuccess: StateFlow<Boolean?> = _registrationSuccess
 
     fun login(context: Context, loginData: LogInData, onLoginSuccess: () -> Unit) {
         viewModelScope.launch {
@@ -69,6 +73,38 @@ class LoginViewModel : ViewModel() {
             })
         }
     }
+
+    fun registerUser(userData: UserData) {
+        viewModelScope.launch {
+            val call = RetrofitInstance.apiService.createUser(userData)
+            call.enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        _snackbarMessage.value = "Usuario creado con éxito"
+                        _registrationSuccess.value = true
+                    } else {
+                        val errorBody = response.errorBody()?.string()
+                        if (!errorBody.isNullOrEmpty()) {
+                            try {
+                                val json = JSONObject(errorBody)
+                                val errorMessage = json.getString("errorMessage")
+                                _snackbarMessage.value = errorMessage
+                            } catch (e: Exception) {
+                                _snackbarMessage.value = "Error al procesar la respuesta"
+                            }
+                        }
+                        _registrationSuccess.value = false
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    _snackbarMessage.value = "Error al crear el usuario: ${t.message}"
+                    _registrationSuccess.value = false
+                }
+            })
+        }
+    }
+
 
     fun clearSnackbarMessage() {
         _snackbarMessage.value = null // Limpiar el mensaje después de mostrarlo

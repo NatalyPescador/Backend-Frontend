@@ -1,5 +1,6 @@
 package com.GanApp.viewsganapp.views
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -47,22 +49,40 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
 import com.GanApp.viewsganapp.ui.theme.Utendo
+import com.GanApp.viewsganapp.viewModels.SessionViewModel
 import kotlinx.coroutines.delay
 
-
-var showErrorRegister by mutableStateOf(false)
-var errorMessageRegister by mutableStateOf("")
-
 @Composable
-fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
+fun Register(navController: NavController) {
+    val sessionViewModel: SessionViewModel = viewModel()
+    val context = LocalContext.current
     var nombreCompleto by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var numeroTelefono by remember { mutableStateOf("") }
+
+    LaunchedEffect(sessionViewModel.snackbarMessage) {
+        sessionViewModel.snackbarMessage.collect { message ->
+            message?.let {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                sessionViewModel.clearSnackbarMessage()
+            }
+        }
+    }
+
+    LaunchedEffect(sessionViewModel.registrationSuccess) {
+        sessionViewModel.registrationSuccess.collect { status ->
+            if (status == true) {
+                navController.navigate("loginUser_screens")
+            }
+        }
+    }
+
 
 
     Box (
@@ -188,8 +208,7 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
             ) {
                 Button(
                     onClick = {
-                        navController.navigate("loginUser_screens")
-                        onSubmit(UserData(nombreCompleto, correo, password, numeroTelefono))
+                        sessionViewModel.registerUser(UserData(nombreCompleto, correo, password, numeroTelefono))
                     },
                     colors = buttonColors(
                         Color(10, 191, 4)
@@ -210,30 +229,6 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
             }
 
             Spacer(modifier = Modifier.height(30.dp))
-
-            LaunchedEffect(showErrorRegister) {
-                if (showErrorRegister) {
-                    delay(5000)
-                    showErrorRegister = false
-                }
-            }
-
-            if (showErrorRegister) {
-                Box(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        errorMessageRegister,
-                        color = Color.Red,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = 8.dp)
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(18.dp))
 
             Row {
                 Text(text = "¿Ya tienes una cuenta?", color = Color.Black)

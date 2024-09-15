@@ -5,7 +5,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,7 +49,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -58,12 +56,11 @@ import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
 import com.GanApp.viewsganapp.models.LogInData
 import com.GanApp.viewsganapp.ui.theme.Utendo
-import com.GanApp.viewsganapp.viewModels.LoginViewModel
-import kotlinx.coroutines.launch
+import com.GanApp.viewsganapp.viewModels.SessionViewModel
 
 @Composable
 fun LogIn(navController: NavController, context: Context, snackbarHostState: SnackbarHostState, onLogin: (LogInData) -> Unit) {
-    val viewModel: LoginViewModel = viewModel()
+    val viewModel: SessionViewModel = viewModel()
     var correo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }

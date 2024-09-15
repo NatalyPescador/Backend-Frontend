@@ -26,7 +26,7 @@ import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.ui.theme.ViewsGanAppTheme
 import com.GanApp.viewsganapp.utils.BackgroundTimer
 import com.GanApp.viewsganapp.utils.TokenManager
-import com.GanApp.viewsganapp.viewModels.LoginViewModel
+import com.GanApp.viewsganapp.viewModels.SessionViewModel
 import com.GanApp.viewsganapp.views.CatalogoPrincipal
 import com.GanApp.viewsganapp.views.Facebook
 import com.GanApp.viewsganapp.views.Favoritos
@@ -44,10 +44,8 @@ import com.GanApp.viewsganapp.views.ResetPassword
 import com.GanApp.viewsganapp.views.ShowChats
 import com.GanApp.viewsganapp.views.VerDetalle
 import com.GanApp.viewsganapp.views.errorMessageForgotPassword
-import com.GanApp.viewsganapp.views.errorMessageRegister
 import com.GanApp.viewsganapp.views.errorMessageResetPassword
 import com.GanApp.viewsganapp.views.showErrorForgotPassword
-import com.GanApp.viewsganapp.views.showErrorRegister
 import com.GanApp.viewsganapp.views.showErrorResetPassword
 import org.json.JSONException
 import org.json.JSONObject
@@ -93,39 +91,14 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(padding)
                     ) {
                         composable(AppScreens.viewReister.route) {
-                            Register(navController = navController) { userData ->
-                                val call = RetrofitInstance.apiService.createUser(userData)
-                                call.enqueue(object : Callback<Void> {
-                                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                                        if (response.isSuccessful) {
-                                            Log.d("API Call", "Usuario creado con éxito")
-                                        } else {
-                                            val errorBody = response.errorBody()?.string()
-                                            Log.d("API Call", "Response not successful: $errorBody")
-                                            if (!errorBody.isNullOrEmpty()) {
-                                                try {
-                                                    val json = JSONObject(errorBody)
-                                                    errorMessageRegister = json.getString("errorMessage")
-                                                    showErrorRegister = true
-                                                } catch (e: JSONException) {
-                                                    Log.e("API Call", "Error parsing JSON", e)
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                                        Log.d("API Call", "Failure: ${t.message}")
-                                    }
-                                })
-                            }
+                            Register(navController = navController)
                         }
 
                         composable(AppScreens.loginUser.route) {
-                            val loginViewModel: LoginViewModel = viewModel()
+                            val sessionViewModel: SessionViewModel = viewModel()
                             LogIn(navController = navController, context = this@MainActivity, snackbarHostState = snackbarHostState) { logInData ->
                                 Log.d("MainActivity", "Attempting login")
-                                loginViewModel.login(this@MainActivity, logInData) {
+                                sessionViewModel.login(this@MainActivity, logInData) {
                                     Log.d("MainActivity", "Login successful, navigating to home")
                                     navController.navigate(AppScreens.homePage.route) {
                                         popUpTo(AppScreens.homePage.route) { inclusive = true }
