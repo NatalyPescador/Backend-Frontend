@@ -92,6 +92,8 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
     var selectedTipoServicio by remember { mutableStateOf<TipoServicioEntity?>(null) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
+    var isLoading by remember { mutableStateOf(false) }
+
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -396,6 +398,10 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
 
             Button(
                 onClick = {
+                    if (isLoading) return@Button // Evita múltiples envíos si ya está cargando
+
+                    isLoading = true // Inicia el estado de carga
+
                     imageUri?.let { uri ->
                         viewModel.uploadProductData(
                             context,
@@ -418,6 +424,22 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                             )
                         )
                     }
+                    isLoading = false
+
+                    // Limpiar campos después de publicación
+                    nombre = ""
+                    precio = ""
+                    descripcion = ""
+                    raza = ""
+                    sexo = ""
+                    uom = ""
+                    edad = ""
+                    cantidad = ""
+                    departamento = ""
+                    municipio = ""
+                    imageUri = null
+                    selectedCategoria = null
+                    selectedTipoServicio = null
                 },
                 colors = ButtonDefaults.buttonColors(Color(10, 191, 4), contentColor = Color.Black)
             ) {
@@ -437,7 +459,6 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                     ),
                     color = Color.White, modifier = Modifier.padding(start = 8.dp)
                 )
-
             }
         }
     }

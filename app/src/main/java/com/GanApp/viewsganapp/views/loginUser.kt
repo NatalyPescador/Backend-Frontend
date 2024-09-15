@@ -2,6 +2,7 @@ package com.GanApp.viewsganapp.views
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -70,12 +71,9 @@ fun LogIn(navController: NavController, context: Context, snackbarHostState: Sna
 
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { message ->
-            Log.d("LogIn", "Mensaje recibido en LogIn: $message")
             message?.let {
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar(it)
-                    viewModel._snackbarMessage.value = null
-                }
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                viewModel.clearSnackbarMessage()
             }
         }
     }

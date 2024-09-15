@@ -69,4 +69,8 @@ class LoginViewModel : ViewModel() {
             })
         }
     }
+
+    fun clearSnackbarMessage() {
+        _snackbarMessage.value = null // Limpiar el mensaje después de mostrarlo
+    }
 }
