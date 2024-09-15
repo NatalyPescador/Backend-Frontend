@@ -10,10 +10,12 @@ import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.utils.decodeJWT
 import com.GanApp.viewsganapp.utils.saveLoginData
 import com.GanApp.viewsganapp.utils.saveUserData
+import com.GanApp.viewsganapp.views.ForgotPasswordData
 import com.GanApp.viewsganapp.views.UserData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,6 +28,9 @@ class SessionViewModel : ViewModel() {
 
     private val _registrationSuccess = MutableStateFlow<Boolean?>(null)
     val registrationSuccess: StateFlow<Boolean?> = _registrationSuccess
+
+    private val _resetSuccess = MutableStateFlow<Boolean?>(null)
+    val resetSuccess: StateFlow<Boolean?> = _resetSuccess
 
     fun login(context: Context, loginData: LogInData, onLoginSuccess: () -> Unit) {
         viewModelScope.launch {
@@ -103,6 +108,39 @@ class SessionViewModel : ViewModel() {
                 }
             })
         }
+    }
+
+    fun forgotPassword(forgotPasswordData: ForgotPasswordData) {
+        viewModelScope.launch {
+            val call = RetrofitInstance.apiService.forgotPassword(forgotPasswordData)
+            call.enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        _snackbarMessage.value = "Correo enviado con éxito"
+                        _resetSuccess.value = true
+                    } else {
+                        val errorBody = response.errorBody()?.string()
+                        if (!errorBody.isNullOrEmpty()) {
+                            try {
+                                val json = JSONObject(errorBody)
+                                val errorMessage = json.getString("errorMessage")
+                                _snackbarMessage.value = errorMessage
+
+                            } catch (e: Exception) {
+                                _snackbarMessage.value = "Error al procesar la respuesta"
+                            }
+                        }
+                        _resetSuccess.value = false
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    _snackbarMessage.value = "Error al enviar el correo: ${t.message}"
+                    _resetSuccess.value = false
+                }
+            })
+        }
+
     }
 
 

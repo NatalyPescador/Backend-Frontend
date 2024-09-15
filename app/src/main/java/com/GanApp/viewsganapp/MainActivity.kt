@@ -43,9 +43,7 @@ import com.GanApp.viewsganapp.views.Register
 import com.GanApp.viewsganapp.views.ResetPassword
 import com.GanApp.viewsganapp.views.ShowChats
 import com.GanApp.viewsganapp.views.VerDetalle
-import com.GanApp.viewsganapp.views.errorMessageForgotPassword
 import com.GanApp.viewsganapp.views.errorMessageResetPassword
-import com.GanApp.viewsganapp.views.showErrorForgotPassword
 import com.GanApp.viewsganapp.views.showErrorResetPassword
 import org.json.JSONException
 import org.json.JSONObject
@@ -116,33 +114,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(AppScreens.forgotPassword.route) {
-                            ForgotPassword(navController = navController) { forgotPasswordData ->
-                                val call = RetrofitInstance.apiService.forgotPassword(forgotPasswordData)
-                                call.enqueue(object : Callback<Void> {
-                                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                                        if (response.isSuccessful) {
-                                            Log.d("API Call", "Correo enviado")
-                                            navController.navigate("resetPassword")
-                                        } else {
-                                            val errorBody = response.errorBody()?.string()
-                                            Log.d("API Call", "Response not successful: $errorBody")
-                                            if (!errorBody.isNullOrEmpty()) {
-                                                try {
-                                                    val json = JSONObject(errorBody)
-                                                    errorMessageForgotPassword = json.getString("errorMessage")
-                                                    showErrorForgotPassword = true
-                                                } catch (e: JSONException) {
-                                                    Log.e("API Call", "Error parsing JSON", e)
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                                        Log.d("API Call", "Failure: ${t.message}")
-                                    }
-                                })
-                            }
+                            ForgotPassword(navController = navController)
                         }
 
                         composable(AppScreens.resetPassword.route) {
