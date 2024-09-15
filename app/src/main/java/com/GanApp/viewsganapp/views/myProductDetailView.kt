@@ -40,8 +40,7 @@ fun MisProdDetalles(navController: NavController, productId: Long) {
     val productViewModel: ProductViewModel = viewModel()
     productViewModel.getProductById(productId)
     val selectedProduct by remember { productViewModel.selectedProduct }
-    val filename = selectedProduct?.imagen?.substringAfterLast('\\') ?: ""
-    val imageUrl = BaseUrlConstant.BASE_URL + "uploads/$filename"
+    val imageUrl = selectedProduct?.imagen
 
     // Variables de ventana emergente
     var showDescription by remember { mutableStateOf(false) }

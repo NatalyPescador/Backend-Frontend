@@ -119,8 +119,7 @@ fun MyProducts(productos: List<ProductoEntity>, navController: NavController) {
 
 @Composable
 fun Tarjeta1(producto: ProductoEntity, navController: NavController) {
-    val filename = producto.imagen?.substringAfterLast('\\') ?: ""
-    val imageUrl = BaseUrlConstant.BASE_URL + "uploads/$filename"
+    val imageUrl = producto.imagen
     val numberFormat = NumberFormat.getInstance(Locale("es", "CO")).apply {
         maximumFractionDigits = 0
     }

@@ -38,8 +38,8 @@ fun ChatItem(
     isSelected: Boolean = false // Puedes agregar un estado para saber si el item está seleccionado
 ) {
     val containerColor = if (isSelected) Color(10, 191, 4) else Color.White // Colores personalizados
-    val filename = chat.imagen.substringAfterLast('\\')
-    val imageUrl = BaseUrlConstant.BASE_URL + "uploads/$filename"
+    //val filename = chat.imagen.substringAfterLast('\\')
+    val imageUrl = chat.imagen
 
     val displayName = if (userId == chat.userId) chat.nombreReceiver else chat.nombreUsuario
 

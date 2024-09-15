@@ -27,7 +27,7 @@ interface ProductRegisterApiService {
     //fun createProduct(@Body productData: ProductData): Call<Void>
 
     @GET("producto")
-    suspend fun getProductList(): Response<List<ProductoEntity>> // Cambio en el tipo de retorno
+    suspend fun getProductList(): Response<List<ProductoEntity>>
 
     @GET("producto/{id}")
     suspend fun getProductById(@Path("id") id: Long): Response<ProductoEntity>
