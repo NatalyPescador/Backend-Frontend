@@ -16,6 +16,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.GanApp.viewsganapp.ui.theme.Utendo
@@ -120,48 +123,127 @@ fun MyProducts(productos: List<ProductoEntity>, navController: NavController) {
 @Composable
 fun Tarjeta1(producto: ProductoEntity, navController: NavController) {
     val imageUrl = producto.imagen
+    val productViewModel: ProductViewModel = viewModel()
     val numberFormat = NumberFormat.getInstance(Locale("es", "CO")).apply {
         maximumFractionDigits = 0
     }
 
-    Surface(
+    var showDialog by remember { mutableStateOf(false) }
+
+    Box(
         modifier = Modifier
             .padding(end = 8.dp)
             .width(150.dp)
-            .height(260.dp),
-        shape = RoundedCornerShape(8.dp),
-        shadowElevation = 3.dp
+            .height(260.dp)
     ) {
-        Column(
+        Surface(
             modifier = Modifier
-                .background(Color.White)
-                .clickable {
-                navController.navigate("my_product_detail/${producto.productoId}")
-            }
+                .padding(end = 8.dp)
+                .width(150.dp)
+                .height(260.dp),
+            shape = RoundedCornerShape(8.dp),
+            shadowElevation = 3.dp
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(model = imageUrl),
-                contentDescription = producto.nombre ?: "Sin nombre",
+            Column(
+                modifier = Modifier
+                    .background(Color.White)
+                    .clickable {
+                        navController.navigate("my_product_detail/${producto.productoId}")
+                    }
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(model = imageUrl),
+                    contentDescription = producto.nombre ?: "Sin nombre",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp),
+                    contentScale = ContentScale.Crop
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = producto.nombre ?: "Sin nombre",
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "$${numberFormat.format(producto.precio.toDouble())}",
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    fontStyle = FontStyle.Italic
+                )
+                Text(
+                    text = "${producto.descripcion}",
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+            }
+        }
+
+        Icon(
+            imageVector = Icons.Default.Delete,
+            contentDescription = "Eliminar producto",
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(8.dp)
+                .size(24.dp)
+                .clickable {
+                    showDialog = true // Mostrar el diálogo de confirmación
+                },
+            tint = Color.Red
+        )
+    }
+
+    if (showDialog) {
+        Dialog(
+            onDismissRequest = { showDialog = false }
+        ) {
+            Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp),
-                contentScale = ContentScale.Crop
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = producto.nombre ?: "Sin nombre",
-                modifier = Modifier.padding(horizontal = 8.dp),
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "$${numberFormat.format(producto.precio.toDouble())}",
-                modifier = Modifier.padding(horizontal = 8.dp),
-                fontStyle = FontStyle.Italic
-            )
-            Text(
-                text = "${producto.descripcion}",
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
+                    .padding(16.dp),
+                shape = RoundedCornerShape(16.dp),
+                shadowElevation = 8.dp
+            ) {
+                Column(
+                    modifier = Modifier
+                        .background(Color.White)
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        text = "Eliminar producto",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        modifier = Modifier
+                            .padding(8.dp)
+                    )
+                    Text(
+                        text = "¿Estás seguro que deseas eliminar este producto?",
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .padding(8.dp)
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        TextButton(
+                            onClick = {
+                                showDialog = false
+                            }
+                        ) {
+                            Text("No", color = Color.Gray)
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        TextButton(
+                            onClick = {
+                                productViewModel.deleteProductById(producto.productoId)
+                                showDialog = false // Cierra el diálogo
+                            }
+                        ) {
+                            Text("Sí", color = Color.Red)
+                        }
+                    }
+                }
+            }
         }
     }
 }
+

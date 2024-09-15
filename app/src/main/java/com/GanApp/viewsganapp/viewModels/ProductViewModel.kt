@@ -28,6 +28,8 @@ import retrofit2.Response
 import java.io.File
 import java.io.IOException
 import com.GanApp.viewsganapp.utils.FileUtils
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
 
@@ -49,6 +51,9 @@ class ProductViewModel : ViewModel() {
     val userProducts: List<ProductoEntity> get() = _userProducts
     private val _updateStatus = MutableLiveData<Result<String>>()
     val updateStatus: LiveData<Result<String>> get() = _updateStatus
+
+    private val _deleteProductStatus = MutableStateFlow<String?>(null)
+    val deleteProductStatus: StateFlow<String?> get() = _deleteProductStatus
 
     init {
         fetchTiposServicio()
@@ -243,6 +248,21 @@ class ProductViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 _updateStatus.value = Result.failure(e)
+            }
+        }
+    }
+
+    fun deleteProductById(productId: Long) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitInstance.apiServiceProduct.deleteProduct(productId)
+                if (response.isSuccessful) {
+                    _deleteProductStatus.value = "Producto eliminado correctamente"
+                } else {
+                    _deleteProductStatus.value = "Error al eliminar el producto: ${response.message()}"
+                }
+            } catch (e: Exception) {
+                _deleteProductStatus.value = "Excepción al eliminar el producto: ${e.message}"
             }
         }
     }
