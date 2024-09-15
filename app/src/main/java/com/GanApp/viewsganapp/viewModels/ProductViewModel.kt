@@ -44,7 +44,6 @@ class ProductViewModel : ViewModel() {
     private val typeServiceApiService = RetrofitInstance.apiServiceTypeService
     private val _products = mutableStateListOf<ProductoEntity>()
     val products: List<ProductoEntity> get() = _products
-    private val _product = mutableStateOf<ProductoEntity?>(null)
     var selectedProduct = mutableStateOf<ProductoEntity?>(null)
 
     private val _userProducts = mutableStateListOf<ProductoEntity>()
@@ -203,10 +202,6 @@ class ProductViewModel : ViewModel() {
             }
             loading.value = false
         }
-    }
-
-    fun clearSelectedProduct() {
-        _product.value = null
     }
 
     fun uploadProductData(context: Context, imageUri: Uri, productData: ProductDataDto) {

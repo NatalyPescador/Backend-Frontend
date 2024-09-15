@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,6 +51,10 @@ fun CatalogoPrincipal(navController: NavController, productViewModel: ProductVie
     val products by remember { mutableStateOf(productViewModel.products) }
     var filterExpanded by remember { mutableStateOf(false) }
     var selectedFilter by remember { mutableStateOf<Long?>(null) } // Estado para el filtro seleccionado
+
+    LaunchedEffect(Unit) {
+        productViewModel.getProducts()
+    }
 
     Column {
         FilterButton(
