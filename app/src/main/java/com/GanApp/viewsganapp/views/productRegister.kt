@@ -6,12 +6,14 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -108,25 +110,19 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {}, // Deja el título vacío para no mostrar contenido
-                navigationIcon = {}, // Deja el icono de navegación vacío
-                actions = {}, // Deja las acciones vacías
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(255, 255, 255)              )// Deja las acciones vacías)
-            )
-        },
-    ) { innerPadding ->
+    Box (
+        modifier = Modifier
+            .fillMaxSize()
+            //.border(1.dp, Color.Red)
+            .padding(top = 40.dp, bottom = 40.dp)
+            .background(Color.White),
+        contentAlignment = Alignment.Center
+    ) {
         Column(
             modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxHeight()
-                .fillMaxWidth()
+                .fillMaxSize()
                 .background(Color.White)
-                .verticalScroll(rememberScrollState())
-                .offset(y = (30).dp),
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -136,7 +132,8 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 fontSize = 35.sp,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.offset(y = (-30).dp)
+                modifier = Modifier
+                    .padding(bottom = 25.dp)
             )
 
             OutlinedTextField(
@@ -145,7 +142,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                     val filteredText = it.replace("\n", "")
                     nombre = filteredText
                 },
-                label = { Text("Nombre del producto", color=Color.Black) },
+                label = { Text("Nombre del producto", color = Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     val painter = painterResource(id = R.drawable.nombre_producto_icn)
@@ -165,7 +162,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                     val filteredText = it.filter { char -> char.isDigit() || char == '.' }
                     precio = filteredText
                 },
-                label = { Text("Precio", color=Color.Black) },
+                label = { Text("Precio", color = Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     val painter = painterResource(id = R.drawable.dolar_icn)
@@ -188,7 +185,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                     val filteredText = it.replace("\n", "")
                     descripcion = filteredText
                 },
-                label = { Text("Descripción", color=Color.Black) },
+                label = { Text("Descripción", color = Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     val painter = painterResource(id = R.drawable.descripcion_icn)
@@ -227,7 +224,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                     val filteredText = it.replace("\n", "")
                     raza = filteredText
                 },
-                label = { Text("Raza", color=Color.Black) },
+                label = { Text("Raza", color = Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     //val painter = painterResource(id = R.drawable.nombre_producto_icn)
@@ -248,7 +245,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                     val filteredText = it.replace("\n", "")
                     sexo = filteredText
                 },
-                label = { Text("Sexo", color=Color.Black) },
+                label = { Text("Sexo", color = Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     //val painter = painterResource(id = R.drawable.nombre_producto_icn)
@@ -269,13 +266,13 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                     val filteredText = it.replace("\n", "")
                     uom = filteredText
                 },
-                label = { Text("Unidad de medida", color=Color.Black) },
+                label = { Text("Peso", color = Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     //val painter = painterResource(id = R.drawable.nombre_producto_icn)
                     Icon(
                         imageVector = Icons.Default.Balance,
-                        contentDescription = "Unidad de Medida",
+                        contentDescription = "Peso",
                         modifier = Modifier.size(24.dp)
                     )
                 },
@@ -290,7 +287,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                     val filteredText = it.filter { char -> char.isDigit() || char == '.' }
                     edad = filteredText
                 },
-                label = { Text("Edad", color=Color.Black) },
+                label = { Text("Edad", color = Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     //val painter = painterResource(id = R.drawable.dolar_icn)
@@ -314,7 +311,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                     val filteredText = it.filter { char -> char.isDigit() || char == '.' }
                     cantidad = filteredText
                 },
-                label = { Text("Cantidad", color=Color.Black) },
+                label = { Text("Cantidad", color = Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     //val painter = painterResource(id = R.drawable.dolar_icn)
@@ -338,7 +335,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                     val filteredText = it.replace("\n", "")
                     departamento = filteredText
                 },
-                label = { Text("Departamento", color=Color.Black) },
+                label = { Text("Departamento", color = Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     //val painter = painterResource(id = R.drawable.nombre_producto_icn)
@@ -359,7 +356,7 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                     val filteredText = it.replace("\n", "")
                     municipio = filteredText
                 },
-                label = { Text("Municipio", color=Color.Black) },
+                label = { Text("Municipio", color = Color.Black) },
                 textStyle = TextStyle(color = Color.Black),
                 leadingIcon = {
                     //val painter = painterResource(id = R.drawable.nombre_producto_icn)
@@ -379,11 +376,12 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 onClick = { imagePickerLauncher.launch("image/*") },
                 colors = ButtonDefaults.buttonColors(Color(10, 191, 4))
             ) {
-                Text("Añadir imagen",
+                Text(
+                    "Añadir imagen",
                     style = TextStyle(
-                    fontFamily = Utendo,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
+                        fontFamily = Utendo,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
                     )
                 )
             }
@@ -396,62 +394,50 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
                 )
             }
 
-            Box(modifier = Modifier.offset(y = 20.dp)) {
-                Button(
-                    onClick = {
-                        imageUri?.let { uri ->
-                            viewModel.uploadProductData(
-                                context,
-                                uri,
-                                ProductDataDto(
-                                    nombre = nombre,
-                                    precio = precio,
-                                    descripcion = descripcion,
-                                    raza = raza,
-                                    sexo = sexo,
-                                    uom = uom,
-                                    edad = edad,
-                                    cantidad = cantidad,
-                                    departamento = departamento,
-                                    municipio = municipio,
-                                    imagen = uri.toString(),
-                                    tipoServicioId = selectedTipoServicio?.tipoServicioId ?: 0,
-                                    categoriaId = selectedCategoria?.categoriaId ?: 0,
-                                    usuarioId = userData?.userId ?: 0L
-                                )
+            Button(
+                onClick = {
+                    imageUri?.let { uri ->
+                        viewModel.uploadProductData(
+                            context,
+                            uri,
+                            ProductDataDto(
+                                nombre = nombre,
+                                precio = precio,
+                                descripcion = descripcion,
+                                raza = raza,
+                                sexo = sexo,
+                                uom = uom,
+                                edad = edad,
+                                cantidad = cantidad,
+                                departamento = departamento,
+                                municipio = municipio,
+                                imagen = uri.toString(),
+                                tipoServicioId = selectedTipoServicio?.tipoServicioId ?: 0,
+                                categoriaId = selectedCategoria?.categoriaId ?: 0,
+                                usuarioId = userData?.userId ?: 0L
                             )
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(Color(10, 191, 4), contentColor = Color.Black)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            //painter = painterResource(id = R.drawable.promocion_icn),
-                            imageVector = Icons.Default.Campaign,
-                            contentDescription = "Descripción del icono",
-                            modifier = Modifier.size(24.dp),
-                            tint = Color.White
                         )
-                        Text("Publicar",
-                            style = TextStyle(
-                                fontFamily = Utendo,
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
-                            ),
-                            color = Color.White, modifier = Modifier.padding(start = 8.dp))
                     }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(30.dp))
-
-            repeat(3) {
-                Text(
-                    text = "Regístrate",
-                    color = Color.White,
-                    fontSize = 40.sp,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                },
+                colors = ButtonDefaults.buttonColors(Color(10, 191, 4), contentColor = Color.Black)
+            ) {
+                Icon(
+                    //painter = painterResource(id = R.drawable.promocion_icn),
+                    imageVector = Icons.Default.Campaign,
+                    contentDescription = "Descripción del icono",
+                    modifier = Modifier.size(24.dp),
+                    tint = Color.White
                 )
+                Text(
+                    "Publicar",
+                    style = TextStyle(
+                        fontFamily = Utendo,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
+                    ),
+                    color = Color.White, modifier = Modifier.padding(start = 8.dp)
+                )
+
             }
         }
     }
