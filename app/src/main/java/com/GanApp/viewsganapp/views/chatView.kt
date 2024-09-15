@@ -1,5 +1,6 @@
 package com.GanApp.viewsganapp.views
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -51,6 +52,12 @@ fun ShowChats(navController: NavHostController, chatViewModel: ChatViewModel = v
         snackbarMessage?.let {
             snackbarHostState.showSnackbar(it)
             chatViewModel._snackbarMessage.value = null
+        }
+    }
+
+    BackHandler {
+        navController.navigate("homePage") {
+            popUpTo(0) { inclusive = true } // Elimina toda la pila de navegación
         }
     }
 

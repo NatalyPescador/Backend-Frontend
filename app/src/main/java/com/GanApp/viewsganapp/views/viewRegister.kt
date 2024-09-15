@@ -188,7 +188,7 @@ fun Register(navController: NavController, onSubmit: (UserData) -> Unit) {
             ) {
                 Button(
                     onClick = {
-                        navController.navigate("homePage")
+                        navController.navigate("loginUser_screens")
                         onSubmit(UserData(nombreCompleto, correo, password, numeroTelefono))
                     },
                     colors = buttonColors(

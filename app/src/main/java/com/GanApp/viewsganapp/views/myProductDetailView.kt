@@ -145,10 +145,11 @@ fun MisProdDetalles(navController: NavController, productId: Long) {
             }
 
             Text(
-                text = "Nombre del ejemplar: ${selectedProduct?.nombre ?: ""}",
+                text = selectedProduct?.nombre ?: "",
                 fontSize = 20.sp,
                 color = Color.Black,
                 textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth()
             )
 
