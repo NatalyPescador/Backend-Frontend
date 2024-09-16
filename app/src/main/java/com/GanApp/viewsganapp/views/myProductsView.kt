@@ -1,6 +1,7 @@
 package com.GanApp.viewsganapp.views
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -49,6 +50,15 @@ fun MisProductos(navController: NavController) {
 
     LaunchedEffect(userId) {
         productViewModel.getProductsByUserId(userId)
+    }
+
+    LaunchedEffect(productViewModel.snackbarMessage) {
+        productViewModel.snackbarMessage.collect { message ->
+            message?.let {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                productViewModel.clearSnackbarMessage()
+            }
+        }
     }
 
     BackHandler {

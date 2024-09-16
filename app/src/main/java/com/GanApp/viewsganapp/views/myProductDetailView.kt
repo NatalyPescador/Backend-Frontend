@@ -1,5 +1,6 @@
 package com.GanApp.viewsganapp.views
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -61,6 +62,15 @@ fun MisProdDetalles(navController: NavController, productId: Long) {
         uom = selectedProduct?.uom ?: ""
         edad = selectedProduct?.edad?.toString() ?: ""
         cantidad = selectedProduct?.cantidad?.toString() ?: ""
+    }
+
+    LaunchedEffect(productViewModel.snackbarMessage) {
+        productViewModel.snackbarMessage.collect { message ->
+            message?.let {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                productViewModel.clearSnackbarMessage()
+            }
+        }
     }
 
     Scaffold( topBar = {

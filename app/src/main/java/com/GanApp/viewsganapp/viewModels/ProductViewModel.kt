@@ -36,6 +36,9 @@ import retrofit2.HttpException
 
 class ProductViewModel : ViewModel() {
 
+    val _snackbarMessage = MutableStateFlow<String?>(null)
+    val snackbarMessage: StateFlow<String?> = _snackbarMessage
+
     var categorias = mutableStateOf<List<CategoriaEntity>>(listOf())
     var tiposServicio = mutableStateOf<List<TipoServicioEntity>>(listOf())
     var selectedTipoServicioId = mutableStateOf<Long?>(null)
@@ -48,11 +51,6 @@ class ProductViewModel : ViewModel() {
 
     private val _userProducts = mutableStateListOf<ProductoEntity>()
     val userProducts: List<ProductoEntity> get() = _userProducts
-    private val _updateStatus = MutableLiveData<Result<String>>()
-    val updateStatus: LiveData<Result<String>> get() = _updateStatus
-
-    private val _deleteProductStatus = MutableStateFlow<String?>(null)
-    val deleteProductStatus: StateFlow<String?> get() = _deleteProductStatus
 
     private val _isDeleting = MutableStateFlow(false)
     val isDeleting: StateFlow<Boolean> get() = _isDeleting
@@ -240,12 +238,13 @@ class ProductViewModel : ViewModel() {
                 // Realiza la llamada a la API
                 val response = apiServiceProduct.updateProduct(id, updatedProductDto)
                 if (response.isSuccessful) {
-                    _updateStatus.value = Result.success("Información actualizada exitosamente")
+                    _snackbarMessage.value = "Información actualizada exitosamente"
                 } else {
-                    _updateStatus.value = Result.failure(Exception("Error al actualizar el producto: ${response.errorBody()?.string()}"))
+                    _snackbarMessage.value = "Error al actualizar el producto: ${response.errorBody()?.string()}"
                 }
             } catch (e: Exception) {
-                _updateStatus.value = Result.failure(e)
+                _snackbarMessage.value = "Error al actualizar el producto. Por favor, intente nuevamente"
+                Log.e("updateProduct","Excepción al actualizar el producto: ${e.message}")
             }
         }
     }
@@ -256,18 +255,23 @@ class ProductViewModel : ViewModel() {
             try {
                 val response = RetrofitInstance.apiServiceProduct.deleteProduct(productId)
                 if (response.isSuccessful) {
-                    _deleteProductStatus.value = "Producto eliminado correctamente"
+                    _snackbarMessage.value = "Producto eliminado correctamente"
                     // Elimina el producto de las listas
                     _products.removeAll { it.productoId == productId }
                     _userProducts.removeAll { it.productoId == productId }
                 } else {
-                    _deleteProductStatus.value = "Error al eliminar el producto: ${response.message()}"
+                    _snackbarMessage.value = "Error al eliminar el producto: ${response.message()}"
                 }
             } catch (e: Exception) {
-                _deleteProductStatus.value = "Excepción al eliminar el producto: ${e.message}"
+                _snackbarMessage.value = "Error al eliminar el producto. Por favor, intente nuevamente"
+                Log.e("deleteProduct","Excepción al eliminar el producto: ${e.message}")
             } finally {
                 _isDeleting.value = false
             }
         }
+    }
+
+    fun clearSnackbarMessage() {
+        _snackbarMessage.value = null // Limpiar el mensaje después de mostrarlo
     }
 }
