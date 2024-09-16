@@ -1,5 +1,6 @@
 package com.GanApp.viewsganapp.views
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -34,6 +36,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -42,21 +45,39 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.GanApp.viewsganapp.R
 import com.GanApp.viewsganapp.ui.theme.Utendo
+import com.GanApp.viewsganapp.viewModels.SessionViewModel
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.layout.Column as Column
 
-var showErrorResetPassword by mutableStateOf(false)
-var errorMessageResetPassword by mutableStateOf("")
-
 @Composable
-fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) -> Unit) {
+fun ResetPassword(navController: NavController) {
+    val sessionViewModel: SessionViewModel = viewModel()
+    val context = LocalContext.current
     var token by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var confirmedPassword by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(sessionViewModel.snackbarMessage) {
+        sessionViewModel.snackbarMessage.collect { message ->
+            message?.let {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                sessionViewModel.clearSnackbarMessage()
+            }
+        }
+    }
+
+    LaunchedEffect(sessionViewModel.updateSuccess) {
+        sessionViewModel.updateSuccess.collect { status ->
+            if (status == true) {
+                navController.navigate("loginUser_screens")
+            }
+        }
+    }
 
     Box (
         modifier = Modifier
@@ -167,48 +188,52 @@ fun ResetPassword(navController: NavController, onSubmit: (ResetPasswordData) ->
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            LaunchedEffect(showErrorResetPassword) {
-                if (showErrorResetPassword) {
-                    delay(5000)
-                    showErrorResetPassword = false
-                }
-            }
-
-            if (showErrorResetPassword) {
-                Box(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        errorMessageResetPassword,
-                        color = Color.Red,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = 8.dp)
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Box() {
+            Column(
+                modifier = Modifier
+                    .width(200.dp), // Asegura que la columna ocupe el ancho completo
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 Button(
-                    { onSubmit(ResetPasswordData(token, newPassword, confirmedPassword)) },
+                    onClick = {
+                        sessionViewModel.resetPassword(ResetPasswordData(token, newPassword, confirmedPassword))
+                    },
                     colors = ButtonDefaults.buttonColors(
                         Color(10, 191, 4),
                         contentColor = Color.Black
                     ),
                     modifier = Modifier
-                        .height(55.dp)
-                )
-                {
+                        .fillMaxWidth() // Asegura que el botón ocupe el ancho completo
+                        .height(55.dp) // Ajusta la altura del botón
+                ) {
                     Text(
                         "Guardar cambios",
                         style = TextStyle(
                             fontFamily = Utendo,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
-                        ), color = Color.White
+                        ),
+                        color = Color.White
+                    )
+                }
+
+                Button(
+                    onClick = { navController.navigate("loginUser_screens") },
+                    colors = ButtonDefaults.buttonColors(
+                        Color(10, 191, 4)
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth() // Asegura que el botón ocupe el ancho completo
+                        .height(55.dp) // Ajusta la altura del botón
+                ) {
+                    Text(
+                        "Cancelar",
+                        color = Color.White,
+                        style = TextStyle(
+                            fontFamily = Utendo,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 21.sp // Puedes ajustar el tamaño según lo necesites
+                        )
                     )
                 }
             }

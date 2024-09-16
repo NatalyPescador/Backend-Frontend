@@ -11,6 +11,7 @@ import com.GanApp.viewsganapp.utils.decodeJWT
 import com.GanApp.viewsganapp.utils.saveLoginData
 import com.GanApp.viewsganapp.utils.saveUserData
 import com.GanApp.viewsganapp.views.ForgotPasswordData
+import com.GanApp.viewsganapp.views.ResetPasswordData
 import com.GanApp.viewsganapp.views.UserData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +32,9 @@ class SessionViewModel : ViewModel() {
 
     private val _resetSuccess = MutableStateFlow<Boolean?>(null)
     val resetSuccess: StateFlow<Boolean?> = _resetSuccess
+
+    private val _updateSuccess = MutableStateFlow<Boolean?>(null)
+    val updateSuccess: StateFlow<Boolean?> = _updateSuccess
 
     fun login(context: Context, loginData: LogInData, onLoginSuccess: () -> Unit) {
         viewModelScope.launch {
@@ -137,6 +141,39 @@ class SessionViewModel : ViewModel() {
                 override fun onFailure(call: Call<Void>, t: Throwable) {
                     _snackbarMessage.value = "Error al enviar el correo: ${t.message}"
                     _resetSuccess.value = false
+                }
+            })
+        }
+
+    }
+
+    fun resetPassword(resetPasswordData: ResetPasswordData) {
+        viewModelScope.launch {
+            val call = RetrofitInstance.apiService.resetPassword(resetPasswordData)
+            call.enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        _snackbarMessage.value = "Contraseña actualizada con éxito"
+                        _updateSuccess.value = true
+                    } else {
+                        val errorBody = response.errorBody()?.string()
+                        if (!errorBody.isNullOrEmpty()) {
+                            try {
+                                val json = JSONObject(errorBody)
+                                val errorMessage = json.getString("errorMessage")
+                                _snackbarMessage.value = errorMessage
+
+                            } catch (e: Exception) {
+                                _snackbarMessage.value = "Error al procesar la respuesta"
+                            }
+                        }
+                        _updateSuccess.value = false
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    _snackbarMessage.value = "Error al restablecer la contraseña: ${t.message}"
+                    _updateSuccess.value = false
                 }
             })
         }
