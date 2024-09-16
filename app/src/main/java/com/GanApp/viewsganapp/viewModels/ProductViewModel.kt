@@ -112,9 +112,11 @@ class ProductViewModel : ViewModel() {
                     _products.clear()
                     _products.addAll(response.body() ?: emptyList())
                 } else {
+                    _snackbarMessage.value = "Error al filtrar los productos. Por favor, vuelve a intentarlo"
                     Log.d("ProductViewModel-filterProductsByTipoServicio", "Error in response: ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
+                _snackbarMessage.value = "Error al filtrar los productos. Por favor, vuelve a intentarlo"
                 Log.d("ProductViewModel-filterProductsByTipoServicio", "Exception caught: ${e.localizedMessage}")
             } finally {
                 loading.value = false
@@ -145,9 +147,11 @@ class ProductViewModel : ViewModel() {
             val response = try {
                 RetrofitInstance.apiServiceProduct.getProductList()
             } catch (e: IOException) {
+                _snackbarMessage.value = "Error de conexión. Por favor, vuelve a intentarlo cuando la conexión se restablezca"
                 Log.d("ProductViewModel-getProducts", "Network error: ${e.localizedMessage}")
                 return@launch
             } catch (e: HttpException) {
+                _snackbarMessage.value = "Error al cargar los productos"
                 Log.d("ProductViewModel-getProducts", "API error: ${e.localizedMessage}")
                 return@launch
             }
@@ -167,9 +171,11 @@ class ProductViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     selectedProduct.value = response.body()
                 } else {
+                    _snackbarMessage.value = "Error al cargar la información del producto"
                     Log.d("ProductViewModel-getProductById", "Error in response: ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
+                _snackbarMessage.value = "Error al cargar la información del producto"
                 Log.d("ProductViewModel-getProductById", "Exception caught: ${e.localizedMessage}")
             } finally {
                 loading.value = false
@@ -183,10 +189,12 @@ class ProductViewModel : ViewModel() {
             val response = try {
                 RetrofitInstance.apiServiceProduct.getProductsByUserId(userId)
             } catch (e: IOException) {
+                _snackbarMessage.value = "Error de conexión. Por favor, vuelve a intentarlo cuando la conexión se restablezca"
                 Log.d("ProductViewModel-getProductsByUserId", "Network error: ${e.localizedMessage}")
                 loading.value = false
                 return@launch
             } catch (e: HttpException) {
+                _snackbarMessage.value = "Error al cargar los productos"
                 Log.d("ProductViewModel-getProductsByUserId", "API error: ${e.localizedMessage}")
                 loading.value = false
                 return@launch
@@ -217,17 +225,21 @@ class ProductViewModel : ViewModel() {
             call.enqueue(object : Callback<String> {
                 override fun onResponse(call: Call<String>, response: Response<String>) {
                     if (response.isSuccessful) {
+                        _snackbarMessage.value = "Producto registrado exitosamente"
                         Log.d("ProductViewModel-uploadProductData", "Product registered successful")
                     } else {
+                        _snackbarMessage.value = "Producto registrado exitosamente"
                         Log.d("ProductViewModel-uploadProductData", "Error registering product: ${response.errorBody()?.string()}")
                     }
                 }
 
                 override fun onFailure(call: Call<String>, t: Throwable) {
+                    _snackbarMessage.value = "Producto registrado exitosamente"
                     Log.d("ProductViewModel-uploadProductData", "Network or conversion error: ${t.localizedMessage}")
                 }
             })
         }catch (e: Exception){
+            _snackbarMessage.value = "Excepción al registrar el producto $e"
             Log.d("ProductViewModel-uploadProductData", "Exception caught: ${e.localizedMessage}")
         }
     }
@@ -240,11 +252,11 @@ class ProductViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     _snackbarMessage.value = "Información actualizada exitosamente"
                 } else {
-                    _snackbarMessage.value = "Error al actualizar el producto: ${response.errorBody()?.string()}"
+                    _snackbarMessage.value = "Error al actualizar el producto ${response.errorBody()?.string()}"
                 }
             } catch (e: Exception) {
                 _snackbarMessage.value = "Error al actualizar el producto. Por favor, intente nuevamente"
-                Log.e("updateProduct","Excepción al actualizar el producto: ${e.message}")
+                Log.e("updateProduct","Excepción al actualizar el producto ${e.message}")
             }
         }
     }
@@ -260,11 +272,11 @@ class ProductViewModel : ViewModel() {
                     _products.removeAll { it.productoId == productId }
                     _userProducts.removeAll { it.productoId == productId }
                 } else {
-                    _snackbarMessage.value = "Error al eliminar el producto: ${response.message()}"
+                    _snackbarMessage.value = "Error al eliminar el producto ${response.message()}"
                 }
             } catch (e: Exception) {
                 _snackbarMessage.value = "Error al eliminar el producto. Por favor, intente nuevamente"
-                Log.e("deleteProduct","Excepción al eliminar el producto: ${e.message}")
+                Log.e("deleteProduct","Excepción al eliminar el producto ${e.message}")
             } finally {
                 _isDeleting.value = false
             }

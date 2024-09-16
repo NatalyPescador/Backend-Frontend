@@ -1,6 +1,7 @@
 package com.GanApp.viewsganapp.views
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -103,6 +104,15 @@ fun ProductRegister(navController: NavController, onSubmit: (ProductDataDto) -> 
     LaunchedEffect(selectedTipoServicio) {
         selectedTipoServicio?.tipoServicioId?.let {
             viewModel.fetchCategoriasByTipoServicio(it)
+        }
+    }
+
+    LaunchedEffect(viewModel.snackbarMessage) {
+        viewModel.snackbarMessage.collect { message ->
+            message?.let {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                viewModel.clearSnackbarMessage()
+            }
         }
     }
 
