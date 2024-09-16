@@ -9,8 +9,6 @@ import com.GanApp.viewsganapp.models.ReviewDto
 import com.GanApp.viewsganapp.models.ReviewEntity
 import com.GanApp.viewsganapp.network.RetrofitInstance
 import com.GanApp.viewsganapp.views.ReviewData
-import com.GanApp.viewsganapp.views.errorMessageReview
-import com.GanApp.viewsganapp.views.showErrorReview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -25,6 +23,9 @@ class ReviewViewModel: ViewModel() {
     private val _loading = MutableStateFlow(true)
     val loading: StateFlow<Boolean> get() = _loading
     var selectedReviews = mutableStateOf<List<ReviewDto>>(emptyList())
+
+    val _snackbarMessage = MutableStateFlow<String?>(null)
+    val snackbarMessage: StateFlow<String?> = _snackbarMessage
 
     fun getReviewByProductId(productId: Long) {
         viewModelScope.launch {
@@ -50,17 +51,17 @@ class ReviewViewModel: ViewModel() {
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    Log.d("API Call", "Reseña publicada con éxito")
+                    _snackbarMessage.value = "Reseña publicada con éxito"
                 } else {
                     val errorBody = response.errorBody()?.string()
-                    Log.d("API Call", "Response not successful: $errorBody")
+                    _snackbarMessage.value = "Error al publicar reseña: $errorBody"
                     if (!errorBody.isNullOrEmpty()) {
                         try {
                             val json = JSONObject(errorBody)
-                            errorMessageReview = json.getString("errorMessage")
-                            showErrorReview = true
-                        } catch (e: JSONException) {
-                            Log.e("API Call", "Error parsing JSON", e)
+                            val errorMessage = json.getString("errorMessage")
+                            _snackbarMessage.value = errorMessage
+                        } catch (e: Exception) {
+                            _snackbarMessage.value = "Error al procesar la respuesta: $e"
                         }
                     }
                 }
@@ -68,9 +69,13 @@ class ReviewViewModel: ViewModel() {
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.d("API Call", "Failure: ${t.message}")
+                _snackbarMessage.value = "Error al crear el usuario: ${t.message}"
                 _loading.value = false
             }
         })
+    }
+
+    fun clearSnackbarMessage() {
+        _snackbarMessage.value = null // Limpiar el mensaje después de mostrarlo
     }
 }

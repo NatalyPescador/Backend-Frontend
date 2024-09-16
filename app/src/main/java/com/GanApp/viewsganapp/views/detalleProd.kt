@@ -1,6 +1,7 @@
 package com.GanApp.viewsganapp.views
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,9 +43,6 @@ import com.GanApp.viewsganapp.viewModels.ReviewViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-var showErrorReview by mutableStateOf(false)
-var errorMessageReview by mutableStateOf("")
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VerDetalle(navController: NavController, productId: Long) {
@@ -80,6 +78,15 @@ fun VerDetalle(navController: NavController, productId: Long) {
     DisposableEffect(Unit) {
         onDispose {
             buttonCreateChatViewModel.reserDate()
+        }
+    }
+
+    LaunchedEffect(reviewViewModel.snackbarMessage) {
+        reviewViewModel.snackbarMessage.collect { message ->
+            message?.let {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                reviewViewModel.clearSnackbarMessage()
+            }
         }
     }
 
@@ -337,32 +344,12 @@ fun VerDetalle(navController: NavController, productId: Long) {
                             reviewViewModel.publishReview(reviewData)
 
                             resena = ""
+
+                            reviewViewModel.getReviewByProductId(productId)
                         },
                         colors = ButtonDefaults.buttonColors(Color(10, 191, 4))
                     ) {
                         Text("Publicar reseña", fontSize = 18.sp, color = Color.White)
-                    }
-                }
-
-                LaunchedEffect(showErrorReview) {
-                    if (showErrorReview) {
-                        delay(5000)
-                        showErrorReview = false
-                    }
-                }
-
-                if (showErrorReview) {
-                    Box(
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            errorMessageReview,
-                            color = Color.Red,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
                     }
                 }
 
