@@ -336,16 +336,21 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 ) {
                     Button(
                         onClick = {
-                            val reviewData = ReviewData(
-                                usuarioId = userId,
-                                productoId = productId,
-                                resena = resena
-                            )
-                            reviewViewModel.publishReview(reviewData)
+                            coroutineScope.launch {
 
-                            resena = ""
+                                val reviewData = ReviewData(
+                                    usuarioId = userId,
+                                    productoId = productId,
+                                    resena = resena
+                                )
+                                reviewViewModel.publishReview(reviewData)
 
-                            reviewViewModel.getReviewByProductId(productId)
+                                resena = ""
+
+                                delay(500L)
+
+                                reviewViewModel.getReviewByProductId(productId)
+                            }
                         },
                         colors = ButtonDefaults.buttonColors(Color(10, 191, 4))
                     ) {
@@ -356,13 +361,13 @@ fun VerDetalle(navController: NavController, productId: Long) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 if (loading) {
-                    // Mostrar un indicador de carga mientras se cargan los datos
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator()
                     }
+                    reviewViewModel.getReviewByProductId(productId)
                 } else {
                     LazyRow(
                         modifier = Modifier
