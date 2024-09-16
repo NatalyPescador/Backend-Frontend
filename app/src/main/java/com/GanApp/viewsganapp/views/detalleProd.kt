@@ -367,7 +367,6 @@ fun VerDetalle(navController: NavController, productId: Long) {
                     ) {
                         CircularProgressIndicator()
                     }
-                    reviewViewModel.getReviewByProductId(productId)
                 } else {
                     LazyRow(
                         modifier = Modifier
