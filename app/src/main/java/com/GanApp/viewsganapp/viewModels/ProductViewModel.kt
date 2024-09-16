@@ -236,6 +236,7 @@ class ProductViewModel : ViewModel() {
                 override fun onFailure(call: Call<String>, t: Throwable) {
                     _snackbarMessage.value = "Producto registrado exitosamente"
                     Log.d("ProductViewModel-uploadProductData", "Network or conversion error: ${t.localizedMessage}")
+                    Log.d("ProductViewModel-uploadProductData", "Network or conversion error: ${t.message}")
                 }
             })
         }catch (e: Exception){
