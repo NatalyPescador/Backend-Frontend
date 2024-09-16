@@ -1,5 +1,6 @@
 import android.content.Context
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -43,6 +44,15 @@ fun EditarPerfil(navController: NavController, context: Context) {
 
     LaunchedEffect(Unit) {
         viewModel.fetchUserData(context)
+    }
+
+    LaunchedEffect(viewModel.snackbarMessage) {
+        viewModel.snackbarMessage.collect { message ->
+            message?.let {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                viewModel.clearSnackbarMessage()
+            }
+        }
     }
 
     BackHandler {

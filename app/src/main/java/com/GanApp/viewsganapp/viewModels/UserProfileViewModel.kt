@@ -16,6 +16,9 @@ import retrofit2.Response
 
 class UserProfileViewModel : ViewModel() {
 
+    val _snackbarMessage = MutableStateFlow<String?>(null)
+    val snackbarMessage: StateFlow<String?> = _snackbarMessage
+
     private val _user = MutableStateFlow<UserDto?>(null)
     val user: StateFlow<UserDto?> get() = _user
 
@@ -36,12 +39,14 @@ class UserProfileViewModel : ViewModel() {
                         if (response.isSuccessful) {
                             _user.value = response.body()
                         } else {
+                            _snackbarMessage.value = "Error al obtener la información de perfil: ${response.errorBody()?.string()}"
                             Log.d("UserProfielViewModel-fetchUserData","fetchUserData Error en la respuesta: ${response.errorBody()?.string()}")
                         }
                         _loading.value = false
                     }
 
                     override fun onFailure(call: Call<UserDto>, t: Throwable) {
+                        _snackbarMessage.value = "Error al obtener la información de perfil: ${t.message}"
                         Log.d("UserProfielViewModel-fetchUserData","fetchUserData Error de red o conversión: ${t.localizedMessage}")
                         _loading.value = false
                     }
@@ -52,27 +57,6 @@ class UserProfileViewModel : ViewModel() {
         }
     }
 
-    fun uploadUserData(context: Context, updatedUser: UserDto) {
-        _loading.value = true
-        val service = RetrofitInstance.apiService
-        val call = service.updateUser(updatedUser.userId, updatedUser)
-        call.enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
-                    _user.value = updatedUser
-                } else {
-                    Log.d("UserProfielViewModel-uploadUserData","uploadUserData Error en la respuesta: ${response.errorBody()?.string()}")
-                }
-                _loading.value = false
-            }
-
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.d("UserProfielViewModel-uploadUserData","uploadUserData Error de red o conversión: ${t.localizedMessage}")
-                _loading.value = false
-            }
-        })
-    }
-
     fun upgradeUser(context: Context, user: UserDto) {
         _loading.value = true
         val service = RetrofitInstance.apiService
@@ -81,16 +65,23 @@ class UserProfileViewModel : ViewModel() {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     _user.value = user
+                    _snackbarMessage.value = "Información actualizada exitosamente"
                 } else {
                     Log.d("UserProfielViewModel-upgradeUser","upgrade Error en la respuesta: ${response.errorBody()?.string()}")
+                    _snackbarMessage.value = "Error al actualizar la información: ${response.errorBody()?.string()}"
                 }
                 _loading.value = false
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
+                _snackbarMessage.value = "Error al restablecer la contraseña: ${t.message}"
                 Log.d("UserProfielViewModel-upgradeUser","upgrade Error de red o conversión: ${t.localizedMessage}")
                 _loading.value = false
             }
         })
+    }
+
+    fun clearSnackbarMessage() {
+        _snackbarMessage.value = null // Limpiar el mensaje después de mostrarlo
     }
 }

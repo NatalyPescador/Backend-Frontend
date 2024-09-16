@@ -1,6 +1,7 @@
 package com.GanApp.viewsganapp.views
 
 import android.content.Context
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -76,6 +77,15 @@ fun Perfil(navController: NavHostController, context: Context) {
             nombreCompleto = it.nombreCompleto
             correo = it.correo
             numeroTelefono = it.numeroTelefono
+        }
+    }
+
+    LaunchedEffect(viewModel.snackbarMessage) {
+        viewModel.snackbarMessage.collect { message ->
+            message?.let {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                viewModel.clearSnackbarMessage()
+            }
         }
     }
 
