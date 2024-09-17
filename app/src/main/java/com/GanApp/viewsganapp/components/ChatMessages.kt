@@ -59,17 +59,6 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Image(
-                            painter = rememberAsyncImagePainter(profileImageUrl),
-                            contentDescription = "Foto de perfil",
-                            modifier = Modifier
-                                .size(50.dp) // Tamaño de la imagen
-                                .clip(CircleShape)
-                                .background(Color.LightGray)
-                                .border(2.dp, Color.Gray, CircleShape),
-                            contentScale = ContentScale.Crop
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
                         Text(text = userName,
                             style = MaterialTheme.typography.bodyMedium.copy(fontSize = 20.sp),
                             color = Color.Black)
