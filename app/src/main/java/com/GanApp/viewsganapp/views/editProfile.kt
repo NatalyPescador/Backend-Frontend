@@ -117,32 +117,6 @@ fun EditarPerfil(navController: NavController, context: Context) {
                 color = Color.Black
             )
 
-            Box(
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(CircleShape)
-                    .background(Color.LightGray)
-                    .border(2.dp, Color.Gray, CircleShape)
-                    .clickable { launcher.launch("image/*") }
-            ) {
-                if (imageUri == null) {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = "Agregar Imagen",
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(100.dp)
-                    )
-                } else {
-                    Image(
-                        painter = rememberAsyncImagePainter(imageUri),
-                        contentDescription = "Foto de perfil",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
-            }
-
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(

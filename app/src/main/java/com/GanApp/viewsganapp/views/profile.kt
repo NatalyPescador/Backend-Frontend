@@ -133,17 +133,6 @@ fun Perfil(navController: NavHostController, context: Context) {
                         .wrapContentWidth(Alignment.CenterHorizontally),
                     color = Color.Black
                 )
-                Spacer(modifier = Modifier.height(15.dp))
-
-                Box(
-                    modifier = Modifier
-                        .size(150.dp)
-                        .clip(CircleShape)
-                        .background(Color.LightGray)
-                        .border(2.dp, Color.Gray, CircleShape)
-                ) {
-                    // Aquí puedes añadir una imagen de perfil usando Coil o cualquier otra biblioteca de imágenes
-                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
