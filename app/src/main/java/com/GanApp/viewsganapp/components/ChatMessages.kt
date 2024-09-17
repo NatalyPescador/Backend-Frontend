@@ -43,7 +43,7 @@ fun ChatMessage(navController: NavHostController, chatId: Long) {
 
     // Aquí puedes añadir la lógica para obtener la imagen de perfil y el nombre del usuario desde el backend
     val profileImageUrl = "https://example.com/path/to/profile/image.jpg" // Reemplaza esta URL con la URL real
-    val userName by remember { mutableStateOf("Nombre del destinatario") } // Nombre de ejemplo
+    val userName by remember { mutableStateOf("Yuliana Guillen") } // Nombre de ejemplo
 
     LaunchedEffect(chatId) {
         chatViewModel.getMessagesByChatId(chatId)
